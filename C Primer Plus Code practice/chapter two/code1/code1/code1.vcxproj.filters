@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="test.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="add.cpp">
+    <ClCompile Include="code1.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
