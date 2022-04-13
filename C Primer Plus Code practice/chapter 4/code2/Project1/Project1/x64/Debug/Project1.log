@@ -1,0 +1,5 @@
+﻿  code2.c
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 4\code2\Project1\Project1\code2.c(100,9): warning C4778: “printf”: 格式字符串“%LLD”未终止
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 4\code2\Project1\Project1\code2.c(100,16): warning C4474: printf: 格式字符串中传递的参数太多
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 4\code2\Project1\Project1\code2.c(100,16): message : 占位符和其参数预计 0 可变参数，但提供的却是 1 参数
+  Project1.vcxproj -> D:\CODE\C_CODE\C Primer Plus Code practice\chapter 4\code2\Project1\x64\Debug\Project1.exe
