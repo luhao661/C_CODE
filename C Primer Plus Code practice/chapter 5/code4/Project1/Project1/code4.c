@@ -23,12 +23,19 @@
 //9.
 //int main(void)
 //{
-//	/*int n = 96;
+//	法一
+//	int n = 96;
 //	while (n++ < 103)
-//		printf("%c",n);*/
-//	int c = 141;
-//	while (c++ < 147)
-//		printf("%c",'\c');//不行，c不会递增
+//		printf("%5c",n);
+//	
+//	//int c = 141;
+//	//while (c++ < 147)
+//	//	printf("%c",'\c');//不行，c不会递增
+//
+//	法二
+//	char n = 'a' - 1;
+//	while (n++ < 'g')
+//		printf("%5c",n);
 //	return 0;
 //}
 
@@ -115,6 +122,32 @@
 //	return 0;
 //}
 
+//4.改正
+//#define FEET_TO_CM 30.48
+//#define INCH_TO_CM 2.54
+//int main(void)
+//{
+//	float cm, inch;
+//	int feet, yushu;
+//	printf("请输入身高（单位：厘米）：___\b\b\b");
+//	scanf("%f", &cm);
+//	while (cm > 0)
+//	{
+//		feet = cm / FEET_TO_CM;//浮点数转换成整型
+//		//yushu = (int)cm % (int)FEET_TO_CM;//182%30等于6余2，而实际应为182/30.48，无法得余数。
+//		//不需要yushu 
+//		inch = (cm - FEET_TO_CM * feet) / INCH_TO_CM;//此换算不需要取余的算法
+//
+//		printf("%.1f cm = %d feet, %.1f inches.\n", cm, feet, inch);
+//		printf("下一个数字是？（输入一个小于或等于0的数即可退出程序）");
+//		scanf("%f", &cm);
+//	}
+//	printf("Done!");
+//
+//	return 0;
+//}
+
+
 
 //5.
 //int main(void)
@@ -146,7 +179,7 @@
 //	printf("输入天数：____\b\b\b\b");
 //	scanf("%d",&day);
 //	
-//	while (count++ < day)
+//	while (count++ < day)                                   //用count和day来控制循环次数
 //	{
 //		sum = sum + count1*count1;
 //		printf("count = %-10d   sum = %-10d    \n",count1*count1, sum);
@@ -154,6 +187,7 @@
 //	}
 //	return 0;
 //}
+////法二：用count--，从大到小来累加，可以减少定义的变量数。
 
 
 //7.
@@ -166,6 +200,23 @@
 //	printf("立方值是：%lf",dou*dou*dou);
 //
 //	return 0;
+//}
+
+//7.改正
+//void lifang(double x);
+//int main (void)
+//{
+//	double y;
+//	printf("请输入一个double类型的数：_____\b\b\b\b\b");
+//	scanf("%lf", &y);
+//	lifang(y);
+//
+//	return 0;
+//}
+//void lifang(double x)
+//{
+//	x = x * x * x;
+//	printf("%lf",x);
 //}
 
 
@@ -194,25 +245,41 @@
 void Temperatures(double t);
 int main(void)
 {
-	double huashi, sheshi, kaishi;
-	sheshi = kaishi = 1;
+	double huashi;
+	int a;
+
 	printf("请输入一个华氏温度：");
-	scanf("%lf",&huashi);
+	a = scanf("%lf",&huashi);
 	
-	       while (scanf("%lf", &huashi) == 1)
+	       while (a == 1)                                                   //法二：while(scanf("%lf",%a)==1)
 			{
+			printf("华氏温度：%.2lf\n", huashi);
 			Temperatures(huashi);
-			printf("华氏温度：%.2lf\n",huashi);
-			printf("摄氏温度：%.2lf\n", sheshi);
-			printf("开氏温度：%.2lf\n", kaishi);
-			printf("输入下一个华氏温度值：（按q键退出）");
-			scanf("%lf",&huashi);
+		/*	printf("摄氏温度：%.2lf\n", sheshi);
+			printf("开氏温度：%.2lf\n", kaishi);    */                                        //此处不能写这些语句，因为调用函数中定义的变量是局部定义	                                                                                
+			printf("输入下一个华氏温度值：（按q键退出）");                          // ，其值发生的变化也只在调用函数中生效。
+			a=scanf("%lf",&huashi);
 			}
 	printf("Done!\n");
 	return 0;
 }
+//void Temperatures(double t)
+//{
+//	const double sheshi = 5.0 / 9.0 * (t - 32.0);
+//	const double kaishi = sheshi + 237.16;
+//	printf("摄氏温度：%.2lf\n", sheshi);
+//	printf("开氏温度：%.2lf\n", kaishi);
+//}
+
+//改
 void Temperatures(double t)
 {
-	const double sheshi = 5.0 / 9.0 * (t - 32.0);
-	const double kaishi = sheshi + 237.16;
+	const double H_TO_S = 32.0;
+	const double C_TO_K = 273.16;
+	double sheshi, kaishi;
+	sheshi = 5.0 / 9.0 * (t - H_TO_S);
+	kaishi = sheshi + C_TO_K;
+	printf("摄氏温度：%.2lf\n", sheshi);
+	printf("开氏温度：%.2lf\n", kaishi);
 }
+
