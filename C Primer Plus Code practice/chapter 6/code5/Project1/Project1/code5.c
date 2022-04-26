@@ -113,6 +113,29 @@
 //
 //	return l;
 //}
+//12.3两个数列的总和
+//int main(void)
+//{
+//	int number;
+//	float i, j;
+//	int k;
+//	float sum=2.0;
+//
+//	printf("请输入项数（>=3）：");
+//
+//	while (scanf("%d", &number) == 1)
+//	{
+//		for (i = 2.0, j = 1.0, k = 3;			k <= number;			j += 1.0, k++)
+//		{
+//			sum += i / (2*j+1.0);
+//		}
+//		printf("1.0+1.0+2.0/3.0+2.0/5.0+2.0/7.0+....(加到第%d项)", number);
+//		printf("和为%f", sum);
+//		printf("\n\n请输入次数(按下q以退出)：");
+//	}
+//
+//	return 0;
+//}
 
 
 //13.
@@ -120,22 +143,28 @@
 //{
 //	int shuzu[8];
 //	int i,index;
-//	for (i = 1, index = 0; index <= 7; index++)
+//	for (i = 1, index = 0;		 index <= 7;			index++)
 //	{
 //		i = i * 2;
 //		shuzu[index] = i;
 //	}
 //
-//	int a;
+//	/*int a;
 //	do
 //	{
 //		for (index = 0; index <= 7; index++)
 //		printf("%5d",shuzu[index]);
 //		printf("\n按下q以结束程序：\n");
 //
-//	} while (scanf("%d",&a)  ==1);
+//	} while (scanf("%d",&a)  ==1);*/
+//	//法二
+//	index = 0;
+//	do
+//	{
+//		printf("%5d",shuzu[index++]);
+//	} while (index<8);
 //
-//	printf("Done!");
+//	printf("\nDone!");
 //
 //	return 0;
 //}
@@ -153,7 +182,7 @@
 //	
 //	shuzu2[0] = shuzu1[0];
 //	for (index = 1; index <= 7; index++)
-//		shuzu2[index] = shuzu1[index] + shuzu2[index - 1];
+//		shuzu2[index] = shuzu1[index] + shuzu2[index - 1];               //法二：P80 嵌套循环
 //	
 //	for (index = 0; index <= 7; index++)
 //		printf("%6.2lf",shuzu1[index]);
@@ -170,14 +199,14 @@
 //15.
 //int main(void)
 //{
-//	char ch[255];
+//	char ch[256];
 //	int index;
 //
 //	printf("请输入内容：");
 //	do
 //	{
 //		for (index = 0; index <= 255; index++)
-//		scanf("%c", &ch[index]);
+//		scanf("%c", &ch[index]);								//这样会一直在for循环中，直到不满足测试条件
 //	} while (ch[index] != '\n');
 //
 //	for (index = strlen(ch); index >= 0; index--)
@@ -206,6 +235,37 @@
 //	return 0;
 //}
 //
+//15.改正
+//#include <string.h>
+//int main(void)
+//{
+//	char ch[256];
+//	int index=-1;
+//
+//	printf("请输入内容：");
+//	/*do
+//	{
+//	  scanf("%c", &ch[index]);								
+//	} while (++index, ch[index-1] != '\n');
+//	  */
+//	do
+//	{
+//		index++;
+//		scanf("%c", &ch[index]);
+//	} while (ch[index] != '\n');
+//
+//	/*do
+//	{
+//		scanf("%c", &ch[index]);
+//		index++;
+//	} while (ch[index] != '\n' );*/  //这样检测不到'\n'，因为index又向后移动了一位
+//
+//	printf("内容倒叙后是：");
+//	for (index--; index >= 0; index--)					//若写成index=strlen(ch)-1,则输出的第一项是数组中偏移地址为255
+//		printf("%c", ch[index]);								//的单元存储的内容。
+//
+//	return 0;
+//}
 
 
 //16.
@@ -213,7 +273,7 @@
 //{
 //	float Da=100.0, De=100.0;
 //	int n,i;
-//	printf("输入年数：");
+//	/*printf("输入年数：");
 //	scanf("%d",&n);
 //
 //	printf("Da:\n");
@@ -228,7 +288,15 @@
 //	{
 //		De += De*0.05;
 //		printf("第%d年是%8.2f\n", i, De);
-//	}
+//	}*/
+//	n = 0;
+//	do
+//	{
+//		Da += 10;
+//		De += De * 0.05;
+//		n++;
+//	}while(Da > De);
+//	printf("过%d年De比Da投资额更多，Da：%8.2f De：%8.2f",n,Da,De);
 //
 //	return 0;
 //}
@@ -251,6 +319,7 @@
 //
 //	return 0;
 //}
+//法二：do while循环
 
 
 //18.
