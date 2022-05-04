@@ -29,6 +29,47 @@
 //
 //	return 0;
 //}
+//9.改
+//int main(void)
+//{
+//	unsigned int num;
+//	unsigned long div;
+//	int biaoji;
+//	int num1;
+//
+//	printf("请输入一个正整数：(按0以退出程序)");
+//	while (scanf("%d", &num) == 1)
+//	{
+//		if (num < 2)
+//		{
+//			if (num == 0)
+//				break;//break在嵌套的if里，也能退出while循环
+//			printf("%d非法,请重新输入！",num);
+//			continue;
+//		}
+//
+//		printf("小于或等于%d的数，且是素数的是：", num);
+//		printf("%5d", 2);
+//				
+//			for (num1 = 3; num1 <= num; num1++)
+//			{
+//				for (div = 2, biaoji = 1; (div * div) <= num1; div++)
+//				{
+//					if (num1 % div == 0)
+//					biaoji = 0;
+//				}
+//
+//					if (biaoji)
+//					printf("%5d", num1);
+//			}
+//		
+//			printf("\n请输入一个正整数：(按0以退出程序)");
+//
+//	}
+//
+//	printf("Done !\n");
+//	return 0;
+//}
 
 
 //10.
@@ -106,81 +147,171 @@
 //	printf("再见！\n");
 //	return 0;
 //}
+//法二：不用goto 用调用函数来显示税收计划表
 
 
 //11.
+//#define yangjijiage 2.05
+//#define tiancaijiage 1.15
+//#define huluobojiage 1.09
+//int main(void)
+//{
+//	char choice;
+//	float yangji=0,tiancai=0,huluobo=0;
+//	float bangshu,shoujia,zhekou=0;
+//	float yunfeibaozhuangfei;
+//
+//	printf("****************************************************\n");
+//	printf("请输入要购买的蔬菜前对应的字母：（按q退出）\n");
+//	printf("(a 洋蓟			（b甜菜\n");
+//	printf("(c 胡萝卜		\n");
+//	printf("****************************************************\n");
+//	
+//	
+//	while (1)
+//	{
+//		scanf("%c", &choice);
+//
+//		switch (choice)
+//		{
+//		case 'a':
+//			printf("请输入磅数：\n");
+//			scanf("%f", &yangji);
+//			break;
+//		case 'b':
+//			printf("请输入磅数：\n");
+//			scanf("%f", &tiancai);
+//			break;
+//		case 'c':
+//			printf("请输入磅数：\n");
+//			scanf("%f", &huluobo);
+//			break;
+//		}
+//			
+//		if (choice == 'q')
+//			break;
+//		
+//    	printf("请输入要购买的蔬菜前对应的字母：（按q退出）\n");//为什么这段话会执行两遍？？？？？
+//		//if (choice == '\n')
+//			//continue;
+//	} 
+//
+//		bangshu = yangji + tiancai + huluobo;
+//		shoujia = yangji * yangjijiage + tiancai * tiancaijiage + huluobo * huluobojiage;
+//
+//		if (shoujia >= 100)
+//			zhekou = shoujia * 0.95;
+//
+//		if (bangshu == 0)
+//			yunfeibaozhuangfei = 0.0;
+//		else if (bangshu <= 5)
+//			yunfeibaozhuangfei = 6.5;
+//		else if (bangshu <= 20)
+//			yunfeibaozhuangfei = 14;
+//		else 
+//			yunfeibaozhuangfei = 14 + (bangshu - 20) * 0.5;
+//
+//
+//		printf("洋蓟单价：		2.05\n甜菜单价：		1.15\n胡萝卜单价：		1.09\n");
+//		printf("*****************************\n");
+//		printf("订购的重量（单位：磅）：%.2f\n",bangshu);
+//		printf("订购的蔬菜费用：	%.2f\n",shoujia);
+//		printf("订单的总费用：		%.2f\n",shoujia-zhekou);
+//		printf("折扣：			%.2f\n",zhekou);
+//		printf("运费和包装费：		%.2f\n",yunfeibaozhuangfei);
+//		printf("总计：			%.2f\n",shoujia-zhekou+yunfeibaozhuangfei);
+//		printf("*****************************\n");
+//
+//	printf("再见！\n");
+//
+//	return 0;
+//}
+
+//11.改
 #define yangjijiage 2.05
 #define tiancaijiage 1.15
 #define huluobojiage 1.09
+void showmenu(void);
+float getweight(void);
 int main(void)
 {
-	char choice;
-	float yangji=0,tiancai=0,huluobo=0;
-	float bangshu,shoujia,zhekou=0;
+	char choice='!';
+	float yangji = 0, tiancai = 0, huluobo = 0;
+	float bangshu, shoujia, zhekou = 0;
 	float yunfeibaozhuangfei;
+		
+do
+	{
+	       	showmenu(0);
+		HELP:	scanf("%c", &choice);//若输入a,则switch块执行完毕后执行showmenu,紧接着输入的是\n,这也执行showmenu.
+					
+		switch (choice)
+		{
+		case 'a':
+			yangji += getweight();
+			break;
+		case 'b':
+			tiancai += getweight();
+			break;
+		case 'c':
+			huluobo += getweight();
+			break;
+		default:
+				{	
+					if (choice == '\n')
+					goto HELP;
+					else
+					printf("输入错误，请重新输入！\n");
+				}
+		}
+				
+} while (choice!='q');
 
+	bangshu = yangji + tiancai + huluobo;
+	shoujia = yangji * yangjijiage + tiancai * tiancaijiage + huluobo * huluobojiage;
+
+	if (shoujia >= 100)
+		zhekou = shoujia * 0.95;
+
+	if (bangshu == 0)
+		yunfeibaozhuangfei = 0.0;
+	else if (bangshu <= 5)
+		yunfeibaozhuangfei = 6.5;
+	else if (bangshu <= 20)
+		yunfeibaozhuangfei = 14;
+	else
+		yunfeibaozhuangfei = 14 + (bangshu - 20) * 0.5;
+
+
+	printf("洋蓟单价：		2.05\n甜菜单价：		1.15\n胡萝卜单价：		1.09\n");
+	printf("*****************************\n");
+	printf("订购的重量（单位：磅）：%.2f\n", bangshu);
+	printf("订购的蔬菜费用：	%.2f\n", shoujia);
+	printf("订单的总费用：		%.2f\n", shoujia - zhekou);
+	printf("折扣：			%.2f\n", zhekou);
+	printf("运费和包装费：		%.2f\n", yunfeibaozhuangfei);
+	printf("总计：			%.2f\n", shoujia - zhekou + yunfeibaozhuangfei);
+	printf("*****************************\n");
+
+	printf("再见！\n");
+
+	return 0;
+}
+
+void showmenu(void)
+{
 	printf("****************************************************\n");
 	printf("请输入要购买的蔬菜前对应的字母：（按q退出）\n");
 	printf("(a 洋蓟			（b甜菜\n");
 	printf("(c 胡萝卜		\n");
 	printf("****************************************************\n");
-	
-	
-	while (1)
-	{
-		scanf("%c", &choice);
+}
 
-		switch (choice)
-		{
-		case 'a':
-			printf("请输入磅数：\n");
-			scanf("%f", &yangji);
-			break;
-		case 'b':
-			printf("请输入磅数：\n");
-			scanf("%f", &tiancai);
-			break;
-		case 'c':
-			printf("请输入磅数：\n");
-			scanf("%f", &huluobo);
-			break;
-		}
-			
-		if (choice == 'q')
-			break;
-		
-    	printf("请输入要购买的蔬菜前对应的字母：（按q退出）\n");//为什么这段话会执行两遍？？？？？
-		//if (choice == '\n')
-			//continue;
-	} 
+float getweight(void)
+{
+	float weight;
+	printf("请输入磅数：\n");
+	scanf("%f", &weight);
 
-		bangshu = yangji + tiancai + huluobo;
-		shoujia = yangji * yangjijiage + tiancai * tiancaijiage + huluobo * huluobojiage;
-
-		if (shoujia >= 100)
-			zhekou = shoujia * 0.95;
-
-		if (bangshu == 0)
-			yunfeibaozhuangfei = 0.0;
-		else if (bangshu <= 5)
-			yunfeibaozhuangfei = 6.5;
-		else if (bangshu <= 20)
-			yunfeibaozhuangfei = 14;
-		else 
-			yunfeibaozhuangfei = 14 + (bangshu - 20) * 0.5;
-
-
-		printf("洋蓟单价：		2.05\n甜菜单价：		1.15\n胡萝卜单价：		1.09\n");
-		printf("*****************************\n");
-		printf("订购的重量（单位：磅）：%.2f\n",bangshu);
-		printf("订购的蔬菜费用：	%.2f\n",shoujia);
-		printf("订单的总费用：		%.2f\n",shoujia-zhekou);
-		printf("折扣：			%.2f\n",zhekou);
-		printf("运费和包装费：		%.2f\n",yunfeibaozhuangfei);
-		printf("总计：			%.2f\n",shoujia-zhekou+yunfeibaozhuangfei);
-		printf("*****************************\n");
-
-	printf("再见！\n");
-
-	return 0;
+	return weight;
 }
