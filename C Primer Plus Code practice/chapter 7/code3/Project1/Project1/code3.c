@@ -28,6 +28,34 @@
 //	return 0;
 //}
 
+//复习题10.改正
+int main(void)
+{
+	char ch;
+
+	while ((ch = getchar()) != '#')
+	{
+		if (ch == '\n')
+			continue;
+		printf("Step 1\n");
+
+		if (ch == 'b')
+			break;
+
+		if (ch != 'c')
+		{
+			if (ch == 'h')
+				;
+			else if (ch == 'q')
+				printf("Step 2\n");
+			printf("Step 3\n");
+		}
+	}
+	printf("Done\n");
+
+	return 0;
+}
+
 
 //编程练习
 //1.
@@ -173,39 +201,180 @@
 
 
 //5.
-int main(void)
-{
-	int index = -1;
-	char ch[256];
-	int cishu = 0;
+//int main(void)
+//{
+//	int index = -1;
+//	char ch[256];
+//	int cishu = 0;
+//
+//	printf("请输入字符：（输入#以停止）");
+//	do
+//	{
+//		index++;
+//		scanf("%c", &ch[index]);
+//		switch (ch[index])
+//		{
+//		case '.':
+//
+//			ch[index] = '!';
+//			cishu++;
+//			break;
+//		case '!':
+//
+//			ch[index] = '!';
+//			index++;
+//			ch[index] = '!';
+//			cishu++;
+//			break;
+//		}
+//	} while (ch[index] != '#');
+//
+//	int a = index;
+//	for (index = 0; index <= a - 1; index++)
+//		printf("%c", ch[index]);
+//	printf("\n");
+//	printf("进行了%d次替换\n\n", cishu);
+//
+//	return 0;
+//}
 
-	printf("请输入字符：（输入#以停止）");
-	do
-	{
-		index++;
-		scanf("%c", &ch[index]);
-		switch (ch[index])
-		{
-		case '.':
 
-			ch[index] = '!';
-			cishu++;
-			break;
-		case '!':
+//6.
+//int main(void)
+//{
+//	printf("请输入字符：（键入#以停止）");
+//	char ch;
+//	int biaoji = 0;
+//	int cishu = 0;
+//
+//	while ((ch = getchar()) != '#')
+//	{
+//		if (ch == 'e' && !biaoji)
+//		biaoji = 1;//输入e，标记打开，输入i，标记关闭。         输入e后输入非i，标记关闭。
+//		
+//		if (biaoji && ch == 'i')
+//			{
+//				cishu++;
+//				biaoji = 0;
+//			}
+//		else if(ch!='e')
+//				biaoji = 0;
+//		
+//	}
+//	printf("ei出现%d次",cishu);
+//
+//	return 0;
+//}
 
-			ch[index] = '!';
-			index++;
-			ch[index] = '!';
-			cishu++;
-			break;
-		}
-	} while (ch[index] != '#');
 
-	int a = index;
-	for (index = 0; index <= a - 1; index++)
-		printf("%c", ch[index]);
-	printf("\n");
-	printf("进行了%d次替换\n\n", cishu);
+//7.
+//#define BREAK1 300
+//#define BREAK2 450
+//#define RATE1 0.15
+//#define RATE2 0.2
+//#define RATE3 0.25
+//
+//#define BASE1 (RATE1*BREAK1)
+//#define BASE2 (BASE1+(RATE2)*(BREAK2-BREAK1))
+//int main(void)
+//{
+//	float hours;
+//	float shui;
+//	float zonge;
+//	float jinshouru;
+//	printf("请输入您一周工作的小时数：\n");
+//	scanf("%f",&hours);
+//	if (hours >= 40)//是否有加班时间
+//		hours = (hours - 40) * 1.5 + 40;
+//
+//	zonge = hours * 10.0;
+//
+//	if (zonge <= BREAK1)
+//		shui = zonge * RATE1;
+//	else if (zonge <= BREAK2)
+//		shui = BASE1 + (zonge - BREAK1) * RATE2;
+//	else
+//		shui = BASE2 + (zonge - BREAK2) * RATE3;
+//		
+//	jinshouru = zonge - shui;
+//
+//	printf("工资总额：%.2f		税金：%.2f		净收入：%.2f\n",zonge,shui,jinshouru);
+//
+//	return 0;
+//}
 
-	return 0;
-}
+
+//8.
+//#define BREAK1 300
+//#define BREAK2 450
+//#define RATE1 0.15
+//#define RATE2 0.2
+//#define RATE3 0.25
+//
+//#define BASE1 (RATE1*BREAK1)
+//#define BASE2 (BASE1+(RATE2)*(BREAK2-BREAK1))
+//int main(void)
+//{
+//	float hours;
+//	float zonge;
+//	float shui;
+//	float jinshouru;
+//	int num;
+//	float meixiaoshi;
+//
+//	printf("********************************************************************\n");
+//	printf("Enter the number corresponding to the desired pay rate or action:\n");
+//	printf("1) $8.75/hr				2)$9.33/hr\n");
+//	printf("3) $10.00/hr				4)$11.20/hr\n");
+//	printf("5) quit\n");
+//	printf("********************************************************************\n");
+//
+//	while (scanf("%d", &num)==1)
+//	{
+//		if (num < 1 || num > 5)
+//		{
+//			printf("输入非法！请重新输入！");
+//			continue;
+//		}
+//		switch (num)
+//		{
+//		case 1:
+//			meixiaoshi = 8.75;
+//			break;
+//		case 2:
+//			meixiaoshi = 9.33;
+//			break;
+//		case 3:
+//			meixiaoshi = 10.0;
+//			break;
+//		case 4:
+//			meixiaoshi = 11.20;
+//			break;
+//		case 5:
+//			goto tuichu;
+//		}
+//
+//		printf("\n请输入您一周工作的小时数：\n");
+//		scanf("%f", &hours);
+//
+//		if (hours >= 40)//是否有加班时间
+//			hours = (hours - 40) * 1.5 + 40;
+//
+//		zonge = hours * meixiaoshi;
+//
+//		if (zonge <= BREAK1)
+//			shui = zonge * RATE1;
+//		else if (zonge <= BREAK2)
+//			shui = BASE1 + (zonge - BREAK1) * RATE2;
+//		else
+//			shui = BASE2 + (zonge - BREAK2) * RATE3;
+//
+//		jinshouru = zonge - shui;
+//
+//		printf("工资总额：%.2f		税金：%.2f		净收入：%.2f\n", zonge, shui, jinshouru);
+//	
+//	tuichu:break;
+//	}
+//
+//	return 0;
+//}
