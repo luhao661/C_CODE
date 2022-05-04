@@ -29,32 +29,32 @@
 //}
 
 //复习题10.改正
-int main(void)
-{
-	char ch;
-
-	while ((ch = getchar()) != '#')
-	{
-		if (ch == '\n')
-			continue;
-		printf("Step 1\n");
-
-		if (ch == 'b')
-			break;
-
-		if (ch != 'c')
-		{
-			if (ch == 'h')
-				;
-			else if (ch == 'q')
-				printf("Step 2\n");
-			printf("Step 3\n");
-		}
-	}
-	printf("Done\n");
-
-	return 0;
-}
+//int main(void)
+//{
+//	char ch;
+//
+//	while ((ch = getchar()) != '#')
+//	{
+//		if (ch == '\n')
+//			continue;
+//		printf("Step 1\n");
+//
+//		if (ch == 'b')
+//			break;
+//
+//		if (ch != 'c')
+//		{
+//			if (ch == 'h')
+//				;
+//			else if (ch == 'q')
+//				printf("Step 2\n");
+//			printf("Step 3\n");
+//		}
+//	}
+//	printf("Done\n");
+//
+//	return 0;
+//}
 
 
 //编程练习
@@ -73,8 +73,9 @@ int main(void)
 //			space++;
 //		if (ch == '\n')
 //			huanhang++;
-//		else if (ch != ' ')
+//		else if (ch != ' ')//不为换行且不为空格
 //			others++;
+//		//法二：if...    else if...    else...
 //	}
 //	printf("您输入的字符中有%d个空格%d个换行符和%d个其他字符。",space,huanhang,others);
 //	
@@ -99,6 +100,31 @@ int main(void)
 //			printf("\n");
 //		jishu++;
 //		printf("%c-%-5d",ch,ch);
+//
+//	}
+//	printf("\nDone ！\n");
+//	return 0;
+//}
+
+//2.改
+//#define STOP '#'
+//int main(void)
+//{
+//	char ch;
+//	int jishu = 0;
+//	printf("请输入字符：（输入#字符时停止）\n");
+//
+//	while ((ch = getchar()) != STOP)
+//	{
+//		
+//		//jishu++;      若写在这边，则第一行只有7个
+//		if (jishu++ % 8 == 0)
+//			printf("\n");
+//		
+//		if (ch == '\n')
+//			printf("'\\n'-%-5d",ch);
+//		else
+//		   printf("'%c'-%-5d", ch, ch);
 //
 //	}
 //	printf("\nDone ！\n");
@@ -199,6 +225,33 @@ int main(void)
 //	return 0;
 //}
 
+//法二
+//int main(void)
+//{
+//	int cishu = 0;
+//	char ch;
+//
+//	printf("请输入字符：（键入#以停止输入）");
+//
+//	while (scanf("%c",&ch)&&ch!='#')
+//	{
+//		if (ch == '.')
+//		{
+//			printf("!");
+//			cishu++;
+//		}
+//		else if (ch == '!')
+//		{
+//			printf("!!");
+//			cishu++;
+//		}
+//		else
+//			printf("%c",ch);//此处不能用putchar();
+//	}
+//	printf("进行了%d次替换\n\n", cishu);
+//	return 0;
+//}
+
 
 //5.
 //int main(void)
@@ -237,7 +290,7 @@ int main(void)
 //
 //	return 0;
 //}
-
+//法二： case '!'  case'.'  default: printf("%c",ch);
 
 //6.
 //int main(void)
@@ -265,7 +318,35 @@ int main(void)
 //
 //	return 0;
 //}
-
+//法二
+//int main(void)
+//{
+//	int cishu = 0;
+//	int halfpair = 0;
+//	char ch;
+//	printf("请输入：（按#退出）");
+//	while ((ch = getchar()) != '#')
+//	{
+//		switch (ch)
+//		{
+//		case 'e':
+//				halfpair = 1;
+//				break;
+//		case 'i':
+//			if (halfpair == 1)
+//			{
+//				cishu++;
+//				halfpair = 0;
+//			}
+//			break;
+//		default://非e和非i可以清空标记。
+//			halfpair = 0;
+//		}
+//	}
+//	printf("%d次",cishu);
+//
+//	return 0;
+//}
 
 //7.
 //#define BREAK1 300
@@ -302,7 +383,7 @@ int main(void)
 //
 //	return 0;
 //}
-
+//法二：按小时分   小于等于30小时   小于等于40小时    40小时以上（细分为基础工资450美元以下和以上）
 
 //8.
 //#define BREAK1 300
@@ -378,3 +459,87 @@ int main(void)
 //
 //	return 0;
 //}
+
+//8.改
+#define BREAK1 300
+#define BREAK2 450
+#define RATE1 0.15
+#define RATE2 0.2
+#define RATE3 0.25
+
+#define BASE1 (RATE1*BREAK1)
+#define BASE2 (BASE1+(RATE2)*(BREAK2-BREAK1))
+void showmenu(void);
+int main(void)
+{
+	float hours;
+	float zonge;
+	float shui;
+	float jinshouru;
+	int num;
+	float meixiaoshi;
+
+	showmenu(0);
+	while (scanf("%d", &num) == 1)
+	{
+		if (num < 1 || num > 5)
+		{
+			printf("输入非法！请重新输入！");
+			continue;
+		}
+		switch (num)
+		{
+		case 1:
+			meixiaoshi = 8.75;
+			break;
+		case 2:
+			meixiaoshi = 9.33;
+			break;
+		case 3:
+			meixiaoshi = 10.0;
+			break;
+		case 4:
+			meixiaoshi = 11.20;
+			break;
+		case 5:
+			goto tuichu;
+		}
+
+		printf("\n请输入您一周工作的小时数：\n");
+		scanf("%f", &hours);
+
+		if (hours >= 40)//是否有加班时间
+			hours = (hours - 40) * 1.5 + 40;
+
+		zonge = hours * meixiaoshi;
+
+		if (zonge <= BREAK1)
+			shui = zonge * RATE1;
+		else if (zonge <= BREAK2)
+			shui = BASE1 + (zonge - BREAK1) * RATE2;
+		else
+			shui = BASE2 + (zonge - BREAK2) * RATE3;
+
+		jinshouru = zonge - shui;
+
+		printf("工资总额：%.2f		税金：%.2f		净收入：%.2f\n", zonge, shui, jinshouru);
+
+		printf("继续——\n");
+		showmenu();
+
+	}
+
+tuichu:printf("再见！\n");
+	return 0;
+}
+
+void showmenu(void)
+{
+	printf("********************************************************************\n");
+	printf("Enter the number corresponding to the desired pay rate or action:\n");
+	printf("1) $8.75/hr				2)$9.33/hr\n");
+	printf("3) $10.00/hr				4)$11.20/hr\n");
+	printf("5) quit\n");
+	printf("********************************************************************\n");
+
+}
