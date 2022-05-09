@@ -184,7 +184,7 @@ int main(void)
 
 
 //5.
-#if 1
+#if 0
 int erfenfa1(int a);
 int erfenfa2(int b);
 
@@ -274,3 +274,30 @@ int erfenfa2(int b)
 
 
 //6.书P205
+#if 1
+int get_first(void);
+int main(void)
+{
+	printf("请输入字符：\n");
+	int ch;
+
+	ch = get_first();
+
+	printf("您输入的第一个非空白字符是：\n");
+	putchar(ch);
+
+	return 0;
+}
+int get_first(void)//该函数用于返回读取到的第一个非空白字符。
+{
+	int ch;
+
+	while ((ch = getchar())== ' '|| ch == '\n' || ch == '\t')
+		continue;
+
+	while (getchar() != '\n')
+		continue;
+
+	return ch;
+}
+#endif
