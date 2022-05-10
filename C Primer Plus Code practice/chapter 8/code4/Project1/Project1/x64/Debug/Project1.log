@@ -1,3 +1,9 @@
 ﻿  code4.c
-D:\CODE\C_CODE\C Primer Plus Code practice\chapter 8\code4\Project1\Project1\code4.c(205): warning C4716: “showmenu”: 必须返回一个值
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 8\code4\Project1\Project1\code4.c(26,11): warning C4087: “showmenu”: 用“void”参数列表声明
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 8\code4\Project1\Project1\code4.c(40,21): warning C4305: “=”: 从“double”到“float”截断
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 8\code4\Project1\Project1\code4.c(46,22): warning C4305: “=”: 从“double”到“float”截断
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 8\code4\Project1\Project1\code4.c(56,31): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 8\code4\Project1\Project1\code4.c(61,17): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 8\code4\Project1\Project1\code4.c(63,17): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 8\code4\Project1\Project1\code4.c(65,17): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
   Project1.vcxproj -> D:\CODE\C_CODE\C Primer Plus Code practice\chapter 8\code4\Project1\x64\Debug\Project1.exe

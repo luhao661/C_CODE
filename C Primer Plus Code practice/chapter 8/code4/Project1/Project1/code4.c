@@ -13,6 +13,7 @@
 void showmenu(void);
 int get_first(void);
 int yanzhengshuru(int a);
+
 int main(void)
 {
 	float hours;
@@ -44,10 +45,12 @@ int main(void)
 		case 'd':
 			meixiaoshi = 11.20;
 			break;
+		default:
+			goto tuichu;
 		}
 
 		printf("请输入您一周工作的小时数：\n");
-		scanf("%f", &hours);                                      //注意：scanf()读取数字时，忽略'\n'
+		scanf("%f", &hours);                                      //注意：scanf()读取数字时，忽略'\n'，但有'\n'留在缓冲区
 
 		if (hours >= 40)//是否有加班时间
 			hours = (hours - 40) * 1.5 + 40;
@@ -91,6 +94,7 @@ int get_first(void)
 		continue;
 	while (getchar() != '\n')
 		continue;
+
 	return ch;
 }
 int yanzhengshuru(int a)
@@ -120,7 +124,7 @@ int main(void)
 	{
 		if (xuanzegongnengyanzheng(ch))
 		{
-			//putchar("输入有误，请重新输入!\n");
+			//putchar("输入有误，请重新输入!\n"); 不能这样写
 			printf("输入有误，请重新输入!\n");
 			continue;
 		}
@@ -136,7 +140,7 @@ int main(void)
 			//if (first_number_input_yanzheng(  scanf("%f", &first_number)  )      这样写不可以
 			if (first_number_input_yanzheng(a))
 			{
-				while (getchar() != '\n')//处理scanf的错误输入，此情况下的scanf会有\n留在输入缓冲区
+				while (getchar() != '\n')//处理scanf的错误输入，scanf会有\n留在输入缓冲区
 				//putchar(first_number);   putchar不能输出浮点型数据
 					continue;
 
@@ -147,7 +151,14 @@ int main(void)
 			else
 				break;
 		}
-
+		//法二：
+		//while (scanf("%f", &first_number) != 1)
+		//{
+		//	while ((a = getchar()) != '\n')
+		//		continue;
+		//	printf("输入有误，请重新输入!\n");
+		//	printf("可以输入比如说2.5, -1.7E8 等:");
+		//}
 
 		printf("Enter second number:");
 
