@@ -101,7 +101,7 @@ int bijiaodaxiao(int num1, int num2)
 
 
 //递归演示
-#if 1
+#if 0
 void up_and_down(int);
 int main(void)
 {
@@ -116,5 +116,117 @@ void up_and_down(int n)
 		up_and_down(n + 1);
 	printf("LEVEL %d: n location %p\n", n, &n);
 
+}
+#endif
+
+
+//使用循环和递归计算阶乘
+#if 0
+int xunhuan(int);
+int digui(int);
+
+int main(void)
+{
+	int num;
+	printf("请输入一个整数，范围在0~12:\n(按q以退出)");
+
+	while (scanf("%d", &num) == 1)
+	{
+		if (num < 0)
+			printf("输入错误！\n");
+		else if (num > 12)
+			printf("输入超过最大范围！\n");
+		else
+		{
+			printf("%d的阶乘是%d\n",num,xunhuan(num));
+			printf("%d的阶乘是%d\n", num, digui(num));
+		}
+	}
+
+	return 0;
+}
+int xunhuan(int num)
+{
+	int i;
+	for (i = 1;num>1;num--)
+		i *=num;
+
+	return i;
+}
+int digui(int num)
+{
+	int i;
+
+	if (num > 0)
+		i = num * digui(num - 1);
+	else
+		i = 1;
+
+	return i;
+}
+#endif
+
+
+//用递归，显示十进制对应的二进制数
+#if 1
+void huaweierjinzhi(int);
+
+int main(void)
+{
+	unsigned long num;
+
+	printf("请输入一个整数（按q以退出）：\n");
+
+	while (scanf("%d", &num) == 1)
+	{
+		printf("转化为二进制是：");
+		huaweierjinzhi(num);
+		printf("\n请输入下一个整数：\n");
+	}
+
+	return 0;
+}
+void huaweierjinzhi(int num)
+{
+	int yushupanduan;//余数判断
+
+	yushupanduan = num % 2;
+	if (num >= 2)
+		huaweierjinzhi(num/2);
+
+	//putchar(yushupanduan ? '0' : '1');
+	printf("%d", yushupanduan);//法二
+
+	return;
+
+}
+#endif
+
+
+//用递归显示斐波那契数列的项
+#if 0
+unsigned long fibonacci(unsigned);
+int main(void)
+{
+	int num;
+
+	printf("此程序将展示斐波那契数列的第n项的值\n");
+	printf("请输入一个整数：\n");
+
+	while (scanf("%d",&num) == 1)
+	{
+		printf("斐波那契数列的第%d项值为%d",num,fibonacci(num));
+
+		printf("\n请继续输入：\n");
+	}
+	
+	return 0;
+}
+unsigned long fibonacci(unsigned num)
+{
+	if (num > 2)
+		return fibonacci(num - 1) + fibonacci(num - 2);
+	else
+		return 1;
 }
 #endif
