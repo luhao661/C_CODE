@@ -9,57 +9,54 @@
 //复习题
 //4.
 #if 0
-int sum(void);
+int sum(int a,int b);
 int main(void)
 {
+	int a, b;
+
 		printf("该程序输出两个整数之和\n");
-	while (sum())
-	{
-		;
-	}
+		printf("请输入两个整数：\n");
+
+		while ((scanf("%d%d", &a, &b)) != 2)
+		{
+			scanf("%*s");
+			printf("请重新输入！\n");
+		}
+	
+		printf("%d+%d=%d\n\n", a, b, sum(a,b));
+	
 	return 0;
 }
-int sum(void)
+int sum(int a,int b)
 {
-	int a, b;
-	printf("请输入两个整数：\n");
-	while ((scanf("%d%d", &a, &b)) != 2)
-	{
-		scanf("%*s");
-		printf("请重新输入！\n");
-	}
-	printf("%d+%d=%d\n\n", a, b, a + b);
-	
-		return (a+b);//输入两个0则退出程序
+		return (a+b);
 }
 #endif
 
 
-//3.
+//5.
 #if 0
-double sum(void);
+double sum(double a,double b);
 int main(void)
 {
-	printf("该程序输出两个小数之和\n");
-	while (sum())
-	{
-		;
-	}
-	return 0;
-}
-
-double sum(void)
-{
 	double a, b;
+
+	printf("该程序输出两个小数之和\n");
 	printf("请输入两个小数：\n");
+
 	while ((scanf("%lf%lf", &a, &b)) != 2)
 	{
 		scanf("%*s");
 		printf("请重新输入！\n");
 	}
-	printf("%lf+%lf=%.3lf\n\n", a, b, a + b);
 
-		return (a+b);//输入两个0则退出程序
+	printf("%.2lf+%.2lf=%.2lf\n\n", a, b, sum(a, b));
+
+	return 0;
+}
+double sum(double a, double b)
+{
+	return (a + b);
 }
 #endif
 
@@ -102,17 +99,28 @@ int main(void)
 
 	return 0;
 }
-int bijiao(int a, int b, int c)
-{
-	if (a >= b && a >= c)
-		return a;
-	else if (b >= a && b >= c)
-		return b;
-	else if (c >= a && c >= b)
-		return c;
-	else
-		return -6666;//表示出错
-}
+//int bijiao(int a, int b, int c)
+//{
+//	if (a >= b && a >= c)
+//		return a;
+//	else if (b >= a && b >= c)
+//		return b;
+//	else if (c >= a && c >= b)
+//		return c;
+//	else
+//		return -6666;//表示出错
+//}
+//法二
+			int bijiao(int a, int b, int c)
+			{
+				int max = a;
+				if (b > max)
+					max = b;
+				if (c > max)
+					max = c;
+
+				return max;
+			}
 #endif
 
 
@@ -156,9 +164,9 @@ int get_choice(int a, int b)
 		printf("\n请重新输入！_______\b\b\b\b");
 	}
 
-	if (biaoji)
-		return choice;
-	else
+	if (biaoji)                               //  if(biaoji   !=   1)
+		return choice;					  //  choice=4;
+	else                                       //   return choice;
 		return 4;
 }
 #endif
