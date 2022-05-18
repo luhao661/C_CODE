@@ -259,6 +259,10 @@ int main(void)
 	int shuzu[5] = { 100,200,300,400,500 };
 	int* p1, * p2, * p3;
 
+	printf("     shuzu=%p\n",shuzu);                                //注意！ 这三条语句等价！
+	printf("    &shuzu=%p\n",&shuzu);
+	printf(" &shuzu[0]=%p\n", &shuzu[0]);
+
 	p1 = shuzu;
 	p2 = &shuzu[2];
 
@@ -331,11 +335,17 @@ void mult_array(double ar[], int n, double mult)
 
 
 //理解指针如何表示二维数组
-#if 1
+#if 0
 int main(void)
 {
 	int zippo[4][2] = { {2,4},{6,8},{1,3},{5,7} };
 
+	printf("       zippo=%p\n",zippo);                                //重要！！！！！
+	printf("      &zippo=%p\n", &zippo);
+	printf("    zippo[0]=%p\n", zippo[0]);
+	printf("   &zippo[0]=%p\n", &zippo[0]);
+	printf("&zippo[0][0]=%p\n\n\n", &zippo[0][0]);
+	
 	printf("zippo=%p, zippo+1=%p\n",zippo,zippo+1);
 	printf("zippo[0]=%p, zippo[0]+1=%p\n",zippo[0],zippo[0]+1);
 	printf("*zippo=%p, *zippo+1=%p\n\n",*zippo,*zippo+1);
@@ -347,6 +357,56 @@ int main(void)
 	printf("zippo[2][1]=%d\n",zippo[2][1]);
 	printf("*(*(zippo+2)+1)=%d\n\n",*(*(zippo+2)+1));
 
+
+	return 0;
+}
+#endif
+
+
+//通过指针获取二维数组的信息
+#if 0
+int main(void)
+{
+	int zippo[4][2] = { {2,4},{6,8},{1,3},{5,7} };
+	int(*p)[2];
+
+	p = zippo;
+	printf("p=%p, p+1=%p\n",p,p+1);
+	printf("p[0]=%p, p[0]+1=%p\n", p[0], p[0] + 1);
+
+	printf("*p=%p, *p+1=%p\n",*p,*p+1);
+	printf("p[0][0]=%d\n",p[0][0]);
+	printf("*p[0]=%d\n",*p[0]);
+	printf("**p=%d\n",**p);
+	printf("p[2][1]=%d\n",p[2][1]);
+	printf("*(*(p+2)+1)=%d\n", *(*(p + 2) + 1));
+
+	return 0;
+}
+#endif
+
+
+//指针的指针
+#if 1
+int main(void)
+{
+	int num = 2;
+	int* p1;
+	int** p2;
+
+	p1 = &num;
+	p2 = &p1;
+
+	printf("num=%d\n",num);
+	printf("&num=%p\n",&num);
+	printf("p1=%p\n", p1);
+	printf("&p1=%p\n", &p1);
+	printf("p2=%p\n",p2);
+	printf("&p2=%p\n\n", &p2);
+
+	printf("*p1=%d\n", *p1);//若写成%p,则为0000000002
+	printf("*p2=%p\n", *p2);
+	printf("**p2=%d\n", **p2);
 
 	return 0;
 }
