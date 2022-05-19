@@ -387,7 +387,7 @@ int main(void)
 
 
 //指针的指针
-#if 1
+#if 0
 int main(void)
 {
 	int num = 2;
@@ -409,5 +409,140 @@ int main(void)
 	printf("**p2=%d\n", **p2);
 
 	return 0;
+}
+#endif
+
+
+//处理二维数组的函数
+#if 0
+#define ROWS 3
+#define COLS 4
+void sum_rows(int(*ar)[COLS], int rows);//计算数列的行和
+void sum_cols(int  ar[] [COLS], int rows);//计算数列的列和
+int sum(int  ar[][COLS], int rows);//计算数列的总和
+
+int main(void)
+{
+	int shuzu[ROWS][COLS] = { {2,4,6,8},
+													{3,5,7,9},
+													{12,10,8,6} };
+
+	sum_rows(shuzu, ROWS);
+	sum_cols(shuzu, ROWS);
+	printf("数组所有元素之和为：%d\n", sum(shuzu, ROWS));
+
+	return 0;
+}
+void sum_rows(int(*ar)[COLS], int rows)
+{
+	int i, j, sum1;
+
+	for (i = 0; i < rows; i++)
+	{
+		sum1 = 0;
+		for (j = 0; j < COLS; j++)
+			//sum1 += shuzu[i][j];     //这样写没用，只能用指针
+			sum1 += ar[i][j];
+
+		printf("row=%d, sum1=%d\n",i,sum1);
+
+	}
+}
+void sum_cols(int(*ar)[COLS], int rows)
+{
+	int i, j, sum2;
+
+	for (i = 0; i < COLS; i++)
+	{
+		sum2 = 0;
+		for (j = 0; j < rows; j++)
+			/*			sum2 += ar[i][j];*/                //错误！！！
+			sum2 += ar[j][i];
+
+		printf("column=%d, sum2=%d\n", i, sum2);
+
+	}
+}
+int sum(int(*ar)[COLS], int rows)
+{
+	int i, j, sum=0;
+
+	for (i = 0; i < rows; i++)
+	{
+		
+		for (j = 0; j < COLS; j++)
+			sum += ar[i][j];
+
+	}
+	return sum;
+}
+#endif
+
+
+//变长数组(无法实现)
+#if 0
+#define ROWS 3
+#define COLS 4
+
+int sum(int rows,int cols, int ar[rows][cols]);//计算数列的总和
+
+int main(void)
+{
+	int shuzu[ROWS][COLS] = { {2,4,6,8},
+													{3,5,7,9},
+													{12,10,8,6} };
+
+	sum_rows(shuzu, ROWS);
+	sum_cols(shuzu, ROWS);
+	printf("数组所有元素之和为：%d\n", sum(ROWS,COLS, shuzu));
+
+	return 0;
+}
+int sum(int rows, int cols, int ar[rows][cols])
+{
+	int i, j, sum1;
+
+	for (i = 0; i < rows; i++)
+	{
+		sum1 = 0;
+		for (j = 0; j < COLS; j++)
+			//sum1 += shuzu[i][j];     //这样写没用，只能用指针
+			sum1 += ar[i][j];
+
+		printf("row=%d, sum1=%d\n", i, sum1);
+
+	}
+}
+#endif
+
+
+//复合字面量
+#if 1
+#define COLS 4
+int sum2(const int ar[][COLS], int rows);
+int sum(const int ar[], int n);
+int main(void)
+{
+	int total1, total2, total3;
+	int* p1;
+	int* p2[COLS];
+
+	p1 = (int[2]){ 10,20 };
+	//p2 = (int[2][COLS]){ {1,2,3,-9},{4,5,6,-8} };   此语句无法实现
+
+	total1 = sum(p1, 2);
+	printf("total1=%d\n",total1);
+
+	return 0;
+}
+int sum(const int ar[], int n)
+{
+	int i;
+	int total = 0;
+	for (i = 0; i < n; i++)
+	{
+		total += ar[i];
+	}
+	return total;
 }
 #endif

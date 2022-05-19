@@ -1,2 +1,5 @@
 ﻿  code1.c
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 10\code1\Project1\Project1\code1.c(525,22): warning C4101: “total3”: 未引用的局部变量
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 10\code1\Project1\Project1\code1.c(527,7): warning C4101: “p2”: 未引用的局部变量
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 10\code1\Project1\Project1\code1.c(525,14): warning C4101: “total2”: 未引用的局部变量
   Project1.vcxproj -> D:\CODE\C_CODE\C Primer Plus Code practice\chapter 10\code1\Project1\x64\Debug\Project1.exe
