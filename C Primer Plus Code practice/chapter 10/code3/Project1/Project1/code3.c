@@ -341,18 +341,71 @@ void reverse_value(double* p, int n)
 
 
 //7.
-#if 1
+#if 0
 void copy_ptr(double(*p1)[3], double(*p2)[3], int rows);
+//void show(double *p1[3],int rows);  错误！！
+void show(double(* p1)[3], int rows);
+
 int main(void)
 {
 	double source[2][3] = { {1.1,2.2,3.3},{4.4,5.5,6.6} };
 	double target[2][3];
 	copy_ptr(target,source,2);
+	show(target,2);
 
 	return 0;
 }
 void copy_ptr(double(*p1)[3], double(*p2)[3], int rows)
 {
+	int i,j;
+	for (i = 0; i < rows; i++)
+	{
+		for (j = 0; j < 3; j++)
+			*(*(p1 + i) + j) = *(*(p2 + i) + j);
+	}
+}
+void show(double(* p1)[3], int rows)
+{
+	//printf("%5.2lf", p1[0][0]);//为什么不显示？  因为 (* p1)[3] 错写成*p1 [3]
+	int i, j;
+	for (i = 0; i < rows; i++)
+	{
+		for (j = 0; j < 3; j++)
+			printf("%5.2lf",p1[i][j]);
+		putchar('\n');
+	}
+}
+#endif
 
+
+//8.
+#if 1
+void copy_ptr(double(*p1), double(*p2), int n);
+void show(double(*p1), int n);
+
+int main(void)
+{
+	double source[7] = { 1.1,2.2,3.3,4.4,5.5,6.6,7.7 };
+	double target[3] = {0,0,0};
+	copy_ptr(&target[0], &source[0], 3);//数组元素的地址，待处理元素的个数
+	show(target,3);
+
+	return 0;
+}
+void copy_ptr(double(*p1), double(*p2), int n)
+{
+	int i;
+	for (i = 0; i <  n; i++)
+	{
+		*(p1 + i) = *(p2 +2+ i);//p1的索引0，1，2  被赋上 p2的索引2，3，4即第3，4，5个元素的值
+	}
+}
+void show(double(*p1), int n)
+{
+	int i;
+	for (i = 0; i < n; i++)
+	{
+		printf("%5.2lf",p1[i]);
+	}
 }
 #endif
