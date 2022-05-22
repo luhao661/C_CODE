@@ -6,14 +6,48 @@
 
 
 //复习题
-//6
+//4.
 #if 0
+int main(void)
+{
+	int* ptr;
+	int torf[2][2] = {12,14,16};
+	ptr = torf[0];
+
+	printf("%d\n",*ptr);
+	printf("%d\n", *(ptr+2));
+	printf("%d\n",torf[0][2]);//会读torf[1][0]上的值
+
+	return 0;
+}
+#endif
+
+
+//4.
+#if 0
+int main(void)
+{
+	int(* ptr)[2];
+	int torf[2][2] = { 12,14,16 };
+	ptr = torf;
+
+	printf("%d\n", **ptr);
+	printf("%d\n", **(ptr + 1));
+	printf("%d\n", *(torf[0]+1));
+	return 0;
+}
+#endif
+
+
+//6
+#if 1
 int main(void)
 {
 	int grid[30][100];
 	int a[100] = { [5] = 101,[20] = 101,101,101,101 };
 
 	printf("%p\n%p\n%p\n",&grid[22][0],grid[22],&grid[22]);
+	printf("%p\n%p\n%p\n%p\n", &grid[0][0], grid[0], &grid[0],grid);
 
 	return 0;
 }
@@ -43,7 +77,7 @@ void show(const double ar[], int n)
 		printf("和为%.2f\n",sum);
 }
 #endif
-#if 1
+#if 0
 void show2(const double ar2[][3], int n);
 int main(void)
 {
