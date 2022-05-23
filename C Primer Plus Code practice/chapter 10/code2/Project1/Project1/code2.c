@@ -40,7 +40,7 @@ int main(void)
 
 
 //6
-#if 1
+#if 0
 int main(void)
 {
 	int grid[30][100];
@@ -54,6 +54,19 @@ int main(void)
 #endif
 
 
+//10.
+#if 0
+int main(void)
+{
+	float rootbeer[10] = {1,2,3,4,5,6,7,8,9,10};
+	float things[10][5];
+	//things[5] = rootbeer;//一维数组不能直接向二维数组的一行赋值
+
+	return 0;
+}
+#endif
+
+
 //13.
 #if 0
 void show(const double ar[], int n);
@@ -61,8 +74,9 @@ int main(void)
 {
 	double* p;
 
-	p=(double[4]) {8,3,9,2};
-	show(p,4);
+	/*p=(double[4]) {8,3,9,2};
+	show(p,4);*/
+	show((double[4]) { 8, 3, 9, 2 },4);
 
 	return 0;
 }
@@ -77,14 +91,16 @@ void show(const double ar[], int n)
 		printf("和为%.2f\n",sum);
 }
 #endif
-#if 0
+#if 1
 void show2(const double ar2[][3], int n);
 int main(void)
 {
-	double (*p)[3];
+	/*double (*p)[3];
 
 	p = (double[2][3]){ {8,3,9},{5,4,1} };
-	show2(p,2 );
+	show2(p,2 );*/
+
+	show2((double[2][3]) { {8, 3, 9}, { 5,4,1 } },2 );
 
 	return 0;
 }
