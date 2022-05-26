@@ -182,21 +182,22 @@ int main(void)
 #endif
 
 
-//读取行，删除存储在字符串中的换行符，若没有换行符，则丢弃数组装不下的字符
-#if 1
+//读取行，替换存储在字符串中的换行符为空字符；若没有换行符，则当出现空字符，就丢弃数组装不下的字符
+#if 0
 int main(void)
 {
 	char words[10];
 	puts("请输入字符串：");
-	while (fgets(words, 10, stdin) != NULL && words[0] != '\n')
+	while (fgets(words, 10, stdin) != NULL && words[0] != '\n')//输入不为^Z 或  '\n'
 	{
-		i = 0;
+	    int i=0;
 		while (words[i] != '\n' && words[i] != '\0')
 			i++;//遍历字符串，直至遇到换行符或空字符
+		
 		if (words[i] == '\n')
 			words[i] = '\0';//若遇到换行符，就换成空字符
 		else
-			while (getchar != '\n')
+			while (getchar() != '\n')
 				continue;//若遇到空字符，则丢弃输入行的剩余字符
 
 		puts(words);
@@ -205,4 +206,204 @@ int main(void)
 	puts("Done !\n");
 	return 0;
 }
+#endif
+
+
+//使用scanf()
+#if 0
+int main(void)
+{
+	char name1[11], name2[11];
+	int count;
+
+	printf("请输入两个名字：\n");
+	count = scanf("%5s %10s",name1,name2);
+	printf("我读入到%d个名字，分别为%s和%s",count,name1,name2);
+
+	return 0;
+}
+#endif
+
+
+//使用puts()
+#if 0
+#define DEF "I am a #define string."
+int main(void)
+{
+	char string1[80] = "An array was initialized to me.";
+	const char* string2 = "A pointer was initialized to me.";
+
+	puts(DEF);
+	puts(string1);
+	puts(string2);
+	putchar('\n');
+
+	puts(&string1);
+	puts(&string1[0]);
+	puts(&string1[5]);
+
+	puts(&string2);//输出是乱码
+	puts(string2+4);
+
+	return 0;
+}
+#endif
+
+
+//如果puts()没遇到空字符
+#if 0
+int main(void)
+{
+	char a[] = "a";
+	char dont[] = {'W','O','W','!'};
+	puts(dont);
+
+	return 0;
+}
+#endif
+
+
+//自定义输出函数
+#if 0
+void put1(const char* string1);//打印字符串，不添加\n
+int  put2(const char* string2);//打印字符串，统计打印的字符数
+int main(void)
+{
+	put1("abcdefg");
+	put1("hijklmn");
+	putchar('\n');
+
+	printf("I count %d characters.\n", put2("opqrst"));//
+	
+	return 0;
+}
+void put1(const char* string1)
+{
+	while (*string1 != '\0')//或while(*string)
+		putchar(*string1++);
+}
+int  put2(const char* string2)
+{
+	int count = 0;
+	while (*string2)
+	{
+		putchar(*string2++);
+		count++;
+	}
+	putchar('\n');
+
+	return count;
+}
+#endif
+
+
+//使用strlen()函数缩短字符串长度
+#if 0
+#include <string.h>
+void fit(char* string, unsigned int size);
+int main(void)
+{
+	char message[] = "Things should be as simple as possible,"" but not simpler.";//翻译事情应该简化而不是更简单
+
+	puts(message);
+	fit(message,38);
+	puts(message);
+	puts(message+39);//打印从message[39]开始的地址上的内容
+
+	return 0;
+}
+void fit(char* string, unsigned int size)
+{
+	if (strlen(string) > size)
+		string[size] = '\0';//若输入size=38,则输出索引为0至37的字符
+}
+#endif
+
+
+//s_gets()函数的返回值
+#if 0
+#include <string.h>
+#define SIZE 80
+char* s_gets(char* string, int n);
+int main(void)
+{
+	char flower[SIZE];
+
+	printf("%p\n", s_gets(flower, SIZE));
+	printf("%p\n",flower);								//两者相同
+	printf("%p\n", &flower[0]);
+	return 0;													    //说明fgets()的返回值是flower数组首元素的地址
+}
+char* s_gets(char* string, int n)
+{
+	char *fanhui;
+	int i = 0;
+	fanhui = fgets(string, n, stdin);
+	
+	if (fanhui)
+	{
+		while (string[i] != '\n' && string[i] != '\0')
+			i++;
+
+		if (string[i] == '\n')
+			string[i] = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+
+	return fanhui;
+}
+#endif
+
+
+//使用strcat()函数，s_gets()函数拼接两个字符串
+#if 1
+#include <string.h>
+#define SIZE 80
+char* s_gets(char* string, int n);
+int main(void)
+{
+	char flower[SIZE];
+	char add[] = "s smell like old shoes.";
+
+	puts("What is your favorite flower ?");
+	if (s_gets(flower, SIZE))//若没遇到^Z则执行if语句块
+	{
+		strcat(flower, add);
+		puts(flower);
+		puts(add);
+	}
+	else
+		puts("End of file encountered !");
+
+	puts("Bye !");
+	
+	return 0;													
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	int i = 0;
+	fanhui = fgets(string, n, stdin);
+
+	if (fanhui)
+	{
+		while (string[i] != '\n' && string[i] != '\0')
+			i++;
+
+		if (string[i] == '\n')
+			string[i] = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+
+	return fanhui;
+}
+#endif
+
+
+//
+#if 1
 #endif
