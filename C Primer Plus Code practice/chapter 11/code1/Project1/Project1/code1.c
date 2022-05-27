@@ -329,10 +329,12 @@ int main(void)
 {
 	char flower[SIZE];
 
-	printf("%p\n", s_gets(flower, SIZE));
-	printf("%p\n",flower);								//两者相同
-	printf("%p\n", &flower[0]);
-	return 0;													    //说明fgets()的返回值是flower数组首元素的地址
+	printf("%p\n", s_gets(flower, SIZE));																			//特殊情况：输入^Z则此句输出0000000000000000
+	printf("%p\n",flower);								//（一般情况下）两者相同
+	printf("%p\n", &flower[0]);					    //说明fgets()的返回值是flower数组首元素的地址
+	printf("%d\n", s_gets(flower,SIZE));//地址类型用%d输出时，无法显示内容
+
+	return 0;								
 }
 char* s_gets(char* string, int n)
 {
@@ -358,7 +360,7 @@ char* s_gets(char* string, int n)
 
 
 //使用strcat()函数，s_gets()函数拼接两个字符串
-#if 1
+#if 0
 #include <string.h>
 #define SIZE 80
 char* s_gets(char* string, int n);
@@ -404,6 +406,102 @@ char* s_gets(char* string, int n)
 #endif
 
 
-//
+//完善strcat()和使用strncat()来拼接两个字符串
+#if 0
+#include <string.h>
+#define SIZE 30
+#define BUGSIZE 13
+char* s_gets(char* string, int n);
+int main(void)
+{
+	char flower[SIZE];
+	char add[] = "s smell like old shoes.";
+	char bug[BUGSIZE];
+	int available;
+
+	puts("What is your favorite flower ?");
+	s_gets(flower, SIZE);
+	printf("flower数组的大小：%zd\n",strlen(flower));//若输入^Z则flower数组的大小是87
+
+	if (strlen(flower)+strlen(add)+1<=SIZE)
+	{
+		strcat(flower, add);
+		puts(flower);
+	}
+	
+
+	puts("What is your favorite bug ?");
+	s_gets(bug, BUGSIZE);
+
+	available = BUGSIZE - strlen(bug) - 1;//防止多出来的字符溢出到相邻存储单元
+	strncat(bug,add,available);
+	puts(bug);
+
+	puts("Bye !");
+
+	return 0;
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	int i = 0;
+	fanhui = fgets(string, n, stdin);
+
+	if (fanhui)
+	{
+		while (string[i] != '\n' && string[i] != '\0')
+			i++;
+
+		if (string[i] == '\n')
+			string[i] = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+
+	return fanhui;
+}
+#endif
+
+
+//使用strcmp()函数比较两个字符串
 #if 1
+#include <string.h>
+#define ANSWER "Grant"
+#define SIZE 40
+char* s_gets(char* string, int n);
+int main(void)
+{
+	char try[SIZE];
+	puts("Who is buried in Grant's tomb ?");
+	s_gets(try,SIZE);
+	while (strcmp(try, ANSWER) != 0)
+	{
+		puts("No, that's wrong. Try again.");
+		s_gets(try, SIZE);
+	}
+	puts("That's right !\n");
+
+	return 0;
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	int i = 0;
+	fanhui = fgets(string, n, stdin);
+
+	if (fanhui)
+	{
+		while (string[i] != '\n' && string[i] != '\0')
+			i++;
+
+		if (string[i] == '\n')
+			string[i] = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+
+	return fanhui;
+}
 #endif
