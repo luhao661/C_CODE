@@ -23,6 +23,9 @@ int main (void)
 	puts("a");//此处“a”是个字符串。
 	puts('a');//不会显示
 
+	/*words = "abc";    //words 不可以修改
+	puts(words);*/
+
 	return 0;
 }
 #endif
@@ -340,7 +343,7 @@ char* s_gets(char* string, int n)
 {
 	char *fanhui;
 	int i = 0;
-	fanhui = fgets(string, n, stdin);
+	fanhui = fgets(string, n, stdin);//n为80，fgets()只会读入79个字符，并自动在其后加\0
 	
 	if (fanhui)
 	{
@@ -465,7 +468,7 @@ char* s_gets(char* string, int n)
 
 
 //使用strcmp()函数比较两个字符串
-#if 1
+#if 0
 #include <string.h>
 #define ANSWER "Grant"
 #define SIZE 40
@@ -481,6 +484,398 @@ int main(void)
 		s_gets(try, SIZE);
 	}
 	puts("That's right !\n");
+
+	return 0;
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	int i = 0;
+	fanhui = fgets(string, n, stdin);
+
+	if (fanhui)
+	{
+		while (string[i] != '\n' && string[i] != '\0')
+			i++;
+
+		if (string[i] == '\n')
+			string[i] = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+
+	return fanhui;
+}
+#endif
+
+
+//strcmp()的返回值
+#if 0
+#include<string.h>
+int main(void)
+{
+	printf("strcmp(\"A\",\"A\") is ");
+	printf("%d\n",strcmp("A","A"));
+
+	printf("strcmp(\"A\",\"B\") is ");
+	printf("%d\n", strcmp("A", "B"));
+
+	printf("strcmp(\"B\",\"A\") is ");
+	printf("%d\n", strcmp("B", "A"));
+
+	printf("strcmp(\"C\",\"A\") is ");
+	printf("%d\n", strcmp("C", "A"));
+
+	printf("strcmp(\"Z\",\"a\") is ");
+	printf("%d\n", strcmp("Z", "a"));
+
+	printf("strcmp(\"apples\",\"apple\") is ");
+	printf("%d\n", strcmp("apples", "apple"));
+
+	return 0;
+}
+#endif
+
+
+//限定输入的行数，设置检测到EOF、quit或达到最大输入行数时退出。
+#if 0
+#include <string.h>
+#define SIZE 80
+#define LIM 10
+#define STOP "quit"
+char* s_gets(char* string, int n);
+int main(void)
+{
+	char input[LIM][SIZE];
+	int count = 0;
+	printf("请输入最多%d行内容（键入quit以退出）：\n",LIM);
+
+	while (count < LIM && s_gets(input[count], SIZE) != NULL && strcmp(input[count], STOP) != 0)
+	{																								//改为&&input[count][0]!='\0'实现输入空行就退出的功能
+		count++;
+	}
+	printf("%d行已输入\n",count);
+
+	return 0;
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	int i = 0;
+	fanhui = fgets(string, n, stdin);
+
+	if (fanhui)
+	{
+		while (string[i] != '\n' && string[i] != '\0')
+			i++;
+
+		if (string[i] == '\n')
+			string[i] = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+
+	return fanhui;
+}
+#endif
+
+
+//使用strncmp()比较两个字符串的指定位置的异同。
+#if 0
+#include <string.h>
+#define LISTSIZE 6
+int main(void)
+{
+	const char* list[LISTSIZE] = {																												//	一个数组，内含6个指针
+	"astronomy","astounding","astrophysics","ostracize","asterism","astrophobia"
+	};
+	int count = 0;
+	int i;
+
+	for(i=0;i<LISTSIZE;i++)
+		if(strncmp(list[i],"astronomy",5)==0)
+		{
+			printf("Found %s\n",list[i]);
+			count++;
+		}
+	printf("The list contained %d words begining with astro.\n",count);
+
+	return 0;
+}
+#endif
+
+
+//用strcpy()拷贝整个字符串（不是拷贝字符串的地址）
+#if 0
+#include <string.h>
+#define SIZE 40
+#define LIM 5
+
+char* s_gets(char* string, int n);
+int main(void)
+{
+	char qwords[LIM][SIZE];
+	char temp[SIZE];
+	int i = 0;
+
+	printf("请输入以q开头的%d行单词：\n",LIM);
+	while (i < LIM && s_gets(temp, SIZE))
+	{
+		if (temp[0] != 'q')
+			printf("%s没有以q开头！\n",temp);
+		else
+		{
+			strcpy(qwords[i], temp);
+			i++;
+		}
+	}
+	puts("以下是已拷贝的字符串：");
+	for (i = 0; i < LIM; i++)
+		puts(qwords[i]);
+
+	return 0;
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	int i = 0;
+	fanhui = fgets(string, n, stdin);
+
+	if (fanhui)
+	{
+		while (string[i] != '\n' && string[i] != '\0')
+			i++;
+
+		if (string[i] == '\n')
+			string[i] = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+
+	return fanhui;
+}
+#endif
+
+
+//strcpy()的返回值
+#if 0
+#include <string.h>
+#define WORDS "beast"
+#define SIZE 40
+int main(void)
+{
+	const char* source = WORDS;
+	char target[SIZE] = "Be the best that you can be.";
+	char* fanhui;
+
+	puts(source);
+	puts(target);
+
+	fanhui = strcpy(target+7,source);
+
+	puts(target);
+	puts(fanhui);//strcpy()返回是一个指针，此时指针指向target的第8个字符。puts从target的第8个字符开始打印，到beast\0  停止
+
+	return 0;
+}
+#endif
+
+
+//用strncpy()拷贝整个字符串（不是拷贝字符串的地址）
+#if 0
+#include <string.h>
+#define SIZE 40
+#define LIM 5
+#define TARGET_SIZE 7
+
+char* s_gets(char* string, int n);
+int main(void)
+{
+	char qwords[LIM][TARGET_SIZE];
+	char temp[SIZE];
+	int i = 0;
+
+	printf("请输入以q开头的%d行单词：\n", LIM);
+	while (i < LIM && s_gets(temp, SIZE))
+	{
+		if (temp[0] != 'q')
+			printf("%s没有以q开头！\n", temp);
+		else
+		{
+			strncpy(qwords[i], temp,TARGET_SIZE-1);
+			qwords[i][TARGET_SIZE - 1] = '\0';
+			i++;
+		}
+	}
+	puts("以下是已拷贝的字符串：");
+	for (i = 0; i < LIM; i++)
+		puts(qwords[i]);
+
+	return 0;
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	int i = 0;
+	fanhui = fgets(string, n, stdin);
+
+	if (fanhui)
+	{
+		while (string[i] != '\n' && string[i] != '\0')
+			i++;
+
+		if (string[i] == '\n')
+			string[i] = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+
+	return fanhui;
+}
+#endif
+
+
+//用sprintf()把3个项合成为一个字符串
+#if 0
+#include <string.h>
+#define  MAX 20
+
+char* s_gets(char* string, int n);
+int main(void)
+{
+	char first[MAX];
+	char last[MAX];
+	char formal[2*MAX];
+	double prize;
+
+	puts("请输入你的姓：");
+	s_gets(first,MAX);
+	puts("请输入你的名：");
+	s_gets(last, MAX);
+	puts("请输入你的奖金金额：");
+	scanf("%lf",&prize);
+
+	sprintf(formal,"%s, %-19s : $%6.2lf", first,last,prize);
+	
+	puts(formal);
+
+	return 0;
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	int i = 0;
+	fanhui = fgets(string, n, stdin);
+
+	if (fanhui)
+	{
+		while (string[i] != '\n' && string[i] != '\0')
+			i++;
+
+		if (string[i] == '\n')
+			string[i] = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+
+	return fanhui;
+}
+#endif
+
+
+//读入字符串，并排序字符串
+#if 0
+#include <string.h>
+#define  SIZE 81//限制字符串长度
+#define LIM 20  //限制字符串行数
+
+void sort_str(char* strings[], int num);
+char* s_gets(char* string, int n);
+int main(void)
+{
+	char input[SIZE][LIM];		//创建char型二维数组
+	char* p[LIM];						//内含指针变量的数组
+	int in_count = 0;					//输入的行数计数
+	int out_count = 0;				//输出的行数计数
+
+	printf("请输入最多%d行字符串，然后我会进行排序。\n",LIM);
+	printf("若要停止程序，请输入空行。\n");
+
+	while (in_count < LIM && s_gets(input[in_count], SIZE) != NULL && input[in_count][0] != '\0')//s_gets()会把\n替换成\0，所以是!='\0'
+	{
+		p[in_count] = input[in_count];//设置指针指向字符串   类似于第10章的       声明char *p；  
+																										//						 p=input[in_count]; 即p存的是&input[in_count][0]
+		in_count++;
+	}
+	sort_str(p, in_count);
+	puts("\n以下是排序好的字符串：\n");
+	for (out_count = 0; out_count < in_count; out_count++)
+		puts(p[out_count]);
+
+	return 0;
+}
+void sort_str(char* strings[], int num)
+{
+	char* temp;
+	int seek1, seek2;
+
+	for (seek1 = 0; seek1 < num - 1; seek1++)//外层循环指明正在处理的元素
+	{
+		for (seek2 = seek1 + 1; seek2 < num; seek2++)//内层循环找出应存储在该元素的值
+		{
+			if (strcmp(strings[seek1], strings[seek2]) > 0)//若前一串字符串的首字母排序序列位于后一串字符串的首字母后面
+			{
+				temp = strings[seek1];
+				strings[seek1] = strings[seek2];
+				strings[seek2] = temp;
+			}
+		}
+	}
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	int i = 0;
+	fanhui = fgets(string, n, stdin);
+
+	if (fanhui)
+	{
+		while (string[i] != '\n' && string[i] != '\0')
+			i++;
+
+		if (string[i] == '\n')
+			string[i] = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+
+	return fanhui;
+}
+#endif
+
+
+//用strchr()实现s_gets()的替换\n为\0功能，用toupper()实现字符串的小写字母改为大写字母，用ispunct()统计标点符号个数
+#if 1
+#include <string.h>
+#include<ctype.h>
+#define  LIMIT 81
+void ToUpper(char* string);
+char* s_gets(char* string, int n);
+int main(void)
+{
+	char line[LIMIT];
+	char* find;
+
+	puts("请输入一行字符：");
+	fgets(line,LIMIT,stdin);
+
+
 
 	return 0;
 }
