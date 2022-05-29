@@ -201,7 +201,7 @@ int main(void)
 			words[i] = '\0';//若遇到换行符，就换成空字符
 		else
 			while (getchar() != '\n')
-				continue;//若遇到空字符，则丢弃输入行的剩余字符
+				continue;//若遇到空字符，则丢弃输入行的剩余字符，若没有else语句块，则会以每9个字符为一组，循环读取缓冲区的内容
 
 		puts(words);
 	}
@@ -861,12 +861,12 @@ char* s_gets(char* string, int n)
 
 
 //用strchr()实现s_gets()的替换\n为\0功能，用toupper()实现字符串的小写字母改为大写字母，用ispunct()统计标点符号个数
-#if 1
+#if 0
 #include <string.h>
 #include<ctype.h>
-#define  LIMIT 81
+#define  LIMIT 10
 void ToUpper(char* string);
-char* s_gets(char* string, int n);
+int PunctCount(const char * string);
 int main(void)
 {
 	char line[LIMIT];
@@ -874,10 +874,65 @@ int main(void)
 
 	puts("请输入一行字符：");
 	fgets(line,LIMIT,stdin);
+	
+	find = strchr(line,'\n');
+	if (find)
+		*find = '\0';					//去掉输入的\n
 
-
-
+	ToUpper(line);
+	puts(line);
+	
+	printf("输入的字符串中有%d个标点符号\n",PunctCount(line));//注意：程序到此仅会执行一遍，若输入的字符过多，则仍有字符在缓冲区
+																										//但程序不再循环执行fgets(line,LIMIT,stdin);   所以不需要清空缓冲区了。
 	return 0;
+}
+void ToUpper(char* string)
+{
+	while (*string)
+	{
+		*string = toupper(*string);
+		string++;
+	}
+}
+int PunctCount(const char* string)
+{
+	int jishu = 0;
+	while (*string)
+	{
+		if (ispunct(*string))
+			jishu++;
+		string++;
+	}
+	return jishu;
+}
+#endif
+
+
+//使用strtol()函数进行进制转换
+#if 0
+#include <stdlib.h>
+#define LIM 30
+
+char* s_gets(char* string, int n);
+int main(void)
+{
+	char number[LIM];
+	char* end;
+	long value;
+
+	puts("请输入一个数字（输入空行以退出）：");
+	while (s_gets(number, LIM) && number[0] != '\n')
+	{
+		value = strtol(number, &end, 10);
+		printf("输入（10进制），输出（10进制）：%ld，数字输入结束后的字符：%s，该字符的首字符ASCII码是：%d\n"
+			, value, end, *end);
+					//end:字符的地址   *end:地址上的值
+
+		value = strtol(number, &end, 16);
+		printf("输入（16进制），输出（10进制）：%ld，数字输入结束后的字符：%s，该字符的首字符ASCII码是：%d\n"
+			, value, end, *end);
+		puts("继续（输入空行以退出）：");
+	}
 }
 char* s_gets(char* string, int n)
 {
