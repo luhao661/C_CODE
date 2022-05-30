@@ -352,7 +352,7 @@ char* s_gets(char* string, int n)
 
 		if (string[i] == '\n')
 			string[i] = '\0';
-		else
+		else//当string[i] == '\0'时
 			while (getchar() != '\n')
 				continue;
 	}
@@ -909,7 +909,7 @@ int PunctCount(const char* string)
 
 
 //使用strtol()函数进行进制转换
-#if 0
+#if 1
 #include <stdlib.h>
 #define LIM 30
 
