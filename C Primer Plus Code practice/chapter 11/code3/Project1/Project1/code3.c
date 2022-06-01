@@ -262,22 +262,199 @@ char* duqv(char* string, int n)
 
 
 //6.
-#if 1
+#if 0
+#include<string.h>
 int is_within(char ch,char *string);
+char* duqv(char* string, int n);
+
 int main(void)
 {
-	char cunchu[50];
-	puts("请输入字符串:");
-	duqv(cunchu,50);
+	while (1)
+	{
+		char cunchu[50];
+		puts("请输入字符串:");
+		duqv(cunchu, 50);
 
-	puts("请输入要寻找的字符:");
+		puts("请输入要寻找的字符:");
+		char ch;
+		scanf("%c", &ch);
 
+		int find;
+		find = is_within(ch, cunchu);
 
+		printf("find=%d", find);
+	}
 	return 0;
 }
 int is_within(char ch, char* string)
 {
+	int find;
 
+	char* xunzhao;
+	xunzhao = string;
+
+	while (*xunzhao != ch)
+	{
+		xunzhao++;
+
+		if (xunzhao == string + strlen(string))//若指针xunzhao 指向了数组后的第一个位置，则弹出。
+			break;
+	}
+
+	find = (*xunzhao == ch) ? 1 : 0;
+
+	return find;
+}
+char* duqv(char* string, int n)
+{
+	char* fanhui;
+
+	fanhui = fgets(string, n, stdin);
+
+	if (fanhui)//输入不为^Z
+	{
+		while (*string != '\n' && *string != '\0')
+			string++;
+		if (*string == '\n')
+			*string = '\0';
+		else//*string == '\0'时
+			while (getchar() != '\n')
+				continue;
+	}
+	return fanhui;
+}
+#endif
+
+
+//7.
+#if 0
+char* mystrncpy(char *string1,char *string2,int n);
+char* duqv(char* string, int n);
+#define SIZE 10
+int main(void)
+{
+	char cunchu[80];
+	char temp[80];
+	char* fanhui;
+
+	puts("请输入待拷贝的字符串:");
+	
+	while (duqv(temp, 80) && temp[0] != '\0')
+	{
+	 fanhui=mystrncpy(cunchu, temp, SIZE-1);
+	 cunchu[SIZE - 1] = '\0';//第10个元素赋为\0
+
+	 puts("您输入的内容是:");
+	 puts(cunchu);
+	 puts(fanhui);
+
+	 puts("请输入待拷贝的字符串:");
+	}
+	puts("再见！");
+
+	return 0;
+}
+char* mystrncpy(char* string1, char* string2, int n)//n=9
+{
+	char* fanhui=string1;
+
+	for (int i = 0; i <= n; i++)
+	{
+		*(string1+i) = *(string2+i);//拷贝到第10个元素为止
+	}
+
+	return fanhui;
+}
+char* duqv(char* string, int n)
+{
+	char* fanhui;
+
+	fanhui = fgets(string, n, stdin);
+
+	if (fanhui)//输入不为^Z
+	{
+		while (*string != '\n' && *string != '\0')
+			string++;
+		if (*string == '\n')
+			*string = '\0';
+		else//*string == '\0'时
+			while (getchar() != '\n')
+				continue;
+	}
+	return fanhui;
+}
+#endif
+
+
+//8.
+#if 1
+#include<string.h>
+char* string_in (char* string1, char* string2);
+char* duqv(char* string, int n);
+int main(void)
+{
+	char cunchu1[80];
+	char cunchu2[80];
+	char* fanhui;
+
+	puts("请输入待查找的字符串:");
+
+	while (duqv(cunchu1, 80) && cunchu1[0] != '\0')
+	{
+		puts("请输入要查找的字符串:");
+		duqv(cunchu2, 80);
+
+		fanhui = string_in(cunchu1, cunchu2);
+			
+		if (fanhui)
+		{
+			puts("待查找的字符串含有:");
+			puts(fanhui);
+		}
+		else
+			puts("未找到！");
+
+		puts("请输入待查找的字符串:");
+	}
+	puts("再见！");
+
+	return 0;
+}
+char* string_in(char* string1, char* string2)																                                    //瑕疵：只支持找两个字符
+{
+	char* fanhui=NULL;//必须先初始化
+
+	int biaoji1=0,biaoji2=0;
+	char* xunzhao = string1;
+	char* temp=NULL;//必须先初始化
+
+	for (          ; xunzhao < string1 + strlen(string1); xunzhao++)
+	{
+		if (*xunzhao == *string2)
+		{
+			biaoji1 = 1;
+			temp = xunzhao;
+			break;
+		}
+	}
+
+	if (biaoji1 == 1)
+	{
+		xunzhao += 1;
+			if (*xunzhao == *(string2 + 1))
+			{
+				biaoji2 = 1;
+			}
+	}
+
+	if (biaoji1 == 1&&biaoji2 == 1)
+	{
+		fanhui = temp;
+	}
+	else
+		fanhui = NULL;
+
+	return fanhui;
 }
 char* duqv(char* string, int n)
 {
