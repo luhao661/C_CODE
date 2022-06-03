@@ -896,15 +896,20 @@ char* duqv(char* string, int n)
 
 //13.
 #if 1
-void fanxu_words(char* string);
-int main(void)
+#include <stdlib.h>
+#include <string.h>
+int main(int argc,char*argv[])
 {
+	
+	int i;
+	
+	for(i=argc;i-1>=1;i--)//输入4个字符串，第一个作为程序名，实际上只有3个字符串，argc=3。
+	strcat(argv[i],argv[i-1]);
 
+	puts(argv[3]);
+	puts("Bye!");
 
 	return 0;
 }
-void fanxu_words(char* string)
-{
 
-}
 #endif
