@@ -99,6 +99,15 @@ int strlen(char* p)
 	//若输入空行，则i为0时不进入for循环。若输入一个字符，则i为0时进入for循环，后来i为1时退出循环。
 	return i;
 }
+//法二：
+//int strlen(char* p)
+//{
+//	int i=0;
+//	while (*p++ != '\0')
+//		i++;
+//
+//	return i;
+//}
 char* s_gets(char* string, int n)
 {
 	char* fanhui;
@@ -179,7 +188,7 @@ int main(void)
 	
 	if (find != NULL)
 	{
-		printf("空格后的字符是:");
+		printf("空格及其后的字符是:");
 		puts(find);
 	}
 	else
@@ -195,7 +204,7 @@ char* find_space(char* string)
 		string++;
 
 	if (*string == ' ')
-		find = string+1;//指向空格的后一个字符
+		find = string;//指向空格的后一个字符
 	else//*string=='\0'时
 		find = NULL;
 
