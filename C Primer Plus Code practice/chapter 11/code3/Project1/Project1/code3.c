@@ -246,7 +246,7 @@ void duqv(char* string, int n)
 }
 #endif
 //使用getchar()，可以实现连续输入\n再输入单词的情况。
-#if 1
+#if 0
 #include<ctype.h>
 #define SIZE 20
 int get_word(char* ar);
@@ -265,7 +265,7 @@ int main(void)
 
 	return 0;
 }
-int get_word(char* string)
+int get_word(char* string)//检测输入的第一个单词
 {
 	int length = 0;//表示元素个数
 	_Bool inword = 0;
@@ -284,7 +284,7 @@ int get_word(char* string)
 		else if (isspace(*string) && inword)//当再次输入空白字符
 			break;
 
-		length++;		
+		length++;//单词长度加一		
 		string++;//指向数组后面元素的位置
 
 		if (length == SIZE)
@@ -340,6 +340,76 @@ char* duqv(char* string, int n)
 	return start;
 }
 #endif
+//4.改
+#if 0
+#include<ctype.h>
+#define SIZE 20
+int get_word(char* string,int n);
+int main(void)
+{
+	char cunchu[SIZE];
+	char* cunchu_p;
+
+	printf("Please enter some text.\n");
+	int leng = get_word(cunchu,SIZE);
+	printf("\nWord:\n");
+	for (cunchu_p = cunchu; cunchu_p < cunchu + leng; cunchu_p++)
+		putchar(*cunchu_p);
+
+	putchar('\n');
+
+	return 0;
+}
+int get_word(char* string, int n)
+{
+	int length = 0;//表示元素个数
+	_Bool inword = 0;
+
+	//while (*string = getchar())
+	//{
+	//	if (isspace(*string) && !inword)                               //若输入          空格 (SPC)
+	//																						//'\t'	    0x09	水平制表符(TAB)
+	//																						//'\n'	0x0a	换行符(LF)
+	//																						//'\v'	0x0b	垂直制表符(VT)
+	//																						//'\f' 	0x0c    换页(FF)
+	//																						//'\r'	    0x0d    回车(CR)
+	//		continue;																	//继续读取输入
+	//	else if (!isspace(*string) && !inword)//当输入字母
+	//		inword = 1;
+	//	else if (isspace(*string) && inword)//当再次输入空白字符
+	//		break;
+
+	//	length++;
+	//	string++;//指向数组后面元素的位置
+
+	//	if (length == n)
+	//		break;
+	//}
+	//或
+	char* temp = string;
+
+		while (temp<string+n)
+		{
+			*temp = getchar();
+			if (isspace(*temp) && !inword)                               //若输入          空格 (SPC)
+																								//'\t'	    0x09	水平制表符(TAB)
+																								//'\n'	0x0a	换行符(LF)
+																								//'\v'	0x0b	垂直制表符(VT)
+																								//'\f' 	0x0c    换页(FF)
+																								//'\r'	    0x0d    回车(CR)
+				continue;																	//继续读取输入
+			else if (!isspace(*temp) && !inword)//当输入字母
+				inword = 1;
+			else if (isspace(*temp) && inword)//当再次输入空白字符
+				break;
+
+			length++;
+			temp++;//指向数组后面元素的位置		
+		}
+
+	return length;
+}
+#endif
 
 
 //5.
@@ -387,7 +457,7 @@ char* find(char* string, char ch)
 		find++;
 	
 		if (find == string+strlen(string))//若输入两个字符，则strlen（）=2，string+2指向数组最后一个元素的后面第一个位置
-		{
+		{																	//法二：if(find=='\0')
 			find = NULL;
 			break;
 		}
@@ -458,6 +528,16 @@ int is_within(char ch, char* string)
 
 	find = (*xunzhao == ch) ? 1 : 0;
 
+	//或
+	//while (*xunzhao != '\0')
+	//{
+	//	if (*xunzhao == ch)
+	//		return 1;
+	//	else
+	//		xunzhao++;
+	//}
+	//return 0;
+
 	return find;
 }
 char* duqv(char* string, int n)
@@ -494,10 +574,10 @@ int main(void)
 
 	puts("请输入待拷贝的字符串:");
 	
-	while (duqv(temp, 80) && temp[0] != '\0')
+	while (duqv(temp, 80) && temp[0] != '\0')//输入^Z或空行，停止程序
 	{
-	 fanhui=mystrncpy(cunchu, temp, SIZE-1);
-	 cunchu[SIZE - 1] = '\0';//第10个元素赋为\0
+	 fanhui=mystrncpy(cunchu, temp, SIZE);
+	 *(cunchu + SIZE-1) = '\0';//第10个元素赋'\0'
 
 	 puts("您输入的内容是:");
 	 puts(cunchu);
@@ -509,13 +589,14 @@ int main(void)
 
 	return 0;
 }
-char* mystrncpy(char* string1, char* string2, int n)//n=9
+char* mystrncpy(char* string1, char* string2, int n)//n=10，n是元素个数					//注：源字符长度大于n，strncpy不会自动添加\0
 {
 	char* fanhui=string1;
+	int i;
 
-	for (int i = 0; i <= n; i++)
+	for ( i = 0; i < n-1; i++)
 	{
-		*(string1+i) = *(string2+i);//拷贝到第10个元素为止
+		*(string1+i) = *(string2+i);//拷贝到第9个元素为止
 	}
 
 	return fanhui;
@@ -610,6 +691,81 @@ char* string_in(char* string1, char* string2)																                   
 		fanhui = NULL;
 
 	return fanhui;
+}
+char* duqv(char* string, int n)
+{
+	char* fanhui;
+
+	fanhui = fgets(string, n, stdin);
+
+	if (fanhui)//输入不为^Z
+	{
+		while (*string != '\n' && *string != '\0')
+			string++;
+		if (*string == '\n')
+			*string = '\0';
+		else//*string == '\0'时
+			while (getchar() != '\n')
+				continue;
+	}
+	return fanhui;
+}
+#endif
+//8.改正																//8.原思路：设两个标记，每个标记一个字符匹配，所以只能支持两个字符检测。
+#if 0																//新思路：标记改为计数器count，只有count的值等于检测字符串的长度，才返回字符串首地址
+#include<string.h>
+char* string_in(char* string1, char* string2);
+char* duqv(char* string, int n);
+int main(void)
+{
+	char cunchu1[80];
+	char cunchu2[80];
+	char* fanhui;
+
+	puts("请输入待查找的字符串:");
+
+	while (duqv(cunchu1, 80) && cunchu1[0] != '\0')
+	{
+		puts("请输入要查找的字符串:");
+		duqv(cunchu2, 80);
+
+		fanhui = string_in(cunchu1, cunchu2);
+
+		if (fanhui)
+		{
+			puts("主串中以子串的首元素开头的字符串为:");
+			puts(fanhui);
+		}
+		else
+			puts("未找到！");
+
+		puts("请输入待查找的字符串:");
+	}
+	puts("再见！");
+
+	return 0;
+}
+char* string_in(char* string1, char* string2)																                                    //瑕疵：只支持找两个字符
+{
+	
+	int count = 0;//匹配度计数
+	int length = strlen(string2);
+
+	while (count < length&&*string1!='\0')//若匹配未完成，且没有轮到string1的末尾字符后的第一个位置。
+	{
+		if (*(string1 + count) == *(string2 + count))//若s1和s2的第一个字符匹配，则计数值加一。
+			count++;
+		else
+		{
+			count = 0;
+			string1++;//若不匹配，则轮到s1的第二个字符与s2的第一个字符检测。
+		}
+	}
+	if (count == length)
+		return string1;//返回主串中子串的首地址。
+
+	else
+	return NULL;
 }
 char* duqv(char* string, int n)
 {
@@ -766,12 +922,86 @@ char* duqv(char* string, int n)
 	}
 	return fanhui;
 }
+#endif//法一：使用临时字符串存储删除空格后的字符串，再找到\0，拼接两个字符串
+//10.法二：使用多个指针，调整原字符串
+#if 0
+#include<string.h>
+void delete_space(char* string);
+char* duqv(char* string, int n);
+int main(void)
+{
+	char cunchu[80];
+
+	puts("请输入待删除空格的字符串:");
+
+	while (duqv(cunchu, 80) && cunchu[0] != '\0')
+	{
+		delete_space(cunchu);
+		puts("处理好后的字符串:");
+		puts(cunchu);
+
+		puts("请输入待删除空格的字符串:");
+	}
+	puts("再见！");
+
+	return 0;
+}
+void delete_space(char* string)
+{
+	char* finish = string;//定义一个处理好后的字符串的指针finish
+	int count = 0;//记录删除的空格数
+
+	while (*string != '\0')//若指向原字符串的指针没处理到最后的元素后的第一个位置
+	{
+		if (*string != ' ')
+			*finish++ = *string++;
+		else
+		{
+			string++;//若检测到空格字符，则原字符串指针后移一位。
+			count++;
+		}
+	}
+
+	/*while (count--)
+		*finish++ = '\0';*/   //最后，在处理好后的字符串后补上\0。不写的话，因为虽然指向原字符串的指针没有向finish赋\0，但是
+										//原字符串后的\0，仍然存在。但是：请输入待删除空格的字符串:
+																								 //a b c d e f
+																								//	处理好后的字符串 :
+																								//abcdefd e f
+																								//	请输入待删除空格的字符串 :
+										//出现此情况的原因：string已经指向了原字符串的\0，程序终止了。后面的d e f是原字符串的残留内容
+
+	while (count--)
+		*finish++ = '\0';//能清除剩余字符。
+
+	return ;
+}
+char* duqv(char* string, int n)
+{
+	char* fanhui;
+
+	fanhui = fgets(string, n, stdin);
+
+	if (fanhui)//输入不为^Z
+	{
+		while (*string != '\n' && *string != '\0')
+			string++;
+		if (*string == '\n')
+			*string = '\0';
+		else//*string == '\0'时
+			while (getchar() != '\n')
+				continue;
+	}
+	return fanhui;
+}
 #endif
 
 
 //11.
 #if 0
 #include<string.h>
+#include<ctype.h>
+
 #define SIZE 81
 #define LIM 10
 void showmenu(void);
@@ -779,6 +1009,7 @@ void yuanzifuchuan(char*string[], int n);
 void ASCII_paixu(char*string[],int n);
 void length_paixu(char*string[],int n);
 void first_word_length_paixu(char* string[], int n);
+int get_word_length(char* string);
 
 char* duqv(char* string, int n);
 int main(void)
@@ -889,11 +1120,19 @@ void first_word_length_paixu(char* string[], int n)
 
 	int dancichangdu[LIM] = {0,0,0};//部分赋初值
 
+	//法一：
+	//for (int i = 0; i < n; i++)
+	//{
+	//	for (int j=0; string1[i][j] != ' '; j++)
+	//		dancichangdu[i]++;
+	//}
+
+	//法二：
 	for (int i = 0; i < n; i++)
 	{
-		for (int j=0; string1[i][j] != ' '; j++)
-			dancichangdu[i]++;
+		dancichangdu[i] = get_word_length(string1[i]);
 	}
+
 
 	for (top = 0; top < n - 1; top++)//最多指向倒数第二个元素
 		for (seek = top + 1; seek < n; seek++)
@@ -926,6 +1165,19 @@ char* duqv(char* string, int n)
 				continue;
 	}
 	return fanhui;
+}
+int get_word_length(char* string)//计算单词长度的函数
+{
+	char* find = string;
+	int length = 0;
+	while (isalpha(*find) == 0)
+		find++;
+	while (isalpha(*find) != 0)
+	{
+		find++;
+		length++;
+	}
+	return length;
 }
 #endif
 
@@ -967,7 +1219,7 @@ int dancishu(char* string)
 		if (isalpha(*find) && !biaoji)
 		{
 			biaoji = 1;
-			count++;// 统计单词
+			count++;// 统计单词个数
 		}
 		if (!isalpha(*find) && biaoji)
 			biaoji = 0;// 已到单词的末尾
@@ -1053,23 +1305,34 @@ char* duqv(char* string, int n)
 #if 0
 #include <stdlib.h>
 #include <string.h>
-int main(int argc,char*argv[])
-{
-	
+int main(int argc,char**argv)
+{	
 	int i;
 	
-	char cunchu[20];
+	char cunchu[20] = "a";
 	char* cunchudezhizhen=cunchu;//指向cunchu
-	cunchudezhizhen= argv[1];
+
+	int length = strlen(argv[1]);
+	for(int i=0;i<length;i++)
+	*(cunchudezhizhen+i)= *(argv[1]+i);			//argv[1]既是字符串数组的名字也是字符串数组的指针。
 
 	puts(cunchu);
+	puts(argv[1]);//两个输出显示效果相同
+	putchar('\n');
 
-
-	//for (i = argc; i - 1 >= 1; i--)//输入4个字符串，第一个作为程序名，实际上只有3个字符串，argc=3。
+	//for (i = argc-1; i - 1 >= 1; i--)//4个字符串，第一个作为程序名，实际上只有3个字符串，argc=4。
 	//strcat(argv[i],argv[i-1]);
+	// 
 
-	//puts(argv[3]);
-	//puts("Bye!");
+	//strcat(argv[3],argv[2]);
+	//strcat(argv[3],argv[1]);
+
+	//puts(argv[3]);																															 //效果不好，且程序打印完后会崩溃
+
+	//putchar('\n');
+
+	for (int i = argc - 1; i > 0; i--)
+		printf("%s ",argv[i]);
 
 	return 0;
 }
@@ -1139,7 +1402,7 @@ int atoi(char* string)
 
 		if (*find != '\0')
 		{
-			temp[i] = *find;
+			temp[i] = *find;																			//错误：虽然temp中的字符串变成了字符，但还不是数值。
 			i++;
 		}
 	}
@@ -1168,10 +1431,67 @@ char* duqv(char* string, int n)
 	return fanhui;
 }
 #endif
+//15.改正
+#if 0
+#include <string.h>
+#include <ctype.h>
+int atoi(char* string);
+char* duqv(char* string, int n);
+int main(void)
+{
+
+	char cunchu[80];
+	puts("请输入字符:");
+	duqv(cunchu, 80);//用scanf()效果相同
+
+	printf("atoi()处理好后，输入的数字为%d\n",  atoi(cunchu));
+
+	return 0;
+}
+int atoi(char* string)
+{
+	int result = 0;
+	int weiquan = 1;//个位的权是1，十位的权是10
+	int length = strlen(string);
+
+	for (int i = length; i > 0; i--)
+	{
+		if (isdigit(*(string + i - 1)) == 0)//先判断末位是否为数字字符
+		{
+			printf("存在非数字字符！");
+			return 0;
+		}
+		result += (*(string + i - 1)- '0') * weiquan;//两个字符的ASCII码相减，能得到数字！
+
+		weiquan *= 10;
+	}
+
+	return result;
+}
+char* duqv(char* string, int n)
+{
+	char* fanhui;
+
+	fanhui = fgets(string, n, stdin);
+
+	if (fanhui)//输入不为^Z（即EOF）
+	{
+		while (*string != '\n' && *string != '\0')
+			string++;
+		if (*string == '\n')
+			*string = '\0';
+		else//*string == '\0'时
+			while (getchar() != '\n')
+				continue;
+	}
+	return fanhui;
+}
+#endif
+
 
 
 //16.
-#if 0
+#if 1
 #include<ctype.h>
 #include<string.h>
 void print(void);
@@ -1195,7 +1515,7 @@ void print(void)
 {
 	char ch;
 
-	while ((ch = getchar()) != EOF)
+	while ((ch = getchar()) != EOF)   //文件导入
 		putchar(ch);
 }
 void to_up(void)
