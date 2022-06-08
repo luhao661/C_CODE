@@ -84,7 +84,7 @@ void ceshi(void)
 
 
 //使用外部变量（外部链接的静态变量）
-#if 1
+#if 0
 int shuzi;
 void ceshi(void);
 int main(void)
@@ -104,6 +104,60 @@ void ceshi(void)
 {
 	printf("输入的数字不对，请重新输入！\n");
 	scanf("%d", &shuzi);
+}
+#endif
+
+
+//使用多种存储类别，编写实现计算等差数列的程序													//要与qiuhehanshu.c一起编译
+#if 0
+void baogao_zhixincishu(void);//报告程序执行次数
+extern void qiuhe(int k);//对输入的实参代表的等差数列求和      extern：当前文件使用的函数被定义在别处
+
+int count = 0;//定义式声明：文件作用域外部链接静态存储期-->外部链接的静态变量
+
+int main(void)
+{
+	int shuzi;//块作用域无链接自动存储期-->自动变量
+	register int i;//块作用域无链接自动存储期-->寄存器变量
+
+	printf("请输入一个正整数(输入0以退出程序)：");
+	while (scanf("%d", &shuzi) == 1 && shuzi > 0)
+	{
+		count++;//使用外部链接的静态变量
+		for (i = shuzi; i >= 0; i--)					//i为0时打印循环次数和计算结果
+			qiuhe(i);
+
+		printf("请输入一个正整数(输入0以退出程序)：");
+	}
+	baogao_zhixincishu();
+
+	return 0;
+}
+void baogao_zhixincishu(void)//报告程序执行次数
+{
+	printf("程序执行了%d次\n",count);//使用外部链接的静态变量
+}
+#endif
+
+
+//使用内部链接的静态变量编写生成伪随机数的函数														//要与rand1.c一起编译
+#if 1//驱动程序
+#include<time.h>
+extern unsigned int rand1(void);
+void seed_to_next(unsigned int seed);
+
+int main(void)
+{
+	int count;
+	unsigned seed;
+
+	printf("使用系统时间作为种子数字\n");
+	seed_to_next((unsigned int )time(0));
+
+	for (count = 0; count < 10; count++)
+		printf("%d\n",rand1());
+
+	return 0;
 }
 #endif
 
