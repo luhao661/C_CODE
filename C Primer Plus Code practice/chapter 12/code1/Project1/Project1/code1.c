@@ -141,10 +141,10 @@ void baogao_zhixincishu(void)//报告程序执行次数
 
 
 //使用内部链接的静态变量编写生成伪随机数的函数														//要与rand1.c一起编译
-#if 1//驱动程序
+#if 0//驱动程序
 #include<time.h>
 extern unsigned int rand1(void);
-void seed_to_next(unsigned int seed);
+extern void seed_to_next(unsigned int seed);
 
 int main(void)
 {
@@ -161,3 +161,44 @@ int main(void)
 }
 #endif
 
+
+//使用两个翻译单元文件完成掷骰子程序																		//要与zhitouzi.c一起编译
+#if 1
+#include<stdlib.h>
+#include <time.h>
+#include"zhitouzi.h"
+
+int main(void)
+{
+	int geshu,mianshu, shuzizongshu;
+	int status;
+
+	srand((unsigned int)time(0));//让rand()函数里的种子数字能随机生成
+	printf("请输入骰子的面数：(输入0以退出程序)\n");
+
+	while (scanf("%d", &mianshu) == 1 && mianshu > 0)
+	{
+		puts("有多少个骰子？");
+		if ((status = scanf("%d", &geshu)) != 1)
+		{
+			if (status == EOF)
+				break;
+			else
+			{
+				puts("您应该输入一个正整数");
+				puts("让我们再试一次");
+				while (getchar()!='\n');
+				continue;
+				puts("有多少个骰子？");
+			}
+		}																													//touzishuzizongshu是外部函数可被其他文件的函数访问
+		shuzizongshu = touzishuzizongshu(geshu, mianshu);							//注：变量名不能与函数名相同，因为若相同则会有二义性错误，编译器不知道该调用变量还是函数。
+		printf("你使用%d个%d面的骰子掷出了%d\n\n",geshu,mianshu,shuzizongshu);
+
+		printf("请输入骰子的面数：(输入0以退出程序)\n");
+	}
+	printf("touzishuzi()函数被执行了%d次", zhitouzicishu);
+
+	return 0;
+}
+#endif

@@ -24,5 +24,13 @@
     <ClCompile Include="rand1.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="zhitouzi.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="zhitouzi.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

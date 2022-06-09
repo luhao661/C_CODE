@@ -142,6 +142,10 @@
     <ClCompile Include="qiuhehanshu.c" />
     <ClCompile Include="code1.c" />
     <ClCompile Include="rand1.c" />
+    <ClCompile Include="zhitouzi.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="zhitouzi.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

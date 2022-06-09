@@ -1,8 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
+#if 0
 #include <stdio.h>
 
-
-#if 1
 static unsigned long int next = 1;//ÖÖ×ÓÊý×Ö
 
 unsigned int rand1(void)

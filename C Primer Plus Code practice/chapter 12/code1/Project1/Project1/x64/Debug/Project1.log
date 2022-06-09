@@ -1,3 +1,6 @@
 ﻿  code1.c
-D:\CODE\C_CODE\C Primer Plus Code practice\chapter 12\code1\Project1\Project1\code1.c(152,11): warning C4101: “seed”: 未引用的局部变量
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 12\code1\Project1\Project1\zhitouzi.h(1,1): warning C4828: 文件包含在偏移 0xe4 处开始的字符，该字符在当前源字符集中无效(代码页 936)。
+  zhitouzi.c
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 12\code1\Project1\Project1\zhitouzi.h(1,1): warning C4828: 文件包含在偏移 0xe4 处开始的字符，该字符在当前源字符集中无效(代码页 936)。
+  正在生成代码...
   Project1.vcxproj -> D:\CODE\C_CODE\C Primer Plus Code practice\chapter 12\code1\Project1\x64\Debug\Project1.exe

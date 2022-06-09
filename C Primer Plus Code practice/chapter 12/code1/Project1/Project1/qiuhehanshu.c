@@ -1,8 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
+#if 0
 #include <stdio.h>
 
-
-#if 0
 extern int count;//引用式声明
 static int total = 0;//定义式声明：文件作用域内部链接静态存储期-->内部链接的静态变量
 
