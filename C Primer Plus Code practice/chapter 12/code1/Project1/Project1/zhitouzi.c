@@ -1,8 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS 1
-#if 1
-#include <stdio.h>
+#if 0
+//#include <stdio.h>
 #include "zhitouzi.h"
-#include <stdlib.h>//提供库函数rand()的原型
+//#include <stdlib.h>//提供库函数rand()的原型					可以不写
 
 int zhitouzicishu = 0;//定义式声明外部链接的静态变量
 
