@@ -140,6 +140,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="code3.c" />
+    <ClCompile Include="pe12-2a.c" />
+    <ClCompile Include="pe12-3a.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pe12-2a.h" />
+    <ClInclude Include="pe12-3a.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
