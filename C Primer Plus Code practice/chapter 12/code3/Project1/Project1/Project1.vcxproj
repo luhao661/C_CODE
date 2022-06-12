@@ -142,10 +142,12 @@
     <ClCompile Include="code3.c" />
     <ClCompile Include="pe12-2a.c" />
     <ClCompile Include="pe12-3a.c" />
+    <ClCompile Include="zhitouzi.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pe12-2a.h" />
     <ClInclude Include="pe12-3a.h" />
+    <ClInclude Include="zhitouzi.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
