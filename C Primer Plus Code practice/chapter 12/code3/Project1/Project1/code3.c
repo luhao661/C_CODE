@@ -441,7 +441,9 @@ void show_array(const int* ar, int n)
 
 
 //9.
-#if 1
+#if 0
+#include<stdlib.h>//malloc()
+#include<string.h>//strlen()
 char* make_array(int elem);
 
 int main(void)
@@ -454,7 +456,15 @@ int main(void)
 	p1=make_array(dancishu);
 	
 	printf("现在请输入%d个单词：\n",dancishu);
+	char temp[200];
+
 	for (int i = 0; i < dancishu; i++)
+	{
+		scanf("%s", temp);
+		char *p2=(char *)malloc(strlen(temp)*sizeof(char));
+
+
+	}
 		scanf("%s", p1[i]);
 
 	printf("%s",p1[0][0]);
@@ -463,7 +473,51 @@ int main(void)
 }
 char* make_array(int elem)
 {
-	char** p1 = (char*)malloc(elem * sizeof(char*));
+	char** p1 = (char**)malloc(elem * sizeof(char*));
+	return p1;
+}
+#endif
+//9.改正
+#if 1
+#include<stdlib.h>//malloc()
+#include<string.h>//strlen()
+char* make_array(int elem);
+
+int main(void)
+{
+	int dancishu;
+	printf("请问要输入几个单词？");
+	scanf("%d", &dancishu);
+
+	char** p1;
+	p1 = make_array(dancishu);//创建一个指针数组，指针个数为等于单词数，指针都指向char，p1是指针的指针。
+
+	printf("现在请输入%d个单词：", dancishu);
+	char temp[200];
+
+	for (int i = 0; i < dancishu; i++)
+	{
+		scanf("%s", temp);//利用scanf()每次只能读一个单词的功能，每次循环都从缓冲区读入一个单词。
+
+		char* p2 = (char*)malloc((strlen(temp)+1)* sizeof(char));//根据每个单词的长度，分配一个合适的内存。
+
+		strcpy(p2,temp);//每次都向分配的内存中存入一个单词。
+		*(p1 + i) = p2;//将p1数组的指针都指向新分配的内存空间。
+	}
+	
+	puts("以下是你输入的单词序列：");
+	for (int i = 0; i < dancishu; i++)
+		puts(*(p1 + i));
+	//printf("%s\n", *(p1+i));
+
+	free(p1);
+	puts("完成！");
+
+	return 0;
+}
+char* make_array(int elem)
+{
+	char** p1 = (char**)malloc(elem * sizeof(char*));
 	return p1;
 }
 #endif
