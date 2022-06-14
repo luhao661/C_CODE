@@ -31,6 +31,29 @@ int critic(int num)//units和num的地址不相同。
 	return num;
 }
 #endif
+//1.法二：指针
+#if 0
+void critic(int *num);
+int main(void)
+{
+	int units;
+	printf("How many pounds to a firkin of butter?\n");
+	scanf("%d", &units);
+
+	while (units != 56)
+	{
+		critic(&units);//向指针num传入units的地址。
+	}
+	printf("You must have looked it up!\n");
+
+	return 0;
+}
+void critic(int *num)
+{
+	printf("No luck, my friend. Try again.\n");
+	scanf("%d", num);//修改units的值
+}
+#endif
 
 
 //2.																						//与pe12-2a.c, pe12-2a.h一起编译
@@ -100,6 +123,16 @@ int main(void)
 	return 0;
 }
 #endif
+//法二：在main()中定义mode, distance, fuel。
+//三个函数改为：
+// 
+//void set_mode(int *mode, int n);
+//void get_info(int mode,double *distance,double *fuel);
+//void show_info(int mode,double distance,double fuel);
+// 
+//set_mode(&mode, n);
+//get_info(mode,&distance,&fuel);
+//show_info(mode,distance,fuel);
 
 
 //4.
@@ -478,7 +511,7 @@ char* make_array(int elem)
 }
 #endif
 //9.改正
-#if 1
+#if 0
 #include<stdlib.h>//malloc()
 #include<string.h>//strlen()
 char* make_array(int elem);
@@ -517,7 +550,7 @@ int main(void)
 }
 char* make_array(int elem)
 {
-	char** p1 = (char**)malloc(elem * sizeof(char*));
+	char** p1 = (char**)malloc(elem * sizeof(char*));//创建一个数组，数组中的每个元素都是指向char的指针，因此返回值应是指针的指针
 	return p1;
 }
 #endif

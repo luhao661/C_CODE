@@ -1,5 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #if 0
+#include <stdio.h>
+#include "pe12-2a.h"
 static int mode;
 static double distance;
 static double consume;

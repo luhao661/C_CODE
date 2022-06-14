@@ -1,4 +1,4 @@
 ﻿  code3.c
-D:\CODE\C_CODE\C Primer Plus Code practice\chapter 12\code3\Project1\Project1\code3.c(493,27): warning C4047: “=”:“char **”与“char *”的间接级别不同
-D:\CODE\C_CODE\C Primer Plus Code practice\chapter 12\code3\Project1\Project1\code3.c(521,11): warning C4047: “return”:“char *”与“char **”的间接级别不同
+  pe12-2a.c
+  正在生成代码...
   Project1.vcxproj -> D:\CODE\C_CODE\C Primer Plus Code practice\chapter 12\code3\Project1\x64\Debug\Project1.exe
