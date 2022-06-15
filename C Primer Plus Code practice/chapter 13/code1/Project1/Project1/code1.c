@@ -80,7 +80,7 @@ int main(int argc, char** argv)
 
 
 //使用fprintf()、fscanf()、rewind()
-#if 1
+#if 0
 #define MAX 41
 int main(void)
 {
@@ -108,3 +108,59 @@ int main(void)
 	return 0;
 }
 #endif
+
+
+//使用fseek()、ftell()倒序打印指定文件的字符
+#if 0
+#define MAX 81
+int main(void)
+{
+	char file[MAX];
+	char ch;
+
+	FILE* fp;
+	long count, last;
+
+	puts("请输入要打开的文件名：");
+	scanf("%80s",file);
+	if ((fp = fopen(file, "rb")) == NULL)
+	{
+		fprintf(stderr, "Can't open %s file.\n",file);
+		exit(EXIT_FAILURE);
+	}
+	
+	fseek(fp,0L,SEEK_END);
+	last = ftell(fp);
+
+	for (count = 1L; count <= last; count++)
+	{
+		fseek(fp,-count,SEEK_END);
+		ch = getc(fp);
+		if (ch != EOF)
+			putchar(ch);
+	}
+	putchar('\n');
+	fclose(fp);
+
+	return 0;
+}
+#endif
+
+
+//把文件的内容附加到另一个文件的末尾
+#if 1
+#include<string.h>
+#define BUFSIZE 4096
+#define LEN 81
+
+void appendix(FILE *source,FILE *destination);
+char* s_gets(char* string, int n);
+
+int main(void)
+{
+
+
+	return 0;
+}
+#endif
+
