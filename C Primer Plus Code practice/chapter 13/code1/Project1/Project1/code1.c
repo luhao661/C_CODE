@@ -223,8 +223,9 @@ void appendix(FILE* target, FILE* source)
 	static char temp[BUFSIZE];
 
 	while ((bytes = fread(temp, sizeof(char), BUFSIZE, source)) > 0)
-		//待读取文件数据在内存中的地址，待读数据块的大小，待读数据块数量，待读取的文件
+//待读取文件数据拷贝进内存中的地址，待读数据块的大小，待读数据块数量，待读取的文件
 		fwrite(temp,sizeof(char),bytes,target);
+//待写入的文件数据所在的内存中的地址，待写数据块的大小，待写数据块数量，待写入的文件
 }
 char* s_gets(char* string, int n)
 {
@@ -242,34 +243,33 @@ char* s_gets(char* string, int n)
 	}
 	return fanhui;
 }
-
 #endif
 
 
 //从文件中读取选定的内容
-#if 1
+#if 0
 #define SIZE 1000
 int main(void)
 {
 	double numbers[SIZE];
 
-	const char* file = "numbers.data";
-	FILE* iofile;
-
 	for (int i = 0; i < SIZE; i++)
 		numbers[i] = 100.0 * i + 1.0 / (i+1);//创建一组double类型的值
 
-	if ((iofile = fopen(file, "wb")) == NULL)//写模式
+	const char* file = "numbers.txt";
+	FILE* iofile;
+
+	if ((iofile = fopen(file, "wb")) == NULL)//写模式（二进制模式打开文件）
 	{
 		fprintf(stderr, "未能打开文件(此文件用于存储输出的数据)：%s\n", file);
 		exit(EXIT_FAILURE);
 	}
 	
 	fwrite(numbers,sizeof(double),SIZE,iofile);
-//待写入文件数据在内存中的地址，待写数据块的大小，待写数据块数量，待写的文件
+//待写入的文件数据所在的内存中的地址，待写数据块的大小，待写数据块数量，待写入的文件
 	fclose(iofile);
 
-	if ((iofile = fopen(file, "rb")) == NULL)//读模式
+	if ((iofile = fopen(file, "rb")) == NULL)//读模式（二进制模式打开文件）
 	{
 		fprintf(stderr, "未能打开文件(此文件用于读出数据)：%s\n", file);
 		exit(EXIT_FAILURE);
@@ -281,13 +281,13 @@ int main(void)
 	double value;
 	while (scanf("%d", &index) == 1 && index >= 0 && index <= 999)
 	{
-		long pos = (long)index * sizeof(double);//确定指针指向double类型值的位置
+		long pos = (long)index * sizeof(double);//pos即偏移量，用于确定指针指向double类型值的位置
 		fseek(iofile,pos,SEEK_SET);//找到存储double类型数值的文件的某个数值的位置
 		fread(&value,sizeof(double),1,iofile);
 //待读取文件数据在内存中的地址，待读数据块的大小，待读数据块数量，待读取的文件
 		printf("此处的值为%f\n",value);
 
-		printf("请输入下一个索引值（0~999）：\n");
+		printf("请输入下一个索引值（0~999，超过范围将退出程序）：\n");
 	}
 	fclose(iofile);
 
