@@ -1,4 +1,7 @@
 ﻿  code3.c
-D:\CODE\C_CODE\C Primer Plus Code practice\chapter 13\code3\Project1\Project1\code3.c(165,21): warning C4477: “fprintf”: 格式字符串“%s”需要类型“char *”的参数，但可变参数 1 拥有了类型“FILE *”
-D:\CODE\C_CODE\C Primer Plus Code practice\chapter 13\code3\Project1\Project1\code3.c(167,21): warning C4477: “fprintf”: 格式字符串“%s”需要类型“char *”的参数，但可变参数 1 拥有了类型“FILE *”
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 13\code3\Project1\Project1\code3.c(437,29): warning C4047: “=”:“int”与“char *”的间接级别不同
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 13\code3\Project1\Project1\code3.c(444,29): warning C4047: “=”:“int”与“char *”的间接级别不同
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 13\code3\Project1\Project1\code3.c(403,14): warning C4101: “last”: 未引用的局部变量
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 13\code3\Project1\Project1\code3.c(403,7): warning C4101: “count”: 未引用的局部变量
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 13\code3\Project1\Project1\code3.c(402,7): warning C4101: “ch”: 未引用的局部变量
   Project1.vcxproj -> D:\CODE\C_CODE\C Primer Plus Code practice\chapter 13\code3\Project1\x64\Debug\Project1.exe
