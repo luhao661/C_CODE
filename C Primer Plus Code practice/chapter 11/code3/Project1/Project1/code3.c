@@ -745,7 +745,7 @@ int main(void)
 
 	return 0;
 }
-char* string_in(char* string1, char* string2)																                                    //瑕疵：只支持找两个字符
+char* string_in(char* string1, char* string2)																                       
 {
 	
 	int count = 0;//匹配度计数
