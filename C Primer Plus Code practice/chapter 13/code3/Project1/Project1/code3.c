@@ -391,7 +391,7 @@ char* s_gets(char* string, int n)
 
 
 //7.a
-#if 1
+#if 0
 #define MAX 81
 int main(void)
 {
@@ -433,7 +433,7 @@ int main(void)
 	
 	while (a||b)
 	{		
-			a = fgets(temp1, 80, fp1);
+			a = fgets(temp1, 80, fp1);//一行一行读入
 			if(a)//a为EOF时，不执行打印
 			fputs(temp1, stdout);
 			
@@ -452,4 +452,369 @@ int main(void)
 //命令行：Project1.exe 
 //13.11.7(1).txt
 //13.11.7(2).txt
+#endif
+
+
+//7.b
+#if 0
+#define MAX 81
+int main(void)
+{
+	char file1[MAX];
+	char file2[MAX];
+	FILE* fp1, * fp2;
+
+	puts("请输入要打开的第一个文件名：");
+	scanf("%80s", file1);
+	if ((fp1 = fopen(file1, "r")) == NULL)
+	{
+		fprintf(stderr, "Can't open %s file.\n", file1);
+		exit(EXIT_FAILURE);
+	}
+
+	puts("请输入要打开的第二个文件名：");
+	scanf("%80s", file2);
+	if ((fp2 = fopen(file2, "r")) == NULL)
+	{
+		fprintf(stderr, "Can't open %s file.\n", file2);
+		exit(EXIT_FAILURE);
+	}
+
+	char temp1[80];
+	char temp2[80];
+	int a, b;
+	a = b = 1;
+	char* find;
+
+	while (a || b)
+	{
+		a = fgets(temp1, 80, fp1);
+		b = fgets(temp2, 80, fp2);
+		
+		if (a && b)//若文件1和2的行读入都不为EOF
+		{
+			if(find=strchr(temp1,'\n'))//找文件1的某一行后的换行符，并使其替换成空字符
+			*find = '\0';
+
+			strcat(temp1, temp2);
+			fputs(temp1, stdout);
+		}
+		else if(a)//若文件1不为EOF
+			fputs(temp1, stdout);
+		else if (b)//若文件2不为EOF
+			fputs(temp2, stdout);
+	}
+
+	if (fclose(fp1) != 0 || fclose(fp2) != 0)
+		fprintf(stderr, "Error in closing files\n");
+
+	return 0;
+}
+//命令行：Project1.exe 
+//13.11.7(1).txt
+//13.11.7(2).txt
+#endif
+
+
+//8.
+#if 0
+int main(int argc, char **argv)
+{
+	if (argc < 2)
+	{
+		fprintf(stderr,"错误的输入项！");
+		exit(EXIT_FAILURE);
+	}
+	if (strlen(argv[1]) != 1)
+	{
+		fprintf(stderr, "只能查找一个字符！");
+		exit(EXIT_FAILURE);
+	}
+
+	char* find;
+	int count = 0;
+
+	if (argc == 2)
+	{
+		printf("请输入字符串：");
+		char words[41];
+		fscanf(stdin, "%40s", words);
+
+		find = words;
+	
+		while (find < words + strlen(words))
+		{
+			if(*find == *argv[1])
+				count++;
+			find++;
+		}
+		fprintf(stdout,"字符%s共出现了%d次。",argv[1],count);
+	}
+
+	if (argc > 2)
+	{
+		FILE* fp[5];//定义5个指向FILE的指针
+
+		for (int i = 0; i < argc - 2; i++)//若输入3项，则有一个文件，argc=3，只需fp[0]即可
+			if ((fp[i] = fopen(argv[i + 2], "r")) == NULL)//fp[0]=argv[2]
+			{
+				fprintf(stderr, "未能打开文件：%s\n", argv[i + 2]);
+				exit(EXIT_FAILURE);
+			}
+
+
+		char ch;
+		for (int i = 0; i < argc - 2; i++)
+		{			
+			while ((ch = getc(fp[i])) != EOF)
+			{
+				if (ch == *argv[1])
+					count++;
+			}
+			printf("字符%s在文件%s中共出现了%d次。",argv[1], argv[i + 2],count);
+			count = 0;
+			putchar('\n');
+		}
+		for (int i = 0; i < argc - 2; i++)
+			fclose(fp[i]);
+	}
+
+	return 0;
+}
+//命令行：Project1.exe 
+//13.11.8(1).txt
+//13.11.8(2).txt
+#endif
+
+
+//9.单词编号
+#if 0
+#define MAX 41
+int main(void)
+{
+	FILE* fp;
+	char temp[MAX];
+	char words[MAX];
+
+	if ((fp = fopen("13.11.9.txt", "a+")) == NULL)//读和写
+	{
+		fprintf(stderr, "Can't open \"13.11.9.txt\" file.\n");
+		exit(EXIT_FAILURE);
+	}
+
+	int count=0;
+
+	rewind(fp);//若无此语句，则程序运行时效果不佳。
+	while ((fscanf(fp, "%40s", temp) == 1))//scanf执行了几次，就证明文件中已有几个单词。
+		count++;
+
+	 
+	puts("请输入要存入文件的内容：(在新行按#以结束输入)");
+	while ((fscanf(stdin, "%40s", words) == 1) && (words[0] != '#'))
+	{
+		count++;
+		fprintf(fp, "%d.", count);
+		fprintf(fp, "%s\n", words);		
+	}
+
+	puts("文件的内容是：");
+	rewind(fp);
+	while (fscanf(fp, "%s", words) == 1)
+		puts(words);
+	puts("Done !");
+
+	if (fclose(fp) != 0)
+		fprintf(stderr, "关闭文件失败！\n");
+
+	return 0;
+}
+//命令行：Project1.exe 
+#endif
+
+
+//10.
+#if 0
+int main(void)
+{
+	FILE* fp;
+	char name[20];
+
+	printf("请输入您要打开的文件名：");
+	scanf("%s",name);
+
+	if ((fp = fopen(name, "rb")) == NULL)//读文件						//此处用文本模式还是二进制模式读文件内容，
+	{																									//文本的一行可见字符后还有两个位置，是\r\n
+		fprintf(stderr, "未能打开目标文件：%s\n", name);
+		exit(EXIT_FAILURE);
+	}
+
+	printf("请输入一个文件位置：");
+	int index;
+	char ch;
+	while (scanf("%d", &index) == 1 && index >= 0)
+	{
+		long pos = (long)index * sizeof(char);
+		fseek(fp,pos,SEEK_SET);
+
+		//while ((fgets(temp, 80, fp) != NULL))//读入该文件位置所在的行，因为是行缓冲。但是无法设置遇到\n停止读入。
+		while ((ch = getc(fp)) != '\n')
+		{
+			putc(ch, stdout);
+		}
+
+		printf("\n请输入一个文件位置(输入负数或非数字字符可退出程序)：");
+	}
+
+	rewind(fp);
+	fclose(fp);
+
+	return 0;
+}
+//命令行：Project1.exe
+//13.11.10.txt
+#endif
+
+
+//11.
+#if 0
+char* string_in(char* string1, char* string2);
+
+int main(int argc,char **argv)
+{
+	if (argc != 3)//程序名，字符串，文件名
+	{
+		printf("输入项数错误！\n");
+		exit(EXIT_FAILURE);
+	}
+	FILE* fp;
+	if ((fp = fopen(argv[2], "r")) == NULL)
+	{
+		printf("打开%s文件失败\n", argv[2]);
+		exit(EXIT_FAILURE);
+	}
+
+	char temp[80];
+	puts("包含该字符的行：");
+	while ((fgets(temp, 80, fp) != NULL))//fgets()一行一行读入，因为是行缓冲。
+	{
+		if (string_in(temp, argv[1]))
+		{		
+			fputs(temp, stdout);
+		}
+	}
+
+	return 0;
+}
+char* string_in(char* string1, char* string2)																                        
+{
+
+	int count = 0;//匹配度计数
+	int length = strlen(string2);
+
+	while (count < length && *string1 != '\0')//若匹配未完成，且没有轮到string1的末尾字符后的第一个位置。
+	{
+		if (*(string1 + count) == *(string2 + count))//若s1和s2的第一个字符匹配，则计数值加一。
+			count++;
+		else
+		{
+			count = 0;
+			string1++;//若不匹配，则轮到s1的第二个字符与s2的第一个字符检测。
+		}
+	}
+	if (count == length)
+		return string1;//返回主串中子串的首地址。
+
+	else
+		return NULL;
+}
+//命令行：Project1.exe a 13.11.11.txt
+#endif
+//法二：
+#if 0
+int main(int argc, char** argv)
+{
+	if (argc != 3)//程序名，字符串，文件名
+	{
+		printf("输入项数错误！\n");
+		exit(EXIT_FAILURE);
+	}
+	FILE* fp;
+	if ((fp = fopen(argv[2], "r")) == NULL)
+	{
+		printf("打开%s文件失败\n", argv[2]);
+		exit(EXIT_FAILURE);
+	}
+
+	char temp[80];
+	puts("包含该字符的行：");
+	while ((fgets(temp, 80, fp) != NULL))//fgets()一行一行读入，因为是行缓冲。
+	{
+		if (strstr(temp, argv[1]))
+		{
+			fputs(temp, stdout);
+		}
+	}
+
+	return 0;
+}
+#endif
+
+
+//12.
+#if 1
+#define ROWS 20
+#define COLUMNS 30
+int main(void)
+{
+	int number[ROWS][COLUMNS] = {0};
+
+	const FILE* fp;
+
+	if ((fp = fopen("13.11.12.txt", "rb")) == NULL)//读模式（二进制模式打开文件）
+	{
+		fprintf(stderr, "未能打开文件(此文件用于读出数据)：%s\n", "13.11.12.txt");
+		exit(EXIT_FAILURE);
+	}
+
+
+		for (int i = 0; i < ROWS; i++)
+		{
+			for (int j = 0; j < COLUMNS; j++)
+				fscanf(fp,"%d", &number[i][j]);
+		}
+
+	//fread(number[0], sizeof(int), 4096, fp);								//fread()第一个参数不能是二维数组名
+	//待读取文件数据拷贝进内存中的地址，待读数据块的大小，待读数据块数量，待读取的文件
+
+	puts("读取到如下数据：");
+	for (int i = 0; i < ROWS; i++)
+	{
+		for (int j = 0; j < COLUMNS; j++)
+			printf("%d", number[i][j]);
+		putchar('\n');
+	}
+
+	fclose(fp);
+
+	puts("根据以上描述选择特定的输出字符，最终输出如下：");
+	int shuchu[ROWS][COLUMNS+1] = { 0 };
+
+	for (int i = 0; i < ROWS; i++)
+	{
+		for (int j = 0; j < COLUMNS; j++)
+		{
+			if (number[i][j] == 0)
+				shuchu[i][j] = ' ';
+			if (number[i][j] == 1)
+				shuchu[i][j] = '.';
+			if (number[i][j] == 2)
+				shuchu[i][j] = '\'';
+			if (number[i][j] == 3)
+				shuchu[i][j] = ':';
+		}
+	}
+
+	return 0;
+}
+//命令行：Project1.exe 
 #endif
