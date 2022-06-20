@@ -144,7 +144,7 @@ int main(void)
 	
 	puts("请输入待处理的目标文件名：");
 	s_gets(file_target, LEN);
-	if ((fptarget = fopen(file_target, "w")) == NULL)//读或写目标文件
+	if ((fptarget = fopen(file_target, "w")) == NULL)//写目标文件
 	{
 		fprintf(stderr, "未能打开目标文件：%s\n", file_target);
 		exit(EXIT_FAILURE);
@@ -204,6 +204,181 @@ char* s_gets(char* string, int n)
 	return fanhui;
 }
 //命令行：输入Project1.exe和13.11.3(2).txt和13.11.3(1).txt								//注：不使用命令行则无法完成此程序的功能
+#endif
+//3.题目要求是在原文件上完成对内容的修改，最终效果要体现在原文件上
+//法一：读入原文件，对每个字符进行处理，保存至一个临时文件中，最后将其内容复制再覆盖到原文件。
+#if 0
+#include <ctype.h>
+#define BUFSIZE 4096//缓冲区大小
+#define LEN 81//文件名最大长度
+void kaobei(FILE* source, FILE* destination);
+char* s_gets(char* string, int n);//输入函数
+
+int main(void)
+{
+	FILE* fp1, * fp2;
+
+	char file1[LEN];
+
+	puts("请输入待处理的目标文件名：");
+	s_gets(file1, LEN);
+
+//法一：打开，关闭文件两次
+#if 0
+	if ((fp1 = fopen(file1, "r+")) == NULL)//读或写目标文件
+	{
+		fprintf(stderr, "未能打开目标文件：%s\n", file1);
+		exit(EXIT_FAILURE);
+	}
+
+	if ((fp2 = fopen("13.11.3(2).txt", "r+")) == NULL)//读或写临时文件
+	{
+		fprintf(stderr, "未能打开临时文件：%s\n", "13.11.3(2).txt");
+		exit(EXIT_FAILURE);
+	}
+		
+	kaobei(fp1, fp2);
+	if (fclose(fp1) != 0 || fclose(fp2) != 0)
+		fprintf(stderr, "Error in closing files\n");
+
+
+	if ((fp1 = fopen(file1, "r+")) == NULL)//读或写目标文件
+	{
+		fprintf(stderr, "未能打开目标文件：%s\n", file1);
+		exit(EXIT_FAILURE);
+	}
+
+	if ((fp2 = fopen("13.11.3(2).txt", "r+")) == NULL)//读或写临时文件
+	{
+		fprintf(stderr, "未能打开临时文件：%s\n", "13.11.3(2).txt");
+		exit(EXIT_FAILURE);
+	}
+	kaobei(fp2, fp1);
+#endif
+
+//法二：写入文件后用rewind()
+#if 1
+	if ((fp1 = fopen(file1, "r+")) == NULL)//读或写目标文件
+	{
+		fprintf(stderr, "未能打开目标文件：%s\n", file1);
+		exit(EXIT_FAILURE);
+	}
+
+	if ((fp2 = fopen("13.11.3(2).txt", "r+")) == NULL)//读或写临时文件
+	{
+		fprintf(stderr, "未能打开临时文件：%s\n", "13.11.3(2).txt");
+		exit(EXIT_FAILURE);
+	}
+
+	kaobei(fp1, fp2);
+	rewind(fp1);
+	rewind(fp2);
+	kaobei(fp2, fp1);
+#endif
+
+	printf("操作完成！\n");
+
+	if (fclose(fp1) != 0 || fclose(fp2) != 0)
+		fprintf(stderr, "Error in closing files\n");
+
+	return 0;
+}
+void kaobei(FILE* fp1, FILE* fp2)
+{
+	char ch;
+	while ((ch = getc(fp1)) != EOF)
+	{
+		ch = toupper(ch);
+		putc(ch, fp2);
+	}
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	char* find;
+	fanhui = fgets(string, n, stdin);
+	if (fanhui)
+	{
+		find = strchr(string, '\n');
+		if (find)
+			*find = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+	return fanhui;
+}
+//示例文本：Take a leap. Take a chance.
+//命令行：Project1.exe
+//13.11.3(1).txt
+#endif
+//法二：利用随机读写功能fseek()函数，读写一个字符，然后转换字符并将文件指针回退一个字符，再将转换后的字符写入文件，每次覆盖一个原字符
+#if 1
+#include <ctype.h>
+#define LEN 81//文件名最大长度
+char* s_gets(char* string, int n);//输入函数
+
+int main(void)
+{
+	FILE* fp1;
+
+	char file1[LEN];
+
+	puts("请输入待处理的目标文件名：");
+	s_gets(file1, LEN);
+
+	if ((fp1 = fopen(file1, "r+")) == NULL)//读或写目标文件
+	{
+		fprintf(stderr, "未能打开目标文件：%s\n", file1);
+		exit(EXIT_FAILURE);
+	}
+
+
+	char ch;
+	while ((ch = getc(fp1)) != EOF)//读取文件中的原字符，存入ch，**文件内的光标后移一位字符**
+	{
+						//强制类型转换
+		fseek(fp1,-(long)sizeof(char),SEEK_CUR);//光标前移一位字符
+		putc(toupper(ch),fp1);//处理好的字符存入光标位置，即覆盖原字符，**文件内的光标后移一位字符**
+
+		//当你使用随机读写的方式来读写文件时。如果此刻您从正在写的方式要切换到读的方式。
+		//	就必须使用定位函数重新定位到你要读的地方，不然就得不到理想结果，还会乱码。//https://blog.csdn.net/weixin_44603568/article/details/91349059
+		fseek(fp1, 0L, SEEK_CUR);
+
+		
+		/*程序进入死循环就跳出*/
+		static int count=0;
+		count++;
+		if (count == 99)
+			break;			
+	}
+	
+		
+	printf("操作完成！\n");
+
+	fclose(fp1);
+
+	return 0;
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	char* find;
+	fanhui = fgets(string, n, stdin);
+	if (fanhui)
+	{
+		find = strchr(string, '\n');
+		if (find)
+			*find = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+	return fanhui;
+}
+//示例文本：Take a leap. Take a chance.
+//命令行：Project1.exe
+//13.11.3(1).txt
 #endif
 
 
@@ -656,7 +831,7 @@ int main(void)
 		long pos = (long)index * sizeof(char);
 		fseek(fp,pos,SEEK_SET);
 
-		//while ((fgets(temp, 80, fp) != NULL))//读入该文件位置所在的行，因为是行缓冲。但是无法设置遇到\n停止读入。
+		//while ((fgets(temp, 80, fp) != NULL))//读入该文件位置所在的行，行缓冲。但是无法设置遇到\n停止读入。
 		while ((ch = getc(fp)) != '\n')
 		{
 			putc(ch, stdout);
@@ -761,7 +936,7 @@ int main(int argc, char** argv)
 
 
 //12.
-#if 1
+#if 0
 #define ROWS 20
 #define COLUMNS 30
 int main(void)
@@ -770,9 +945,9 @@ int main(void)
 
 	const FILE* fp;
 
-	if ((fp = fopen("13.11.12.txt", "rb")) == NULL)//读模式（二进制模式打开文件）
+	if ((fp = fopen("13.11.12(1).txt", "rb")) == NULL)//读模式（二进制模式打开文件）
 	{
-		fprintf(stderr, "未能打开文件(此文件用于读出数据)：%s\n", "13.11.12.txt");
+		fprintf(stderr, "未能打开文件(此文件用于读出数据)：%s\n", "13.11.12(1).txt");
 		exit(EXIT_FAILURE);
 	}
 
@@ -783,7 +958,7 @@ int main(void)
 				fscanf(fp,"%d", &number[i][j]);
 		}
 
-	//fread(number[0], sizeof(int), 4096, fp);								//fread()第一个参数不能是二维数组名
+	//fread(number[0], sizeof(int), 4096, fp);																				//fread()第一个参数不能是二维数组名
 	//待读取文件数据拷贝进内存中的地址，待读数据块的大小，待读数据块数量，待读取的文件
 
 	puts("读取到如下数据：");
@@ -797,7 +972,7 @@ int main(void)
 	fclose(fp);
 
 	puts("根据以上描述选择特定的输出字符，最终输出如下：");
-	int shuchu[ROWS][COLUMNS+1] = { 0 };
+	int shuchu[ROWS][COLUMNS+1] = { '\0'};
 
 	for (int i = 0; i < ROWS; i++)
 	{
@@ -811,8 +986,48 @@ int main(void)
 				shuchu[i][j] = '\'';
 			if (number[i][j] == 3)
 				shuchu[i][j] = ':';
+			if (number[i][j] == 4)
+				shuchu[i][j] = '~';
+			if (number[i][j] == 5)
+				shuchu[i][j] = '*';
+			if (number[i][j] == 6)
+				shuchu[i][j] = '=';
+			if (number[i][j] == 7)
+				;
+			if (number[i][j] == 8)
+				shuchu[i][j] = '%';
+			if (number[i][j] == 9)
+				shuchu[i][j] = '#';
 		}
 	}
+
+	for (int i = 0; i < ROWS; i++)
+	{
+		for (int j = 0; j < COLUMNS+1; j++)
+			printf("%c", shuchu[i][j]);
+		putchar('\n');
+	}
+
+	FILE* out;
+	if ((out = fopen("13.11.12(2).txt", "wb")) == NULL)//写模式（二进制模式打开文件）
+	{
+		fprintf(stderr, "未能打开文件：%s\n", "13.11.12(2).txt");
+		exit(EXIT_FAILURE);
+	}
+
+	//for (int i = 0; i < ROWS; i++)							//这样写，无法拷贝内容到文件，为什么？
+	//	fprintf(out, "%s", shuchu[i]);
+
+	for (int i = 0; i < ROWS; i++)
+	{
+		for (int j = 0; j < COLUMNS + 1; j++)
+			fprintf(out,"%c", shuchu[i][j]);
+		putc('\n',out);
+	}
+
+	puts("最终输出内容已存入13.11.12(2).txt");
+
+	fclose(out);
 
 	return 0;
 }
