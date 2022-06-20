@@ -41,7 +41,7 @@ int main(int argc,char **argv)
 			exit(EXIT_FAILURE);
 		}
 
-		while (fscanf(fp, "%lf", temp) == 1)
+		while (fscanf(fp, "%lf", temp) == 1)//或：while(!feof(fp)&&(fscanf(fp, "%lf", temp) == 1))
 		{
 			sum += *temp;
 			count++;
@@ -55,6 +55,7 @@ int main(int argc,char **argv)
 	return 0;
 }
 #endif
+//也可以使用fp=stdin;   处理无参数输入的情况
 
 
 //5.
@@ -85,6 +86,19 @@ int main(int argc, char** argv)
 			if(strchr(temp, *argv[1])!=NULL)//注：strchr()第二个参数是整型值，所以必须加*号
 				fputs(temp, stdout);
 		}
+		//法二：(不使用strchr)
+		//while ((fgets(temp, 80, fp) != NULL))
+		//{
+		//	char* p = temp;
+		//	while (*p != '\0')
+		//	{
+		//		if (*p++ == *argv[1])
+		//		{
+		//			fputs(temp, stdout);
+		//			break;//该行只打印一次
+		//		}
+		//	}
+		//}
 
 		fclose(fp);
 	
@@ -96,7 +110,7 @@ int main(int argc, char** argv)
 
 
 //8.
-#if 1
+#if 0
 int main(void)
 {
 	char name[] = "Yan";
