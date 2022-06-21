@@ -313,7 +313,7 @@ char* s_gets(char* string, int n)
 //13.11.3(1).txt
 #endif
 //法二：利用随机读写功能fseek()函数，读写一个字符，然后转换字符并将文件指针回退一个字符，再将转换后的字符写入文件，每次覆盖一个原字符
-#if 1
+#if 0
 #include <ctype.h>
 #define LEN 81//文件名最大长度
 char* s_gets(char* string, int n);//输入函数
@@ -475,8 +475,8 @@ int main(int argc,char **argv)
 			fclose(fpsource[i]);
 			files++;
 		}	
-		i++;																						//注：若此处不写i++，上面改成while (i++<argc-2)，则i是以1的值进入循环的
-	}																								//造成无法拷贝内容的后果。
+		i++;																				//注：若此处不写i++，上面改成while (i++<argc-2)，则i是以1的值进入循环的
+	}																						//造成无法拷贝内容的后果。
 	printf("操作完成！%d个文件的内容已附加到%s\n", files, argv[1]);
 
 	rewind(fptarget);
@@ -524,8 +524,8 @@ int main(void)
 	}
 
 	strncpy(name,wenjianmin, LEN - 5);
-	name[LEN - 5] = '\0';
-	strcat(name, "-reduced.txt");//注：第二个字符串仅会从第一个字符串的第一个空字符处开始覆盖。    red即reduced
+	name[LEN - 5] = '\0';//保险起见，在字符串的索引LEN-5处加入空字符，文件名较短时，在索引LEN-5前面也会有空字符。
+	strcat(name, "-reduced.txt");//注：一般情况下第二个字符串仅会从第一个字符串的第一个空字符处开始覆盖。    red即reduced
 
 	if ((out = fopen(name, "w")) == NULL)//打开第二个文件
 	{
@@ -628,6 +628,30 @@ int main(void)
 //13.11.7(1).txt
 //13.11.7(2).txt
 #endif
+//法二：
+#if 0
+void function_a(FILE* f1, FILE* f2)
+{
+	char ch1, ch2;
+
+	do
+	{
+		while ((ch1 = getc(f1)) != EOF && ch1 != '\n')
+		{
+			putc(ch1, stdout);
+			putchar('\n');
+		}
+
+		while ((ch2 = getc(f2)) != EOF && ch2 != '\n')
+		{
+			putc(ch2, stdout);
+			putchar('\n');
+		}
+
+	} while (ch1 != EOF && ch2 != EOF);
+}
+//https ://blog.csdn.net/weixin_44603568/article/details/91349059
+#endif
 
 
 //7.b
@@ -688,6 +712,30 @@ int main(void)
 //命令行：Project1.exe 
 //13.11.7(1).txt
 //13.11.7(2).txt
+#endif
+//法二
+#if 0
+
+void function_b(FILE* f1, FILE* f2)
+{
+	char ch1, ch2;
+
+	do
+	{
+		while ((ch1 = getc(f1)) != EOF && ch1 != '\n')
+		{
+			putc(ch1, stdout);
+		}
+
+		while ((ch2 = getc(f2)) != EOF && ch2 != '\n')
+		{
+			putc(ch2, stdout);
+		}
+		putchar('\n');
+
+	} while (ch1 != EOF && ch2 != EOF);
+}
+//https ://blog.csdn.net/weixin_44603568/article/details/91349059
 #endif
 
 
@@ -760,6 +808,16 @@ int main(int argc, char **argv)
 //13.11.8(1).txt
 //13.11.8(2).txt
 #endif
+//读取标准输入，并判断字符与给定字符相同的次数
+//法二：不一定要创建二维数组来存储输入的字符，直接在输入时逐个字符判断也可行。
+#if 0
+printf("请输入字符串：");
+while ((ch = getchar()) != EOF)
+{
+	if (ch == argv[1][0])
+		count++;
+}
+#endif
 
 
 //9.单词编号
@@ -779,7 +837,7 @@ int main(void)
 
 	int count=0;
 
-	rewind(fp);//若无此语句，则程序运行时效果不佳。
+	rewind(fp);//若无此语句，则程序运行时效果不佳。		//*****************注：若fopen模式为r+，则不用写此语句。*****************
 	while ((fscanf(fp, "%40s", temp) == 1))//scanf执行了几次，就证明文件中已有几个单词。
 		count++;
 
@@ -804,6 +862,18 @@ int main(void)
 	return 0;
 }
 //命令行：Project1.exe 
+#endif
+//法二：使用fgets()来确定原文件中的行数
+#if 0
+int get_number(FILE* fp)
+{
+	int i = 0;
+	char temp[80];
+	rewind(fp);
+	while (fgets(temp, 80, fp) != NULL)
+		i++;
+	return i;
+}
 #endif
 
 
@@ -831,11 +901,14 @@ int main(void)
 		long pos = (long)index * sizeof(char);
 		fseek(fp,pos,SEEK_SET);
 
-		//while ((fgets(temp, 80, fp) != NULL))//读入该文件位置所在的行，行缓冲。但是无法设置遇到\n停止读入。
-		while ((ch = getc(fp)) != '\n')
+		while ((ch = getc(fp)) != '\n')											
 		{
 			putc(ch, stdout);
 		}
+		//while ((fgets(temp, 80, fp) != NULL))//读入该文件位置所在的行，行缓冲。但是无法设置遇到\n停止读入。
+		//但是可以把上句改为if即可完成程序功能
+		/*if (fgets(temp, 80, fp) != NULL)
+			printf("%s",temp);*/
 
 		printf("\n请输入一个文件位置(输入负数或非数字字符可退出程序)：");
 	}
@@ -904,7 +977,7 @@ char* string_in(char* string1, char* string2)
 }
 //命令行：Project1.exe a 13.11.11.txt
 #endif
-//法二：
+//法二：使用strstr()
 #if 0
 int main(int argc, char** argv)
 {
@@ -951,15 +1024,12 @@ int main(void)
 		exit(EXIT_FAILURE);
 	}
 
-
-		for (int i = 0; i < ROWS; i++)
-		{
-			for (int j = 0; j < COLUMNS; j++)
-				fscanf(fp,"%d", &number[i][j]);
-		}
-
-	//fread(number[0], sizeof(int), 4096, fp);																				//fread()第一个参数不能是二维数组名
-	//待读取文件数据拷贝进内存中的地址，待读数据块的大小，待读数据块数量，待读取的文件
+	//用fscanf()读取字符，存为整型数据，不读取空格和换行符。
+	for (int i = 0; i < ROWS; i++)
+	{
+		for (int j = 0; j < COLUMNS; j++)
+			fscanf(fp,"%d", &number[i][j]);
+	}
 
 	puts("读取到如下数据：");
 	for (int i = 0; i < ROWS; i++)
@@ -972,7 +1042,14 @@ int main(void)
 	fclose(fp);
 
 	puts("根据以上描述选择特定的输出字符，最终输出如下：");
-	int shuchu[ROWS][COLUMNS+1] = { '\0'};
+
+	//创建一个临时二维数组存转换好的字符数据
+	char shuchu[ROWS][COLUMNS+1] ;
+
+	for (int i = 0; i < ROWS; i++)
+	{
+		shuchu[i][30] = '\0';
+	}
 
 	for (int i = 0; i < ROWS; i++)
 	{
@@ -993,7 +1070,7 @@ int main(void)
 			if (number[i][j] == 6)
 				shuchu[i][j] = '=';
 			if (number[i][j] == 7)
-				;
+				shuchu[i][j] = '$';
 			if (number[i][j] == 8)
 				shuchu[i][j] = '%';
 			if (number[i][j] == 9)
@@ -1001,12 +1078,17 @@ int main(void)
 		}
 	}
 
-	for (int i = 0; i < ROWS; i++)
-	{
-		for (int j = 0; j < COLUMNS+1; j++)
-			printf("%c", shuchu[i][j]);
-		putchar('\n');
-	}
+	//for (int i = 0; i < ROWS; i++)
+	//{
+	//	for (int j = 0; j < COLUMNS+1; j++)
+	//		printf("%c", shuchu[i][j]);
+	//	putchar('\n');
+	//}
+																					//*************************************注**********************************************
+	//或：																		//	char shuchu[ROWS][COLUMNS+1] ;不能写成int shuchu[ROWS][COLUMNS+1] ;
+	for (int i = 0; i < ROWS; i++)								//否则转换说明%s只能打印数组的首个元素。					
+		fprintf(stdout, "%s\n", shuchu[i]);
+
 
 	FILE* out;
 	if ((out = fopen("13.11.12(2).txt", "wb")) == NULL)//写模式（二进制模式打开文件）
@@ -1015,15 +1097,17 @@ int main(void)
 		exit(EXIT_FAILURE);
 	}
 
-	//for (int i = 0; i < ROWS; i++)							//这样写，无法拷贝内容到文件，为什么？
-	//	fprintf(out, "%s", shuchu[i]);
 
-	for (int i = 0; i < ROWS; i++)
-	{
-		for (int j = 0; j < COLUMNS + 1; j++)
-			fprintf(out,"%c", shuchu[i][j]);
-		putc('\n',out);
-	}
+	//for (int i = 0; i < ROWS; i++)
+	//{
+	//	for (int j = 0; j < COLUMNS + 1; j++)
+	//		fprintf(out,"%c", shuchu[i][j]);
+	//	putc('\n',out);
+	//}
+	//或
+	for (int i = 0; i < ROWS; i++)															
+		fprintf(out, "%s\n", shuchu[i]);
+
 
 	puts("最终输出内容已存入13.11.12(2).txt");
 
@@ -1032,4 +1116,262 @@ int main(void)
 	return 0;
 }
 //命令行：Project1.exe 
+#endif
+//法二：通过查找一维字符数组的下标和元素值来实现整数到符号的转换
+#if 0
+char convert[] = { ' ',           '.',           '\'',             '\"',         '^',           '*',          '%',           '$',          '@',           '#' };
+for (int i = 0; i < ROWS; i++)
+{
+	for (int j = 0; j < COLUMNS + 1; j++)
+	{
+		printf("%c", convert[   number[i][j]   ]   );
+		fprintf(out, "%c", convert[number[i][j]]);
+	}
+	printf("\n");
+	putc('\n', out);
+}
+#endif
+//法三：利用宏定义的数组+指针来实现转换数据
+#if 0
+# define STR " .':~*=&%#"
+for (int i=0,j = 0; i < 20; i++)
+{
+	for (j = 0; j < 30; j++)
+		number[i][j] = *(STR + number[i][j]);
+
+	number[i][j] = '\0';
+	fprintf(out, "%s\n", number[i]);
+}
+//https ://blog.csdn.net/weixin_44603568/article/details/91349059
+#endif
+//法四：不使用二维数组和fscanf()，而用fgets()将字符转换成规定的数据。
+#if 0
+char line[61];//数字+空格+'\0'=61个char形存储空间
+while ((fgets(line, 61 * sizeof(char)), fp)!=NULL)
+{
+	for (int i = 0; i < 61; i++)
+	{
+		if (line[i] >= 48 && line[i] <= 57)
+		{
+			printf("%c", convert[   line[i]-48    ]);
+			fprintf(out, "%c", convert[line[i] - 48]);
+		}
+	}
+	printf("\n");
+	fprintf(out,"\n");
+}
+#endif
+
+
+//13.用变长数组(VLA)代替标准数组,完成上述程序的功能
+#if 0
+# include <stdio.h>
+# include <stdlib.h>
+
+# define ROWS 20
+# define COLS 30
+# define FNAME "no12.txt"
+# define FARGS "no12.dat"
+# define STR " .':~*=&%#"
+
+void initialize_ar(FILE* fp, int n, int m, int ar[n][m]);
+void set_st(int n, int m, char st[n][m + 1], int ar[n][m]);
+
+int main(void)
+{
+	FILE* fp, * ft;
+	int ar[ROWS][COLS];
+	char st[ROWS][COLS + 1];
+
+	if (!(fp = fopen(FNAME, "r")))
+	{
+		fprintf(stderr, "Can't open file %s.\n", FNAME);
+		exit(EXIT_FAILURE);
+	}
+
+	if (!(ft = fopen(FARGS, "w")))
+	{
+		fprintf(stderr, "Can't open file %s.\n", FARGS);
+		exit(EXIT_FAILURE);
+	}
+
+	initialize_ar(fp, ROWS, COLS, ar);
+	set_st(ROWS, COLS, st, ar);
+
+	for (int i = 0; i < ROWS; i++)
+		fprintf(ft, "%s\n", st[i]);
+
+	if (fclose(fp) || fclose(ft))
+	{
+		fprintf(stderr, "Clossing error .\n");
+		exit(EXIT_FAILURE);
+	}
+
+	return 0;
+}
+
+void initialize_ar(FILE* fp, int n, int m, int ar[n][m])
+{
+	// 读取文件中的内容到整型数组
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < m; j++)
+			//这样做是为了确保fscanf()正确读到1个数,而不受空格和其他字符影响
+			while (fscanf(fp, "%d", &ar[i][j]) != 1)
+				fscanf(fp, "%*c");
+}
+
+void set_st(int n, int m, char st[n][m + 1], int ar[n][m])
+{
+	int i, j;
+
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < m; j++)
+		{
+			st[i][j] = *(STR + ar[i][j]);
+		}
+		st[i][j] = '\0';
+	}
+}
+//https ://blog.csdn.net/weixin_44603568/article/details/91349059
+#endif
+
+
+//14.图像抖动优化算法
+#if 0
+# include <stdio.h>
+# include <stdlib.h>
+# include <math.h>
+
+# define ROWS 20
+# define COLS 30
+# define FNAME "no12.txt"
+# define FARGS "no12.dat"
+# define STR " .':~*=&%#"
+
+void initialize_ar(FILE* fp, int n, int m, int ar[n][m]);//读取文件中的原始字符数据并存入临时二维数组ar中（类型：int）
+void reconstruction(int n, int m, int ar[n][m]);//优化算法，处理二维数组ar的值
+void set_st(int n, int m, char st[n][m + 1], int ar[n][m]);//临时二维数组ar中的值处理为字符后存入临时二维数组st中（类型：char）
+
+int main(void)
+{
+	FILE* fp, * ft;
+	int ar[ROWS][COLS];
+	char st[ROWS][COLS + 1];
+
+	if (!(fp = fopen(FNAME, "r")))
+	{
+		fprintf(stderr, "Can't open file %s.\n", FNAME);
+		exit(EXIT_FAILURE);
+	}
+
+	if (!(ft = fopen(FARGS, "w")))
+	{
+		fprintf(stderr, "Can't open file %s.\n", FARGS);
+		exit(EXIT_FAILURE);
+	}
+
+	initialize_ar(fp, ROWS, COLS, ar);
+	reconstruction(ROWS, COLS, ar);
+	set_st(ROWS, COLS, st, ar);
+
+	for (int i = 0; i < ROWS; i++)
+		fprintf(ft, "%s\n", st[i]);
+
+	if (fclose(fp) || fclose(ft))
+	{
+		fprintf(stderr, "Clossing error .\n");
+		exit(EXIT_FAILURE);
+	}
+
+	return 0;
+}
+
+void initialize_ar(FILE* fp, int n, int m, int ar[n][m])
+{
+	// 读取文件中的内容到整型数组
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < m; j++)
+			//这样做是为了确保fscanf()正确读到1个数,而不受空格和其他字符影响
+			while (fscanf(fp, "%d", &ar[i][j]) != 1)
+				fscanf(fp, "%*c");
+}
+
+void reconstruction(int n, int m, int ar[n][m])
+{
+	//int left, right, up, down;
+	int l, r, u, d;
+	int sum;
+	int count;
+
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)//从ar二维数组的第一行第一列开始处理
+		{
+			l = r = u = d = 1;
+
+			//法二：
+			//left = right = up = down = -1 ;
+			sum = 0;
+			count = 0;
+
+			if (j > 0)
+			{
+				//left = ar[i][m - 1] ;
+				l = abs(ar[i][j] - ar[i][j - 1]) > 1 ? 1 : 0;//abs:绝对值函数
+				sum += ar[i][j - 1];
+				count++;
+			}
+
+			if (j < m - 1)
+			{
+				r = abs(ar[i][j] - ar[i][j + 1]) > 1 ? 1 : 0;//以第一行第一列为例，其与其右侧的数作差，判断是否大于1
+				sum += ar[i][j + 1];
+				count++;
+				//right = ar[i][m + 1] ;
+			}
+			if (i > 0)
+			{
+				u = abs(ar[i][j] - ar[i - 1][j]) > 1 ? 1 : 0;
+				sum += ar[i - 1][j];
+				count++;
+				//up = ar[i - 1][m] ;
+			}
+			if (i < n - 1)
+			{
+				d = abs(ar[i][j] - ar[i + 1][j]) > 1 ? 1 : 0;//以第一行第一列为例，其与其下侧的数作差，判断是否大于1
+				sum += ar[i + 1][j];
+				count++;
+				//down = ar[i + 1][m] ;
+			}
+
+			if (l && r && u && d)//若某数与其上下左右的数的差都大于1，则某数要被优化（4条边上的数值不会被优化）
+			{
+				ar[i][j] = sum / (double)count;
+			}
+
+
+			/*
+			if ((abs(left - ar[i][j]) > 1) && (abs(right - ar[i][j]) > 1)
+					&& (abs(up - ar[i][j]) > 1) && (abs(down - ar[i][j]) > 1))
+				ar[i][j] = (left + right + up + down) / 4.0 ;
+			*/
+		}
+	}
+}
+
+void set_st(int n, int m, char st[n][m + 1], int ar[n][m])
+{
+	int i, j;
+
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < m; j++)
+		{
+			st[i][j] = *(STR + ar[i][j]);
+		}
+		st[i][j] = '\0';
+	}
+}
+//https ://blog.csdn.net/weixin_44603568/article/details/91349059
 #endif
