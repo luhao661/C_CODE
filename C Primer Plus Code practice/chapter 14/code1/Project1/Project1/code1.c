@@ -14,7 +14,7 @@
 char* s_gets(char* string, int n);
 
 struct book											//½á¹¹ÉùÃ÷£¨Ò²½Ğ´´½¨Ò»¸ö½á¹¹Ä£°å£©	//bookÊÇ¸ö½á¹¹µÄ±ê¼Ç£¬ºóÃæ³ÌĞò¿ÉÒÔÊ¹ÓÃbookÒıÓÃ´Ë½á¹¹
-{
+{															//ÉùÃ÷Ò»¸ö±ê¼ÇÎªbookµÄ½á¹¹
 	char shuming[MAX_SHUMING];
 	char zuozhe[MAX_ZUOZHE];
 	float value;
@@ -22,7 +22,7 @@ struct book											//½á¹¹ÉùÃ÷£¨Ò²½Ğ´´½¨Ò»¸ö½á¹¹Ä£°å£©	//bookÊÇ¸ö½á¹¹µÄ±ê¼Ç£¬º
 
 int main(void)
 {
-	struct book library;						//°ÑlibraryÉùÃ÷ÎªÒ»¸öÊ¹ÓÃbook½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿£¨°ÑlibraryÉùÃ÷ÎªÒ»¸öbookÀàĞÍµÄ±äÁ¿£©
+	struct book library;						//ÉùÃ÷Ò»¸öÊ¹ÓÃbook½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿library£¨°ÑlibraryÉùÃ÷ÎªÒ»¸öbookÀàĞÍµÄ±äÁ¿£©
 	printf("ÇëÊäÈëÊéÃû£º\n");
 	s_gets(library.shuming,MAX_SHUMING);//·ÃÎÊshumingÊı×é
 
@@ -57,14 +57,14 @@ char* s_gets(char* string, int n)
 
 
 //ÀûÓÃ½á¹¹£¬´´½¨¶à±¾ÊéµÄÍ¼ÊéÄ¿Â¼
-#if 1
+#if 0
 #define MAX_SHUMING 41 //×î´óÊéÃû³¤¶È
 #define MAX_ZUOZHE 41 //×î´ó×÷ÕßĞÕÃû³¤¶È
 #define MAX_SHULIANG 100//×î´óÊé¼®ÊıÁ¿
 
 char* s_gets(char* string, int n);
 
-struct book											//½á¹¹ÉùÃ÷£¨Ò²½Ğ´´½¨Ò»¸ö½á¹¹Ä£°å£©	//bookÊÇ¸ö½á¹¹µÄ±ê¼Ç£¬ºóÃæ³ÌĞò¿ÉÒÔÊ¹ÓÃbookÒıÓÃ´Ë½á¹¹
+struct book												//ÉùÃ÷Ò»¸ö±ê¼ÇÎªbookµÄ½á¹¹
 {
 	char shuming[MAX_SHUMING];
 	char zuozhe[MAX_ZUOZHE];
@@ -73,7 +73,7 @@ struct book											//½á¹¹ÉùÃ÷£¨Ò²½Ğ´´½¨Ò»¸ö½á¹¹Ä£°å£©	//bookÊÇ¸ö½á¹¹µÄ±ê¼Ç£¬º
 
 int main(void)
 {
-	struct book library[MAX_SHULIANG];//°Ñlibrary[100]ÉùÃ÷ÎªÒ»¸öÊ¹ÓÃbook½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿Êı×é
+	struct book library[MAX_SHULIANG];//ÉùÃ÷Ò»¸öÊ¹ÓÃbook½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿Êı×élibrary[100]
 	int count = 0;
 	int index;
 
@@ -120,3 +120,333 @@ char* s_gets(char* string, int n)
 }
 #endif
 
+
+//Ê¹ÓÃÇ¶Ì×½á¹¹À´±íÊ¾Êı¾İ
+#if 0
+#define LEN 20
+const char* message[5] = {
+"  Thank you for the wonderful evening, ",
+"You certainly prove that a ",
+"is a special kind of guy. We must get together",
+"over a delicious ",
+" and have a few laughs"
+};
+struct names
+{
+	char first[LEN];
+	char last[LEN];
+};
+struct guy
+{
+	struct names handle;//Ç¶Ì×½á¹¹£¬ÉùÃ÷Ò»¸öÊ¹ÓÃname½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿handle
+	char job[LEN];
+	char favoriate_food[LEN];
+	float income;
+};
+int main(void)
+{
+	struct guy fellow =//ÉùÃ÷Ò»¸öÊ¹ÓÃguy½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿fellow£¬²¢¶ÔÆä³õÊ¼»¯
+	{
+		{"Ewen","Villard"},//**************³õÊ¼»¯Ç¶Ì×½á¹¹µÄ³ÉÔ±£¨Ê¹ÓÃÁ½´Î»¨À¨ºÅ£©***************
+		"personality coach",
+		"grilled salmon",
+		68112.00
+	};
+
+	printf("Dear %s,\n\n",fellow.handle.first);//******·ÃÎÊÇ¶Ì×½á¹¹µÄ³ÉÔ±£¨Ê¹ÓÃÁ½´ÎµãÔËËã·û£©***********
+	printf("%s%s.\n",message[0],fellow.handle.first);//  Thank you for the wonderful evening, 
+	printf("%s%s.\n", message[1], fellow.job);//You certainly prove that a 
+	printf("%s\n",message[2]);//is a special kind of guy. We must get together
+	printf("%s%s%s",message[3],fellow.favoriate_food,message[4]);// over a delicious        and have a few laughs
+
+	if (fellow.income > 15000.0)
+		puts("!!");
+	else if (fellow.income > 75000.0)
+		puts("!");
+	else
+		puts(".");
+
+	printf("\n%40s%s\n",         " ",             "See you soon, ");
+	printf("%40s%s\n",             " ",             "Luhao");
+
+	return 0;
+}
+#endif
+
+
+//Ê¹ÓÃÖ¸Ïò½á¹¹µÄÖ¸ÕëºÍÇ¶Ì×½á¹¹À´±íÊ¾Êı¾İ
+#if 0
+#define LEN 20
+struct names					//ÉùÃ÷Ò»¸ö±ê¼ÇÎªnamesµÄ½á¹¹
+{
+	char first[LEN];
+	char last[LEN];
+};
+struct guy
+{
+	struct names handle;//Ç¶Ì×½á¹¹£¬ÉùÃ÷Ò»¸öÊ¹ÓÃnames½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿handle
+	char job[LEN];
+	char favoriate_food[LEN];
+	float income;
+};
+int main(void)
+{
+	struct guy fellow[2] =//ÉùÃ÷Ò»¸öÊ¹ÓÃguy½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿Êı×éfellow[2]£¬²¢¶ÔÆä³õÊ¼»¯
+	{
+		{//¶Ôfellow[1]³õÊ¼»¯
+		{"Ewen","Villard"},//**************³õÊ¼»¯Ç¶Ì×½á¹¹µÄ³ÉÔ±£¨Ê¹ÓÃÁ½´Î»¨À¨ºÅ£©***************
+		"personality coach",
+		"grilled salmon",
+		68112.00
+		},
+
+		{//¶Ôfellow[2]³õÊ¼»¯
+		{"Rodney", "Swillbelly"},//**************³õÊ¼»¯Ç¶Ì×½á¹¹µÄ³ÉÔ±£¨Ê¹ÓÃÁ½´Î»¨À¨ºÅ£©***************
+		"editor",
+		"tripe",
+		432400.00
+		}
+	};
+
+	struct guy* him;//ÉùÃ÷Ò»¸öÖ¸Ïòguy½á¹¹²¼¾ÖµÄ½á¹¹µÄÖ¸Õëhim
+
+	printf("½á¹¹±äÁ¿fellow[0]µÄµØÖ·£º%p\n½á¹¹±äÁ¿fellow[1]µÄµØÖ·£º%p\n\n",&fellow[0],&fellow[1]);
+
+	him = &fellow[0];
+	printf("½á¹¹Ö¸ÕëhimµÄµØÖ·£º%p\n      him+1µÄµØÖ·£º%p\n", him, him+1);
+	printf("him->income£º%.2f\n(*him).income:%.2f\n\n",him->income,(*him).income);
+
+	him++;
+	printf("½á¹¹Ö¸Õëhim++µÄµØÖ·£º%p\n", him);
+	printf("him->favoriate_food£º%s\nhim->handle.last:%s\n\n", him->favoriate_food, him->handle.last);
+
+	return 0;
+}
+#endif
+
+
+//°Ñ½á¹¹³ÉÔ±×÷ÎªÊµ²Î´«µİ£¨Ò²¿ÉÒÔ°Ñ½á¹¹³ÉÔ±µÄµØÖ·×÷ÎªÊµ²Î´«µİ£©
+#if 0
+#define FUNDLEN 50
+
+struct funds//	//ÉùÃ÷Ò»¸ö±ê¼ÇÎªfundsµÄ½á¹¹
+{
+	char bank[FUNDLEN];
+	double bankfund;
+	char save[FUNDLEN];
+	double savefund;
+};
+double sum(double x,double y);//ÉùÃ÷Ò»¸öº¯Êı
+
+int main(void)
+{
+	struct funds zhangsan =//ÉùÃ÷Ò»¸öÊ¹ÓÃfunds½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿zhangsan£¬²¢¶ÔÆä³õÊ¼»¯
+	{
+	"Bank of China",
+	4023.27,
+	"Luck's Savings",
+	8543.94
+	};
+
+	printf("ÕÅÈı×Ü¹²ÓĞ%.2f¿éÇ®\n",sum(zhangsan.bankfund,zhangsan.savefund));
+
+	return 0;
+}
+double sum(double x, double y)
+{
+	return (x+y);
+}
+#endif
+
+
+//°Ñ½á¹¹µÄµØÖ·×÷ÎªÊµ²Î´«µİ
+#if 0
+#define FUNDLEN 50
+
+struct funds//	//ÉùÃ÷Ò»¸ö±ê¼ÇÎªfundsµÄ½á¹¹
+{
+	char bank[FUNDLEN];
+	double bankfund;
+	char save[FUNDLEN];
+	double savefund;
+};
+double sum(const struct funds * money);//ÉùÃ÷Ò»¸öº¯Êı£¬ĞÎ²ÎÊÇÒ»¸öÖ¸Ïòfunds½á¹¹²¼¾ÖµÄ½á¹¹µÄÖ¸Õëmoney
+
+int main(void)
+{
+	struct funds zhangsan =//ÉùÃ÷Ò»¸öÊ¹ÓÃfunds½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿zhangsan£¬²¢¶ÔÆä³õÊ¼»¯
+	{
+	"Bank of China",
+	4023.27,
+	"Luck's Savings",
+	8543.94
+	};
+
+	printf("ÕÅÈı×Ü¹²ÓĞ%.2f¿éÇ®\n", sum(&zhangsan));
+
+	return 0;
+}
+double sum(const struct funds* money)
+{
+	return (              money->bankfund         +         (*money).savefund         );
+}
+#endif
+
+
+//°Ñ½á¹¹×÷ÎªÊµ²Î´«µİ
+#if 0
+#define FUNDLEN 50
+
+struct funds//	//ÉùÃ÷Ò»¸ö±ê¼ÇÎªfundsµÄ½á¹¹
+{
+	char bank[FUNDLEN];
+	double bankfund;
+	char save[FUNDLEN];
+	double savefund;
+};
+double sum(const struct funds money);//ÉùÃ÷Ò»¸öº¯Êı£¬ĞÎ²ÎÊÇÒ»¸öÊ¹ÓÃfunds½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿money
+
+int main(void)
+{
+	struct funds zhangsan =//ÉùÃ÷Ò»¸öÊ¹ÓÃfunds½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿zhangsan£¬²¢¶ÔÆä³õÊ¼»¯
+	{
+	"Bank of China",
+	4023.27,
+	"Luck's Savings",
+	8543.94
+	};
+
+	printf("ÕÅÈı×Ü¹²ÓĞ%.2f¿éÇ®\n", sum(zhangsan));//Ïòmoney½á¹¹±äÁ¿µÄ³ÉÔ±¿½±´zhangsan½á¹¹±äÁ¿µÄ³ÉÔ±µÄÖµ
+
+	return 0;
+}
+double sum(const struct funds money)
+{
+	return (money.bankfund + money.savefund);
+}
+#endif
+
+
+//Ê¹ÓÃ½á¹¹Ö¸Õë½øĞĞº¯Êı¼äË«ÏòÍ¨ĞÅ
+#if 0
+#define LEN 30
+struct names					//ÉùÃ÷Ò»¸ö±ê¼ÇÎªnamesµÄ½á¹¹
+{
+	char first[LEN];
+	char last[LEN];
+	int letters;
+};
+
+void getinfo(struct names *);//ÉùÃ÷Ò»¸öº¯Êı£¬ĞÎ²ÎÊÇÒ»¸öÖ¸Ïònames½á¹¹²¼¾ÖµÄ½á¹¹Ö¸Õë
+void makeinfo(struct names*);
+void showinfo(const struct names*);
+char* s_gets(char* string, int n);
+
+int main(void)
+{
+	struct names person;//ÉùÃ÷Ò»¸öÊ¹ÓÃnames½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿person
+	
+	getinfo(&person);//¶Ô½á¹¹±äÁ¿personµÄ³ÉÔ±¸³Öµ
+	makeinfo(&person);
+	showinfo(&person);
+
+	return 0;
+}
+void getinfo(struct names* p)
+{
+	puts("ÇëÊäÈëÄãµÄĞÕ");
+	s_gets(p->first,LEN);
+	puts("ÇëÊäÈëÄãµÄÃû");
+	s_gets(p->last, LEN);
+}
+void makeinfo(struct names*p)
+{
+	p->letters = strlen(p->first) + strlen(p->last);
+}
+void showinfo(const struct names*p)
+{
+	printf("%s %s,ÄãµÄÃû×ÖÕ¼%d¸ö×Ö½Ú\n",p->first,p->last,p->letters);
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	char* find;
+
+	fanhui = fgets(string, n, stdin);
+	if (fanhui)
+	{
+		find = strchr(string, '\n');
+		if (find)
+			*find = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+	return fanhui;
+}
+#endif
+
+
+//Ê¹ÓÃ½á¹¹²ÎÊıºÍ·µ»ØÖµ½øĞĞº¯Êı¼äË«ÏòÍ¨ĞÅ
+#if 1
+#define LEN 30
+struct names					//ÉùÃ÷Ò»¸ö±ê¼ÇÎªnamesµÄ½á¹¹
+{
+	char first[LEN];
+	char last[LEN];
+	int letters;
+};
+
+struct names getinfo(void);//ÉùÃ÷Ò»¸öº¯Êı£¬·µ»ØÖµÊÇÊ¹ÓÃnames½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿£¬ĞÎ²ÎÎŞ
+struct names makeinfo(struct names);
+void showinfo( struct names);
+char* s_gets(char* string, int n);
+
+int main(void)
+{
+	struct names person;//ÉùÃ÷Ò»¸öÊ¹ÓÃnames½á¹¹²¼¾ÖµÄ½á¹¹±äÁ¿person
+
+	person=getinfo();//°ÑÒ»¸ö½á¹¹¸³Öµ¸øÁíÒ»¸ö½á¹¹
+	person=makeinfo(person);
+	showinfo(person);
+
+	return 0;
+}
+struct names getinfo(void)
+{
+	struct names temp;
+	puts("ÇëÊäÈëÄãµÄĞÕ");
+	s_gets(temp.first, LEN);
+	puts("ÇëÊäÈëÄãµÄÃû");
+	s_gets(temp.last, LEN);
+
+	return temp;
+}
+struct names makeinfo(struct names p)
+{
+	p.letters = strlen(p.first) + strlen(p.last);
+
+	return p;
+}
+void showinfo(const struct names p)
+{
+	printf("%s %s,ÄãµÄÃû×ÖÕ¼%d¸ö×Ö½Ú\n", p.first, p.last, p.letters);
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	char* find;
+
+	fanhui = fgets(string, n, stdin);
+	if (fanhui)
+	{
+		find = strchr(string, '\n');
+		if (find)
+			*find = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+	return fanhui;
+}
+#endif
