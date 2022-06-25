@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>//malloc(), free()
+#include <ctype.h>
 //
 #if 1
 #endif
@@ -662,7 +663,7 @@ double sum(const struct funds *money,int n)
 
 
 //在文件中保存结构中的内容
-#if 1
+#if 0
 #define MAX_SHUMING 41 //最大书名长度
 #define MAX_ZUOZHE 41 //最大作者姓名长度
 #define MAX_SHULIANG 100//最大书籍数量
@@ -683,7 +684,7 @@ int main(void)
 
 	//打开文件，并计算文件中原有的图书数量
 	FILE* fp;
-	if ((fp = fopen("book_data.erjinzhi", "a+b")) == NULL)
+	if ((fp = fopen("book_data.txt", "a+b")) == NULL)
 	{
 		fputs("打开文件失败！",stderr);
 		exit(EXIT_FAILURE);
@@ -699,8 +700,8 @@ int main(void)
 		count++;
 	}
 
-	//保存文件中图书数量的值
-	int filecount = count;
+	//保存文件中图书数量的值        (注：此处count的值是文件中图书数量的值，因为count从0开始递增)
+	int filecount = count;				//      (count值能赋给filecount，两者都能在后面程序中成为索引值)
 
 	//判断文件中图书数量是否大于了100本
 	if (filecount == MAX_SHULIANG)
@@ -723,6 +724,7 @@ int main(void)
 
 		count++;
 
+		if(count<MAX_SHULIANG)
 		printf("请输入书名(在新行输入^Z或在新行输入[Enter]以结束)：\n");
 	}
 
@@ -733,11 +735,11 @@ int main(void)
 		printf("%s:《%s》（￥%.2f）\n", library[index].zuozhe, library[index].shuming, library[index].value);
 	}
 	//待写入的文件数据所在的内存中的地址，待写数据块的大小，待写数据块数量，待写入的文件
-	fwrite(&library[count], sizeof(struct book), count-filecount, fp);
+	fwrite(&library[filecount], sizeof(struct book), count-filecount, fp);
 																		  //count-filecount得出新添加的图书数量
 	puts("存入文件已完成！");
-	fclose("fp");
-
+	fclose(fp);                                                      //************************注意*************************************
+																		   //若写成fclose("fp");则程序不会把数据存入文件，还难以排查错误！！！
 	return 0;
 }
 char* s_gets(char* string, int n)
@@ -759,4 +761,124 @@ char* s_gets(char* string, int n)
 }
 //命令行运行程序：D:\CODE\C_CODE\C Primer Plus Code practice\chapter 14\code1\Project1\x64\Debug
 //Project1.exe
+#endif
+
+
+//使用枚举类型来提高程序的可读性
+#if 0
+#define LEN 30
+char* s_gets(char* string, int n);
+
+enum spectrum {red, orange, yellow, green, blue, violet};//声明一个标记为spectrum的枚举类型
+
+//const char ** colors = { "red","orange","yellow","green","blue","violet" };												//这样写不行
+const char* colors[6] = {"red","orange","yellow","green","blue","violet"};//用于和输入内容比较
+
+int main(void)
+{
+	enum spectrum color;//声明一个使用spectrum枚举布局的枚举变量color
+
+	char choice[LEN];
+	int biaoji=0;//标记输入内容是否与给定的字符串内容相同
+	puts("请用英文输入一种颜色(在空行按下[Enter]以退出)：");
+	while (s_gets(choice, LEN) != NULL && choice[0] != '\0')
+	{
+		for (color = red; color <= violet; color++)//for (color =0; color <= 5; color++)
+		{
+			if (strcmp(choice, colors[color]) == 0)
+				biaoji = 1;
+			break;
+		}
+
+		if (biaoji)//输入内容与给定的字符串内容相同
+		{
+			switch (color)//枚举变量color，此处用法与整数变量相同
+			{
+			case red://枚举常量(枚举符)是int类型的常量，red代表0
+				puts("玫瑰是红色的");
+				break;
+			case orange:
+				puts("马缨丹是橙色的");
+			case yellow:
+				puts("葵花是黄色的");
+			case green:
+				puts("草是绿色的");
+			case blue:
+				puts("风信子是蓝色的");
+			case violet:
+				puts("紫罗兰是紫色的");
+			}
+		}
+		else
+			printf("我不知道什么植物的颜色是%s\n", choice);
+
+		biaoji = 0;
+		puts("请用英文输入一种颜色(在空行按下[Enter]以退出)：");
+	}
+	puts("再见！");
+
+	return 0;
+}
+
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	char* find;
+
+	fanhui = fgets(string, n, stdin);
+	if (fanhui)
+	{
+		find = strchr(string, '\n');
+		if (find)
+			*find = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+	return fanhui;
+}
+#endif
+
+
+//使用typedef提高程序的可读性
+#if 0
+typedef struct book											
+{														
+	char shuming[2];
+	char zuozhe[3];
+	float value;
+} BOOK;
+
+int main(void)
+{
+	BOOK library;
+
+	library.value= 1.1;
+	BOOK.shuming[0] = 'a';
+
+	char shuming[2] = { "a" };
+	return 0;
+}
+#endif
+
+
+//使用函数指针
+#if 1
+#define LEN 81
+char* s_gets(char *string, int n);
+char showmenu(void);
+void eatline(void);																		//清理输入缓冲区
+void show(        void (*fp)(char *),            char *string          );//选择的函数和待处理内容
+void toupper(char *);
+void tolower(char*);
+void transpose(char*);
+void original(char *);
+
+int main(void)
+{
+	char yuanshuju[LEN];
+	char daichuli[LEN];
+
+	return 0;
+}
 #endif
