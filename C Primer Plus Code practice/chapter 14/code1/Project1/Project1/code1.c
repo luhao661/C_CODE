@@ -645,10 +645,10 @@ int main(void)
 	    }
 
 	};
-	printf("张三总共有%.2f块钱\n", sum(zhangsan,2));//************拷贝给函数zhangsan这个结构   ╳    *******************
+	printf("张三总共有%.2f块钱\n", sum(zhangsan,2));//*******************【拷贝】给函数zhangsan这个结构   ╳    *******************
 																					  //正确理解：传递的是zhangsan数组的地址，即该数组首元素的地址&zhangsan[0]
 	return 0;																	  //对比第320行。结构变量名不是结构的地址。但此处是zhangsan是个结构数组，
-}																					  //*********因此zhangsan是数组地址也是结构地址**********
+}																					  //*********因此zhangsan是数组地址也是结构地址，传递的是结构地址**********
 double sum(const struct funds *money,int n)
 {												//money指向zhangsan[0]，存储&zhangsan[0]
 	double total;
@@ -819,7 +819,6 @@ int main(void)
 
 	return 0;
 }
-
 char* s_gets(char* string, int n)
 {
 	char* fanhui;
@@ -863,22 +862,139 @@ int main(void)
 
 
 //使用函数指针
-#if 1
+#if 0
 #define LEN 81
 char* s_gets(char *string, int n);
 char showmenu(void);
 void eatline(void);																		//清理输入缓冲区
-void show(        void (*fp)(char *),            char *string          );//选择的函数和待处理内容
-void toupper(char *);
-void tolower(char*);
-void transpose(char*);
-void original(char *);
+void show(        void (*function_p)(char *),            char *string          );//选择的函数和待处理的内容
+void Toupper(char *);
+void Tolower(char*);
+void Transpose(char*);
+void Original(char *);
 
 int main(void)
 {
 	char yuanshuju[LEN];
 	char daichuli[LEN];
 
+	void (*function_p)(char *);//声明一个函数指针，指向的函数形参是char*，返回值是void
+	char choice;
+
+	puts("请输入一个字符串（在空行输入[Enter]以退出程序）：");
+	while (s_gets(yuanshuju, LEN) != NULL && yuanshuju[0] != '\0')
+	{
+		while ((choice = showmenu()) != 'n')
+		{
+			switch (choice)
+			{
+			case 'u':
+				function_p = Toupper;
+				break;
+			case 'l':
+				function_p = Tolower;
+				break;
+			case 't':
+				function_p = Transpose;
+				break;
+			case 'o':
+				function_p = Original;
+				break;
+			default:
+				function_p = NULL;
+				puts("出现错误！");
+				exit(1);
+			}
+			strcpy(daichuli,yuanshuju);
+			show(function_p, daichuli);
+		}
+
+		puts("请输入一个字符串（在空行输入[Enter]以退出程序）：");
+	}
+	puts("再见！");
+
 	return 0;
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	char* find;
+
+	fanhui = fgets(string, n, stdin);
+	if (fanhui)
+	{
+		find = strchr(string, '\n');
+		if (find)
+			*find = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+	return fanhui;
+}
+char showmenu(void)
+{
+	char answer;
+	puts("请输入您选择的菜单上的功能：");
+	puts("u) 转换成大写	l)转换成小写");
+	puts("t) 大小写转置	o)原始字符串");
+	puts("n)处理下一条字符串");
+
+	answer = getchar();
+	answer = tolower(answer);//使用C库的tolower()
+	
+	eatline();
+	while (strchr("ulton", answer) == NULL)
+	{
+		puts("请输入u、l、t、o或n");
+		answer = tolower(getchar());
+		eatline();
+	}
+
+	return answer;
+}
+void eatline(void)
+{
+	while (getchar() != '\n')
+		continue;
+}
+void Toupper(char*string)
+{
+	while (*string != '\0')
+	{
+		*string = toupper(*string);
+		string++;
+	}
+}
+void Tolower(char*string)
+{
+	while (*string != '\0')
+	{
+		*string = tolower(*string);
+		string++;
+	}
+}
+void Transpose(char*string)
+{
+	while (*string != '\0')
+	{
+		/*if(islower(*string))
+		*string = toupper(*string);
+		if (isupper(*string))
+		*string = tolower(*string);*/  //错误！
+		if(islower(*string))
+		*string = toupper(*string);
+		else
+		*string = tolower(*string);		//二选一用if...else
+		string++;
+	}
+}
+void Original(char*string)
+{
+}
+void show(void (*function_p)(char*), char* string)
+{
+	(*function_p)(string);//把用户选定的函数作用于字符串
+	puts(string);
 }
 #endif
