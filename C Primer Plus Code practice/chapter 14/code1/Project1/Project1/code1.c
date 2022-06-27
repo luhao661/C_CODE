@@ -195,14 +195,14 @@ int main(void)
 {
 	struct guy fellow[2] =//声明一个使用guy结构布局的结构变量数组fellow[2]，并对其初始化
 	{
-		{//对fellow[1]初始化
+		{//对fellow[0]初始化
 		{"Ewen","Villard"},//**************初始化嵌套结构的成员（使用两次花括号）***************
 		"personality coach",
 		"grilled salmon",
 		68112.00
 		},
 
-		{//对fellow[2]初始化
+		{//对fellow[1]初始化
 		{"Rodney", "Swillbelly"},//**************初始化嵌套结构的成员（使用两次花括号）***************
 		"editor",
 		"tripe",
@@ -214,7 +214,7 @@ int main(void)
 
 	printf("结构变量fellow[0]的地址：%p\n结构变量fellow[1]的地址：%p\n\n",&fellow[0],&fellow[1]);
 
-	him = &fellow[0];
+	him = &fellow[0];//结构指针指向fellow[0]结构
 	printf("结构指针him的地址：%p\n      him+1的地址：%p\n", him, him+1);
 	printf("him->income：%.2f\n(*him).income:%.2f\n\n",him->income,(*him).income);
 
