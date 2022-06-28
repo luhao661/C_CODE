@@ -599,7 +599,7 @@ void dayin(XINXI dayinxinxi)
 
 
 //5.
-#if 1
+#if 0
 struct name
 {
 	char min[20];
@@ -699,9 +699,9 @@ void dayinjiegou(struct student* xueshen, int num)
 {
 	for (int i = 0; i < num; i++)
 	{
-		printf("%s %s\n",(xueshen+i)->xinmin.min, (xueshen + i)->xinmin.xin);
-		printf("%.2f %.2f %.2f\n", (xueshen + i)->grade[0],(xueshen + i)->grade[1], (xueshen + i)->grade[2]);
-		printf("%.2f\n", (xueshen + i)->average);
+		printf("学生姓名：%s %s\n",(xueshen+i)->xinmin.min, (xueshen + i)->xinmin.xin);
+		printf("三项分数：%.2f %.2f %.2f\n", (xueshen + i)->grade[0],(xueshen + i)->grade[1], (xueshen + i)->grade[2]);
+		printf("平均分：%.2f\n", (xueshen + i)->average);
 	}
 }
 void banji_average(struct student* xueshen, int num)
@@ -716,4 +716,322 @@ void banji_average(struct student* xueshen, int num)
 
 	printf("班级平均分：%.2f\n\n",sum/CSIZE);
 }
+#endif
+
+
+//6.
+#if 0
+#define SIZE 19
+typedef struct
+{
+	char min[20];
+	char xin[20];
+	int shangchang;
+	int jizhong;
+	int zoulei;
+	int dadian;
+	float anda;
+}QIUYUAN;//球员
+void jisuan_andalv(QIUYUAN *qiuyuan,int num);
+
+int main(void)
+{
+	QIUYUAN qiuyuan[SIZE];
+	QIUYUAN temp[SIZE];
+
+	FILE* fp;
+	if ((fp = fopen("qiuyuanxinxi_data.txt", "a+")) == NULL)
+	{
+		fputs("打开文件失败！", stderr);
+		exit(EXIT_FAILURE);
+	}
+
+	rewind(fp);
+
+	int count = 0;							//第count个结构的地址
+	while (count < SIZE && fread(&temp[count], sizeof(QIUYUAN), 1, fp) == 1)
+	{
+		if (count == 0)
+			puts("当前文件中含有的球员信息如下：");
+
+		printf("%d %s %s %d %d %d %d\n", count,temp[count].min,temp[count].xin,temp[count].shangchang\
+			, temp[count].jizhong,temp[count].zoulei, temp[count].dadian);
+		count++;
+	}
+
+
+	return 0;
+}
+void jisuan_andalv(QIUYUAN* qiuyuan, int num)
+{
+
+}
+//命令行：D:\CODE\C_CODE\C Primer Plus Code practice\chapter 14\code3\Project3\x64\Debug
+//Project3.exe
+#endif
+//以上程序思路错误：
+// 从文件中读取内容用fread()的话读的是文件中的结构，而结构内容存入文本中用文件编辑器看是乱码，手动输入没法输入乱码让程序去读取。
+// 所以文件中的内容是不能用fread()读结构的。
+// 正确思路：用文本模式的fscanf()函数读文件内容。
+//6.
+#if 0
+#define SIZE 19
+typedef struct
+{
+	int haoma;
+	char min[20];
+	char xin[20];
+	int shangchang;//上场次数
+	int jizhong;		   //击中数
+	int zoulei;		   //走垒数
+	int dadian;		   //打点
+	float anda;		   //安打率
+}QIUYUAN;//球员
+
+void addmessage(FILE *fp,QIUYUAN* qiuyuan, int num);
+void jisuan_andalv(QIUYUAN* qiuyuan, int num);
+void show(QIUYUAN* qiuyuan, int num);
+
+int main(void)
+{
+	QIUYUAN qiuyuan[SIZE] = { {0} };						//初始化成员为0，防止球员数少于19时结构中的成员信息不全，导致乱码刷屏
+
+	FILE* fp;
+	if ((fp = fopen("qiuyuanxinxi_data.txt", "a+")) == NULL)
+	{
+		fputs("打开文件失败！", stderr);
+		exit(EXIT_FAILURE);
+	}
+
+	rewind(fp);
+
+	addmessage(fp,qiuyuan,SIZE);
+	fclose(fp);
+
+	jisuan_andalv(qiuyuan,SIZE);
+	show(qiuyuan,SIZE);
+
+	return 0;
+}
+void addmessage(FILE* fp,QIUYUAN* qiuyuan, int num)
+{
+	int haoma;
+	char min[20];
+	char xin[20];
+	int shangchang;
+	int jizhong;
+	int zoulei;
+	int dadian;
+
+	int i=0;
+	while (fscanf(fp, "%d%s%s%d%d%d%d", &haoma,min, xin, &shangchang, &jizhong, &zoulei, &dadian)==7)
+	{
+		(qiuyuan + haoma)->haoma = haoma;
+		strcpy((qiuyuan+haoma)->min, min);
+		strcpy((qiuyuan+haoma)->xin, xin);
+		(qiuyuan + haoma)->shangchang += shangchang;
+		(qiuyuan + haoma)->jizhong += jizhong;
+		qiuyuan[haoma].zoulei += zoulei;
+		qiuyuan[haoma].dadian += dadian;
+	}
+}
+void jisuan_andalv(QIUYUAN* qiuyuan, int num)
+{
+	float anda=0.0;
+
+	for (int i = 0; i < num; i++)
+	{
+		anda=(float)(qiuyuan + i)->jizhong / (float)(qiuyuan + i)->shangchang;
+		(qiuyuan + i)->anda = anda;
+		anda = 0.0;
+	}
+}
+void show(QIUYUAN* qiuyuan, int num)
+{
+	printf("球员号  名     姓  上场次数  击中数  走垒数  打点  安打率\n");
+	for(int i=0;i<num;i++)
+	printf("%5d    %s  %s   %d          %d     %d      %d      %.2f\n",(qiuyuan+i)->haoma, (qiuyuan + i)->min, (qiuyuan + i) ->xin,\
+		(qiuyuan + i) ->shangchang, (qiuyuan + i) ->jizhong, (qiuyuan + i) ->zoulei, (qiuyuan + i) ->dadian, (qiuyuan + i) ->anda);
+}
+//命令行：D:\CODE\C_CODE\C Primer Plus Code practice\chapter 14\code3\Project3\x64\Debug
+//Project3.exe
+#endif
+
+
+//7.
+#if 1
+#define MAX_SHUMING 41 //最大书名长度
+#define MAX_ZUOZHE 41 //最大作者姓名长度
+#define MAX_SHULIANG 100//最大书籍数量
+
+char* s_gets(char* string, int n);
+void eatline(void);
+
+struct book												//声明一个标记为book的结构
+{
+	char shuming[MAX_SHUMING];
+	char zuozhe[MAX_ZUOZHE];
+	float value;
+	int delete_biaoji;
+};
+
+int main(void)
+{
+	struct book library[MAX_SHULIANG];//声明一个使用book结构布局的结构变量数组library[100]
+	int count = 0;
+
+	//打开文件，并计算文件中原有的图书数量
+	FILE* fp;
+	if ((fp = fopen("book_data.txt", "r+b")) == NULL)//二进制模式下
+	{
+		fputs("打开文件失败！", stderr);
+		exit(EXIT_FAILURE);
+	}
+	
+	rewind(fp);											//待读取文件数据拷贝进内存中的地址，待读数据块的大小，待读数据块数量，待读取的文件
+	while (count < MAX_SHULIANG && fread(&library[count], sizeof(struct book), 1, fp) == 1)
+	{
+		if (count == 0)
+			puts("当前文件中含有的图书信息如下：");
+
+		printf("%s:《%s》（￥%.2f）\n", library[count].zuozhe, library[count].shuming, library[count].value);
+		count++;
+	}
+
+	//保存文件中图书数量的值        (注：此处count的值是文件中图书数量的值，因为count从0开始递增)
+	int filecount = count;				//      (count值能赋给filecount，两者都能在后面程序中成为索引值)
+
+	//判断文件中图书数量是否大于了100本
+	if (filecount == MAX_SHULIANG)
+	{
+		fprintf(stderr, "book_data.txt已满！");
+		exit(EXIT_FAILURE);
+	}
+
+	//文件中图书数量没到100本
+	printf("请输入书名(在新行输入^Z或在新行输入[Enter]以结束)：\n");
+	while (count < MAX_SHULIANG && s_gets(library[count].shuming, MAX_SHUMING) != NULL && library[count].shuming[0] != '\0')
+	{
+		puts("请输入作者姓名：");
+		s_gets(library[count].zuozhe, MAX_ZUOZHE);
+
+		puts("请输入售价：");
+		scanf("%f", &library[count].value);
+		while (getchar() != '\n')//消除scanf()执行后缓冲区留下的\n
+			continue;
+
+		count++;
+
+		if (count < MAX_SHULIANG)
+			printf("请输入书名(在新行输入^Z或在新行输入[Enter]以结束)：\n");
+	}
+
+	//显示添加的图书，并把新加的图书也保存在文件中
+	printf("以下是图书目录：\n");
+	for (int index = 0; index < count; index++)
+	{
+		printf("%s:《%s》（￥%.2f）\n", library[index].zuozhe, library[index].shuming, library[index].value);
+	}
+	//待写入的文件数据所在的内存中的地址，待写数据块的大小，待写数据块数量，待写入的文件
+	fwrite(&library[filecount], sizeof(struct book), count - filecount, fp);
+	//count-filecount得出新添加的图书数量
+	puts("存入文件已完成！");
+                                                    //************************注意*************************************
+																		   //若写成fclose("fp");则程序不会把数据存入文件，还难以排查错误！！！
+
+	char ch;
+	printf("您想要修改记录的内容吗？(输入y或n)");
+	scanf("%c",&ch);
+	eatline();
+
+	if (ch == 'y')
+	{
+		printf("请输入您要修改的记录的行号(输入q以退出)：");
+		int line;
+		while (scanf("%d", &line) == 1)
+		{
+			eatline();
+			printf("是这行吗(输入y或n)：%s:《%s》（￥%.2f）", library[line].zuozhe, library[line].shuming, library[line].value);
+			scanf("%c", &ch);
+			eatline();
+			if (ch == 'y')
+			{
+				library[line].delete_biaoji = 1;
+				puts("此行内容已删除！");
+				printf("请输入您要修改的记录的行号(输入q以退出)：");
+			}
+			else
+				continue;
+		}
+
+		eatline();
+		printf("要在已有记录后继续写入内容吗？(输入y或n)");								//瑕疵：若仅删除但不添加内容，则文件中仍会留有部分原记录
+		scanf("%c", &ch);																						//应该可以由fopen()的w模式解决
+		eatline();
+
+		if (ch == 'y')
+		{
+			printf("请输入书名(在新行输入^Z或在新行输入[Enter]以结束)：\n");
+			while (count < MAX_SHULIANG && s_gets(library[count].shuming, MAX_SHUMING) != NULL && library[count].shuming[0] != '\0')
+			{
+				puts("请输入作者姓名：");
+				s_gets(library[count].zuozhe, MAX_ZUOZHE);
+
+				puts("请输入售价：");
+				scanf("%f", &library[count].value);
+				eatline();
+
+				library[count].delete_biaoji = 0;
+
+				count++;
+
+				if (count < MAX_SHULIANG)
+					printf("请输入书名(在新行输入^Z或在新行输入[Enter]以结束)：\n");
+			}
+		}
+
+	}
+	rewind(fp);
+	printf("以下是图书目录：\n");
+	for (int index = 0; index < count; index++)
+	{
+		if (library[index].delete_biaoji != 1)
+		{
+			printf("%s:《%s》（￥%.2f）\n", library[index].zuozhe, library[index].shuming, library[index].value);
+			fwrite(&library[index], sizeof(struct book), 1, fp);
+		}
+	}
+	
+	puts("存入文件已完成！");
+
+	fclose(fp);
+
+	return 0;
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	char* find;
+
+	fanhui = fgets(string, n, stdin);
+	if (fanhui)
+	{
+		find = strchr(string, '\n');
+		if (find)
+			*find = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+	return fanhui;
+}
+void eatline(void)
+{
+	while (getchar() != '\n')
+		continue;
+}
+//命令行运行程序：D:\CODE\C_CODE\C Primer Plus Code practice\chapter 14\code1\Project1\x64\Debug
+//Project3.exe
+
+//*****注*******此程序的操作的文件不管fopen()是文本模式还是二进制模式，用文件编辑器看是乱码
 #endif
