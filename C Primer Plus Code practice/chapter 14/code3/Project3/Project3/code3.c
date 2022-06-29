@@ -351,8 +351,8 @@ struct book												//声明一个标记为book的结构
 };
 
 char* s_gets(char* string, int n);
-void shumin_paixu(struct book *,int num);
-void jiage_paixu(struct book*, int num);
+void shumin_paixu(struct book *,int num);//书名排序
+void jiage_paixu(struct book*, int num);//价格排序
 
 int main(void)
 {
@@ -859,7 +859,7 @@ void show(QIUYUAN* qiuyuan, int num)
 
 
 //7.
-#if 1
+#if 0
 #define MAX_SHUMING 41 //最大书名长度
 #define MAX_ZUOZHE 41 //最大作者姓名长度
 #define MAX_SHULIANG 100//最大书籍数量
@@ -1034,4 +1034,541 @@ void eatline(void)
 //Project3.exe
 
 //*****注*******此程序的操作的文件不管fopen()是文本模式还是二进制模式，用文件编辑器看是乱码
+#endif
+
+
+//8.
+#if 0
+typedef struct
+{
+	int zuoweibianhao;//座位编号
+	int yuding_biaoji;//座位被预订的标记
+	char name_min[20];
+	char name_xin[20];
+}XINXI;
+#define SIZE 12
+void showmenu(void);
+char get_choice(void);
+void eatline(void);
+
+void show_empty_seats(XINXI *xinxi,int num);
+void show_list_of_empty_seats(XINXI* xinxi, int num);
+void show_chengke_paixu(XINXI* xinxi, int num);
+int fenpeizuowei(XINXI* xinxi, int num);
+int quxiaozuowei(XINXI* xinxi, int num);
+
+int main(void)
+{
+	XINXI xinxi[SIZE] = { {0} };//初始化结构的成员值为0
+
+	int j = -1;//表示预订的座位编号所在的第x个结构
+	while (1)
+	{
+		showmenu();
+		char choice = get_choice();
+
+		switch (choice)
+		{
+		case 'a':
+			show_empty_seats(xinxi, SIZE);
+			break;
+		case 'b':
+			show_list_of_empty_seats(xinxi, SIZE);
+			break;
+		case 'c':
+			show_chengke_paixu(xinxi, SIZE);
+			break;
+		case 'd':
+			j = fenpeizuowei(xinxi, SIZE);
+			break;
+		case 'e':
+			j=quxiaozuowei(xinxi, j);
+			break;
+		case 'f':
+		default:
+			printf("程序已退出！");
+			exit(1);
+		}
+	}
+	return 0;
+}
+void showmenu(void)
+{
+	puts("请从如下选项中选择一项功能：");
+	puts("a)显示空余的座位数量");
+	puts("b)显示空余的座位列表");
+	puts("c)按字母表顺序显示座位上的乘客列表");
+	puts("d)为您分配座位");
+	puts("e)清除您的座位记录");
+	puts("f)退出");
+}
+char get_choice(void)
+{
+	char choice;
+
+	choice = getchar();
+	choice = tolower(choice);//使用C库的tolower()
+
+	eatline();
+	while (strchr("abcdef", choice) == NULL)
+	{
+		puts("请输入a、b、c、d、e或f");
+		choice = tolower(getchar());
+		eatline();
+	}
+
+	return choice;
+}
+void eatline(void)
+{
+	while (getchar() != '\n')
+		continue;
+}
+void show_empty_seats(XINXI* xinxi, int num)
+{
+	int count = 0;
+	for (int i = 0; i < num; i++)
+	{
+		if ((xinxi + i)->yuding_biaoji == 0)
+			count++;
+	}
+
+	printf("共有%d个空座位\n",count);
+}
+void show_list_of_empty_seats(XINXI* xinxi, int num)
+{
+	int i;
+	for ( i = 0; i < num; i++)
+	{
+		if ((xinxi + i)->yuding_biaoji == 0)
+			printf("座位编号:%3d    ",(xinxi+i)->zuoweibianhao);
+
+		if (i % 6 == 5)
+			putchar('\n');
+	}
+	if (i % 6!=0)
+		putchar('\n');
+}
+void show_chengke_paixu(XINXI* xinxi, int num)
+{
+	XINXI xinxi_kaobei[SIZE];
+	for (int index = 0; index < num; index++)
+	{
+		xinxi_kaobei[index] = xinxi_kaobei[index];//拷贝结构数组的每个元素
+	}
+
+	XINXI  temp;
+	int seek1, seek2;
+
+	for (seek1 = 0; seek1 < num - 1; seek1++)//外层循环指明正在处理的元素
+	{
+		for (seek2 = seek1 + 1; seek2 < num; seek2++)//内层循环找出应存储在该元素的值
+		{
+			if (strcmp((xinxi_kaobei + seek1)->name_min, (xinxi_kaobei + seek2)->name_min) > 0)//若前一串字符串的首字母排序序列位于后一串字符串的首字母后面
+			{
+				temp = *(xinxi_kaobei + seek1);
+				xinxi_kaobei[seek1] = xinxi_kaobei[seek2];//*******************************两种写法**********************************
+				xinxi_kaobei[seek2] = temp;
+			}
+		}
+	}
+
+	printf("以下是按乘客字母排序的乘客列表：\n");
+	for (int index = 0; index < num; index++)
+	{
+		if ((xinxi + index)->yuding_biaoji != 0)
+		printf("乘客名：%s 座位号：%d \n",(xinxi_kaobei+index)->name_min,(xinxi_kaobei)->zuoweibianhao );
+	}
+}
+int fenpeizuowei(XINXI* xinxi, int num)
+{
+	int zuoweibianhao;
+	printf("请输入您要预订的座位编号(输入q以退出)：");
+
+	int j = -1;
+	while (scanf("%d", &zuoweibianhao))
+	{	
+		eatline();
+		for (int index = 0; index < num; index++)
+		{
+			if ((xinxi + index)->zuoweibianhao == zuoweibianhao)
+			{
+				j = index;
+				break;
+			}
+
+			j = -1;
+		}
+		if (j == -1)
+		{
+			printf("未找到该座位编号，请重新输入！");
+			continue;
+		}
+
+		if((xinxi+j)->yuding_biaoji==1)
+		{
+			printf("该座位编号已被预订，请重新输入！");
+			continue;
+		}
+
+		break;
+	}
+	
+	if(j==-1)//输入q时
+		eatline();
+
+	if (j != -1)
+	{
+		char name_min[20];
+		char name_xin[20];
+
+		printf("请输入您的名和姓：");
+		scanf("%s%s", name_min, name_xin);
+		eatline();
+
+		(xinxi + j)->yuding_biaoji = 1;
+		strcpy((xinxi + j)->name_min, name_min);
+		strcpy((xinxi + j)->name_xin, name_xin);
+
+		printf("座位编号：%d   %s %s\n", (xinxi + j)->zuoweibianhao, (xinxi + j)->name_min, (xinxi + j)->name_xin);
+		puts("写入完成！");
+	}
+
+	return j;
+}
+int quxiaozuowei(XINXI* xinxi, int num)
+{
+	if (num == -1)
+	{
+		printf("您还未订座位！");
+	}
+	else
+	{
+		printf("确定取消座位编号%d的预订吗？（输入y或n）");
+		char choice;
+
+		choice = getchar();
+		choice = tolower(choice);//使用C库的tolower()
+
+		eatline();
+		while (strchr("yn", choice) == NULL)
+		{
+			puts("请输入y或n");
+			choice = tolower(getchar());
+			eatline();
+		}
+		if (choice == 'y')
+		{
+			char name_min = { '0' };
+			char name_xin = { '0' };
+
+			strcpy((xinxi + num)->name_min, name_min);
+			strcpy((xinxi + num)->name_xin, name_xin);
+			(* (xinxi + num)).yuding_biaoji = 0;
+
+			puts("已删除预订信息！");
+			num=-1;
+		}
+	}
+	return num;
+}
+#endif
+
+
+//9.
+#if 0
+typedef struct
+{
+	int zuoweibianhao;//座位编号
+	int yuding_biaoji;//座位被预订的标记
+	char name_min[20];
+	char name_xin[20];
+}XINXI;
+
+#define SIZE 12
+void showmenu(void);
+char get_choice(void);
+void eatline(void);
+
+void show_empty_seats(XINXI* xinxi, int num);
+void show_list_of_empty_seats(XINXI* xinxi, int num);
+void show_chengke_paixu(XINXI* xinxi, int num);
+int fenpeizuowei(XINXI* xinxi, int num);
+int quxiaozuowei(XINXI* xinxi, int num);
+
+int main(void)
+{
+	XINXI xinxi[4][SIZE] = { {0} };//四个航班，每个航班都是个XINXI布局的结构
+
+	printf("请选择航班号：102	311	444	519	（输入0以退出）:");
+	while (1)
+	{
+		int hangbanhao;
+		int x;
+		while (scanf("%d", &hangbanhao))
+		{
+			eatline();
+
+			switch (hangbanhao)
+			{
+			case 102:
+				x = 0;
+				puts("正在处理航班102");
+				break;
+			case 311:
+				x = 1;
+				puts("正在处理航班311");
+				break;
+			case 444:
+				x = 2;
+				puts("正在处理航班444");
+				break;
+			case 519:
+				x = 3;
+				puts("正在处理航班519");
+				break;
+			default:
+				if (hangbanhao == 0)
+					exit(1);
+				else
+				{
+					puts("输入有误，请重新输入！");
+					continue;
+				}
+			}
+			break;
+		}
+
+		showmenu();
+		char choice='0';
+		int j = -1;//表示预订的座位编号所在的第x个结构
+		while ((choice= get_choice())&&choice!='f')					//*******************************注*********************************************************
+		{																							//错误写法：while (		choice= get_choice()&&choice!='f'     )	若输入a，则choice=1
+			switch (choice)																//优先级：算数，关系，逻辑，赋值
+			{
+			case 'a':
+				show_empty_seats(*(xinxi + x), SIZE);
+				break;
+			case 'b':
+				show_list_of_empty_seats(xinxi[x], SIZE);
+				break;
+			case 'c':
+				show_chengke_paixu(xinxi[x], SIZE);
+				break;
+			case 'd':
+				j = fenpeizuowei(xinxi[x], SIZE);
+				break;
+			case 'e':
+				j = quxiaozuowei(xinxi[x], j);
+				break;
+			case 'f':
+			default:
+				printf("已退出！\n");				
+			}
+			showmenu();
+		}
+
+		printf("请选择航班号：102	311	444	519	（输入0以退出）:");
+	}
+	return 0;
+}
+void showmenu(void)
+{
+	puts("请从如下选项中选择一项功能：");
+	puts("a)显示空余的座位数量");
+	puts("b)显示空余的座位列表");
+	puts("c)按字母表顺序显示座位上的乘客列表");
+	puts("d)为您分配座位");
+	puts("e)清除您的座位记录");
+	puts("f)退出");
+}
+char get_choice(void)
+{
+	char choice;
+
+	choice = getchar();
+	choice = tolower(choice);//使用C库的tolower()
+
+	eatline();
+	while (strchr("abcdef", choice) == NULL)
+	{
+		puts("请输入a、b、c、d、e或f");
+		choice = tolower(getchar());
+		eatline();
+	}
+
+	return choice;
+}
+void eatline(void)
+{
+	while (getchar() != '\n')
+		continue;
+}
+void show_empty_seats(XINXI* xinxi, int num)
+{
+	int count = 0;
+	for (int i = 0; i < num; i++)
+	{
+		if ((xinxi + i)->yuding_biaoji == 0)
+			count++;
+	}
+
+	printf("共有%d个空座位\n", count);
+}
+void show_list_of_empty_seats(XINXI* xinxi, int num)
+{
+	int i;
+	for (i = 0; i < num; i++)
+	{
+		if ((xinxi + i)->yuding_biaoji == 0)
+			printf("座位编号:%3d    ", (xinxi + i)->zuoweibianhao);
+
+		if (i % 6 == 5)
+			putchar('\n');
+	}
+	if (i % 6 != 0)
+		putchar('\n');
+}
+void show_chengke_paixu(XINXI* xinxi, int num)
+{
+	XINXI xinxi_kaobei[SIZE];
+	for (int index = 0; index < num; index++)
+	{
+		xinxi_kaobei[index] = xinxi_kaobei[index];//拷贝结构数组的每个元素
+	}
+
+	XINXI  temp;
+	int seek1, seek2;
+
+	for (seek1 = 0; seek1 < num - 1; seek1++)//外层循环指明正在处理的元素
+	{
+		for (seek2 = seek1 + 1; seek2 < num; seek2++)//内层循环找出应存储在该元素的值
+		{
+			if (strcmp((xinxi_kaobei + seek1)->name_min, (xinxi_kaobei + seek2)->name_min) > 0)//若前一串字符串的首字母排序序列位于后一串字符串的首字母后面
+			{
+				temp = *(xinxi_kaobei + seek1);
+				xinxi_kaobei[seek1] = xinxi_kaobei[seek2];//*******************************两种写法**********************************
+				xinxi_kaobei[seek2] = temp;
+			}
+		}
+	}
+
+	printf("以下是按乘客字母排序的乘客列表：\n");
+	for (int index = 0; index < num; index++)
+	{
+		if ((xinxi + index)->yuding_biaoji != 0)
+			printf("乘客名：%s 座位号：%d \n", (xinxi_kaobei + index)->name_min, (xinxi_kaobei)->zuoweibianhao);
+	}
+}
+int fenpeizuowei(XINXI* xinxi, int num)
+{
+	int zuoweibianhao;
+	printf("请输入您要预订的座位编号(输入q以退出)：");
+
+	int j = -1;
+	while (scanf("%d", &zuoweibianhao))
+	{
+		eatline();
+		for (int index = 0; index < num; index++)
+		{
+			if ((xinxi + index)->zuoweibianhao == zuoweibianhao)
+			{
+				j = index;
+				break;
+			}
+
+			j = -1;
+		}
+		if (j == -1)
+		{
+			printf("未找到该座位编号，请重新输入！");
+			continue;
+		}
+
+		if ((xinxi + j)->yuding_biaoji == 1)
+		{
+			printf("该座位编号已被预订，请重新输入！");
+			continue;
+		}
+
+		break;
+	}
+
+	if (j == -1)//输入q时
+		eatline();
+
+	if (j != -1)
+	{
+		char name_min[20];
+		char name_xin[20];
+
+		printf("请输入您的名和姓：");
+		scanf("%s%s", name_min, name_xin);
+		eatline();
+
+		(xinxi + j)->yuding_biaoji = 1;
+		strcpy((xinxi + j)->name_min, name_min);
+		strcpy((xinxi + j)->name_xin, name_xin);
+
+		printf("座位编号：%d   %s %s\n", (xinxi + j)->zuoweibianhao, (xinxi + j)->name_min, (xinxi + j)->name_xin);
+		puts("写入完成！");
+	}
+
+	return j;
+}
+int quxiaozuowei(XINXI* xinxi, int num)
+{
+	if (num == -1)
+	{
+		printf("您还未订座位！");
+	}
+	else
+	{
+		printf("确定取消座位编号%d的预订吗？（输入y或n）");
+		char choice;
+
+		choice = getchar();
+		choice = tolower(choice);//使用C库的tolower()
+
+		eatline();
+		while (strchr("yn", choice) == NULL)
+		{
+			puts("请输入y或n");
+			choice = tolower(getchar());
+			eatline();
+		}
+		if (choice == 'y')
+		{
+			char name_min = { '0' };
+			char name_xin = { '0' };
+
+			strcpy((xinxi + num)->name_min, name_min);
+			strcpy((xinxi + num)->name_xin, name_xin);
+			(*(xinxi + num)).yuding_biaoji = 0;
+
+			puts("已删除预订信息！");
+			num = -1;
+		}
+	}
+	return num;
+}
+#endif
+
+
+//10.
+#if 1
+void showmenu(void);
+int main(void)
+{
+	void (*function_p)(void);//声明一个函数指针。
+
+	function_p = showmenu;
+	(*function_p)();
+
+	return 0;
+}
+void showmenu(void)
+{
+	puts("这是一个菜单！");
+}
 #endif
