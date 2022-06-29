@@ -689,7 +689,7 @@ int main(void)
 		fputs("打开文件失败！",stderr);
 		exit(EXIT_FAILURE);
 	}
-
+																//二进制模式下的
 	rewind(fp);											//待读取文件数据拷贝进内存中的地址，待读数据块的大小，待读数据块数量，待读取的文件
 	while (count < MAX_SHULIANG && fread(&library[count], sizeof(struct book), 1, fp)==1)
 	{
@@ -761,6 +761,8 @@ char* s_gets(char* string, int n)
 }
 //命令行运行程序：D:\CODE\C_CODE\C Primer Plus Code practice\chapter 14\code1\Project1\x64\Debug
 //Project1.exe
+
+//*****注*******此程序的操作的文件不管fopen()是文本模式还是二进制模式，用文件编辑器看是乱码
 #endif
 
 
