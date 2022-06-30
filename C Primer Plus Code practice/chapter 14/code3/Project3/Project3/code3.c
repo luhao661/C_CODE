@@ -4,6 +4,7 @@
 #include <stdlib.h>//malloc(), free()
 #include <ctype.h>
 #include <stdlib.h>//atoi()
+#include <math.h>
 //
 #if 1
 #endif
@@ -1556,19 +1557,100 @@ int quxiaozuowei(XINXI* xinxi, int num)
 
 
 //10.
-#if 1
-void showmenu(void);
+#if 0
+void showmenu1(void);
+void showmenu2(void);
+void showmenu3(void);
+void eatline(void);
+
 int main(void)
 {
-	void (*function_p)(void);//声明一个函数指针。
+	char choice;
 
-	function_p = showmenu;
-	(*function_p)();
+	void (*function_p[3])(void) = {showmenu1,showmenu2,showmenu3};//声明一个函数指针数组。
+
+	puts("请选择菜单前的字母(输入a、b或c)：");
+
+	choice = getchar();
+	choice = tolower(choice);//使用C库的tolower()
+
+	eatline();
+	while (strchr("abc", choice) == NULL)
+	{
+		puts("请输入a、b或c");
+		choice = tolower(getchar());
+		eatline();
+	}
+
+	switch (choice)
+	{
+	case 'a':
+		function_p[0] = showmenu1;//可以之前不初始化，到这里对函数指针赋值
+		(*function_p[0])();
+		break;
+	case 'b':
+		( * function_p[1])();
+		break;
+	case 'c':
+		(*function_p[2])();
+		break;
+	default:
+		exit(1);
+	}
+	return 0;
+}
+void showmenu1(void)
+{
+	puts("这是一个菜单a！");
+}
+void showmenu2(void)
+{
+	puts("这是一个菜单b！");
+}
+void showmenu3(void)
+{
+	puts("这是一个菜单c！");
+}
+void eatline(void)
+{
+	while (getchar() != '\n')
+		continue;
+}
+#endif
+
+
+//11.
+#if 1
+double transform(double *source,double *target, int num,double(*p)(double));
+int main(void)
+{
+	double source[100] = {1.0,2.0,3.0,4.0};
+	double target[100] = {0.0};
+	int num = 100;
+
+	double(*p)(double);
+	p = sin;
+
+	for(int i=0;i<4;i++)
+	*(target+i)=transform(source, target, num, p);
+
+	for (int i = 0; i < 4; i++)
+		printf("%-5.2lf", *(target + i));
+
+	//printf("%lf",sin(1.0));
 
 	return 0;
 }
-void showmenu(void)
+double transform(double* source, double* target, int num, double(*p)(double))
 {
-	puts("这是一个菜单！");
+	static int i = 0;//只在编译transform()时被初始化一次
+
+	double jieguo[100] = { 0 };
+
+	*(jieguo + i) = p(*(source+i));
+
+	i++;
+
+	return (*(jieguo + i-1));//********注：-1必须要写***************************
 }
 #endif
