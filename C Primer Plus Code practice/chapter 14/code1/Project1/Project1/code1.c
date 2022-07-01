@@ -625,7 +625,7 @@ struct funds//	//声明一个标记为funds的结构
 	char save[FUNDLEN];
 	double savefund;
 };
-double sum(const struct funds *money,int n);//声明一个函数，形参是一个使用funds结构布局的结构变量money
+double sum(const struct funds *money,int n);//声明一个函数，形参是一个使用funds结构布局的结构指针money
 
 int main(void)
 {
@@ -773,7 +773,7 @@ char* s_gets(char* string, int n);
 
 enum spectrum {red, orange, yellow, green, blue, violet};//声明一个标记为spectrum的枚举类型
 
-//const char ** colors = { "red","orange","yellow","green","blue","violet" };												//这样写不行
+//const char ** colors = { "red","orange","yellow","green","blue","violet" };												//**********这样写不行**********
 const char* colors[6] = {"red","orange","yellow","green","blue","violet"};//用于和输入内容比较
 
 int main(void)
