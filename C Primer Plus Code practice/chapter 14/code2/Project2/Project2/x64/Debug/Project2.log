@@ -1,3 +1,6 @@
 ﻿  code2.c
-D:\CODE\C_CODE\C Primer Plus Code practice\chapter 14\code2\Project2\Project2\code2.c(211,6): warning C4101: “born”: 未引用的局部变量
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 14\code2\Project2\Project2\code2.c(375): warning C4716: “function2”: 必须返回一个值
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 14\code2\Project2\Project2\code2.c(371): warning C4716: “function1”: 必须返回一个值
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 14\code2\Project2\Project2\code2.c(377): warning C4716: “function3”: 必须返回一个值
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 14\code2\Project2\Project2\code2.c(379): warning C4716: “function4”: 必须返回一个值
   Project2.vcxproj -> D:\CODE\C_CODE\C Primer Plus Code practice\chapter 14\code2\Project2\x64\Debug\Project2.exe
