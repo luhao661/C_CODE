@@ -171,6 +171,21 @@ char* s_gets(char* string, int n)
 	return fanhui;
 }
 #endif
+#if 0
+//法二：
+int jisuantianshu(YUEFEN* yinian, const char* yuefenmin)
+{
+	int total = 0;
+	for (int i = 0; i < 12; i++)
+	{
+		if (strcmp((yinian+i)->yuefen_min, yuefenmin) != 0)
+			total += (yinian+i)->yuefen_tianshu;
+		else
+			return total;
+	}
+	return -1;
+}
+#endif 
 
 
 //2.
@@ -353,6 +368,7 @@ struct book												//声明一个标记为book的结构
 
 char* s_gets(char* string, int n);
 void shumin_paixu(struct book *,int num);//书名排序
+void shumin_paixu2(struct book* library, int num);//书名排序方法二
 void jiage_paixu(struct book*, int num);//价格排序
 
 int main(void)
@@ -383,11 +399,12 @@ int main(void)
 		printf("%s:《%s》（￥%.2f）\n", library[index].zuozhe, library[index].shuming, library[index].value);
 	}
 
+	shumin_paixu2(library, count);//书名排序方法二
 
 	struct book library_kaobei[MAX_SHULIANG];
 	for (index = 0; index < count; index++)
 	{
-		library_kaobei[index] = library[index];//拷贝结构数组的每个元素
+		library_kaobei[index] = library[index];//拷贝结构数组的每个元素，即每个结构
 	}
 	shumin_paixu(library_kaobei,count);
 
@@ -399,7 +416,7 @@ int main(void)
 	jiage_paixu(library_kaobei, count);
 
 	return 0;
-}																				//*****************************************注********************************************
+}																				//*****************************************注****************************************************
 void shumin_paixu(struct book *library_kaobei,int num)//结构可以作为实参传递，但是数组只能由指针传递。所以结构数组也只能由指针传递。
 {
 	struct book  temp;
@@ -415,7 +432,7 @@ void shumin_paixu(struct book *library_kaobei,int num)//结构可以作为实参传递，但
 				(library_kaobei + seek1) = (library_kaobei + seek2);						//此处拷贝地址失败，***地址不是个对象***
 				(library_kaobei + seek1) = temp;*/
 
-				temp = *(library_kaobei+seek1);						   //
+				temp = *(library_kaobei+seek1);						   //对结构进行排序
 				library_kaobei[ seek1] =library_kaobei[seek2];//*******************************两种写法**********************************
 				library_kaobei[ seek2] = temp;
 
@@ -469,6 +486,47 @@ char* s_gets(char* string, int n)
 				continue;
 	}
 	return fanhui;
+}
+#endif
+#if 0
+//书名排序法二
+void shumin_paixu2(struct book* library, int num)
+{									//传原结构的地址给调用函数
+
+	//char* temp_shumin[num];//不支持变长数组，可以使用malloc()来实现
+	char** shumin;
+	shumin = (char**)malloc(num*sizeof(char*));//*************可以回顾12.9.9.****************
+
+	char* temp;
+	int seek1, seek2;
+
+	for (int i = 0; i < num; i++)
+	{
+		*(shumin + i) = (library + i)->shuming;
+	}
+
+	for (seek1 = 0; seek1 < num - 1; seek1++)//外层循环指明正在处理的元素
+	{
+		for (seek2 = seek1 + 1; seek2 < num; seek2++)//内层循环找出应存储在该元素的值
+		{
+			if (strcmp(*(shumin + seek1), *(shumin + seek2)) > 0)
+			{
+				temp = *(shumin + seek1);						//对指针进行排序，所以不影响结构成员的内容
+				*(shumin + seek1) = *(shumin + seek2);
+				*(shumin + seek2) = temp;
+			}
+		}
+	}
+
+	printf("以下是按书名的字母排序的图书目录：\n");
+	for (int index = 0; index < num; index++)//num 在数值上等于书籍的数量
+	{
+		for (int i = 0; i < num; i++)//对结构遍历
+		{
+			if (*(shumin + index) == (library + i)->shuming)
+				printf("%s:《%s》（￥%.2f）\n", (*(library + i)).zuozhe, (library + i)->shuming, library[i].value);
+		}
+	}															//*****************************************三种表示方法****************************************************
 }
 #endif
 
@@ -579,7 +637,7 @@ int main(void)
 	};
 
 	for(int i=0;i<5;i++)
-	dayin(xinxi[i]);//传递结构的值
+	dayin(xinxi[i]);//*****传递结构的值*******
 
 	return 0;
 }
@@ -1620,7 +1678,7 @@ void eatline(void)
 
 
 //11.
-#if 1
+#if 0
 double transform(double *source,double *target, int num,double(*p)(double));
 int main(void)
 {
