@@ -527,6 +527,8 @@ void shumin_paixu2(struct book* library, int num)
 				printf("%s:《%s》（￥%.2f）\n", (*(library + i)).zuozhe, (library + i)->shuming, library[i].value);
 		}
 	}															//*****************************************三种表示方法****************************************************
+	
+	free(shumin);
 }
 #endif
 
@@ -733,7 +735,7 @@ void addmessage(struct student *xueshen, int num)
 		}
 
 		printf("请输入该学生的3个分数：");
-		scanf("%f%f%f",&xueshen->grade[0],&xueshen->grade[1],&xueshen->grade[2]);
+		scanf("%f%f%f",&(xueshen+j)->grade[0],&(xueshen + j)->grade[1],&(xueshen + j)->grade[2]);
 
 		count++;
 		if (count == num)
@@ -774,6 +776,109 @@ void banji_average(struct student* xueshen, int num)
 	}
 
 	printf("班级平均分：%.2f\n\n",sum/CSIZE);
+}
+#endif
+//题目要求存入学生姓名，而不是判断输入的姓名是否与结构中的姓名匹配
+//5.
+#if 0
+struct name
+{
+	char min[20];
+	char xin[20];
+};
+struct student
+{
+	struct name xinmin;
+	float grade[20];
+	float average;
+};
+#define CSIZE 4
+void addmessage(struct student* xueshen, int num);
+void average(struct student* xueshen, int num);
+void dayinjieguo(struct student* xueshen, int num);
+void banji_average(struct student* xueshen, int num);
+
+int main(void)
+{
+	struct student students[CSIZE] ={'0'};
+
+	addmessage(students, CSIZE);
+	average(students, CSIZE);
+	dayinjieguo(students, CSIZE);
+	banji_average(students, CSIZE);
+
+	return 0;
+}
+void addmessage(struct student* xueshen, int num)
+{
+	char xin[20];
+	char min[20];
+	int count = 0;
+
+	printf("请输入学生的姓名(名和姓之间用空格分开)(输入0 0以退出)：");
+	//scanf("%s",xin);
+	//scanf("%s", min);
+	//或写成：
+	//scanf("%s%s", min,xin);
+
+	while (count < num && scanf("%s%s", min, xin) == 2 && xin[0] != '0' && min[0] != '0')
+	{
+		if (strlen(min) < 1 && strlen(xin) < 1)
+		{
+		printf("输入有误，请重新输入！\n");
+			continue;
+		}
+
+		strcpy((xueshen+count)->xinmin.min,min);
+		strcpy((xueshen + count)->xinmin.xin, xin);
+
+		printf("请输入该学生的3个分数：");
+		scanf("%f%f%f", &((xueshen+count)->grade[0]), &((xueshen + count)->grade[1]), &((xueshen + count)->grade[2]));
+
+		count++;
+		if (count == num)
+			break;
+		printf("请继续输入学生的姓名(名和姓之间用空格分开)(输入0 0以退出)：");
+	}
+
+	/*printf("%s%s",xin,min);
+	printf("%f   %f    %f", xueshen->grade[0], xueshen->grade[1], xueshen->grade[2]);*/     //用于检测此函数的功能
+}
+void average(struct student* xueshen, int num)
+{
+	float sum = 0.0;
+	for (int i = 0; i < num; i++)
+	{
+		sum = (xueshen + i)->grade[0] + (xueshen + i)->grade[1] + (xueshen + i)->grade[2];
+		(xueshen + i)->average = sum / 3.0;
+		sum = 0;
+	}
+	//法二：不用中间变量sum
+	/*for (int i = 0; i < num; i++)
+	{
+		(xueshen + i)->average =( (xueshen + i)->grade[0] + (xueshen + i)->grade[1] + (xueshen + i)->grade[2] )/3;
+	}*/
+}
+void dayinjieguo(struct student* xueshen, int num)
+{
+	for (int i = 0; i < num; i++)
+	{
+		printf("学生姓名：%s %s\n", (xueshen + i)->xinmin.min, (xueshen + i)->xinmin.xin);
+		printf("三项分数：%.2f %.2f %.2f\n", (xueshen + i)->grade[0], (xueshen + i)->grade[1], (xueshen + i)->grade[2]);
+		printf("平均分：%.2f\n", (xueshen + i)->average);
+	}
+}
+void banji_average(struct student* xueshen, int num)
+{
+	putchar('\n');
+	putchar('\n');
+	float sum = 0.0;
+	for (int i = 0; i < num; i++)
+	{
+		sum += (xueshen + i)->average;
+	}
+
+	printf("班级平均分：%.2f\n\n", sum / CSIZE);
 }
 #endif
 
@@ -830,7 +935,7 @@ void jisuan_andalv(QIUYUAN* qiuyuan, int num)
 #endif
 //以上程序思路错误：
 // 从文件中读取内容用fread()的话读的是文件中的结构，而结构内容存入文本中用文件编辑器看是乱码，手动输入没法输入乱码让程序去读取。
-// 所以文件中的内容是不能用fread()读结构的。
+// 所以文件中的内容是不能用fread()用读结构的方式去读的。
 // 正确思路：用文本模式的fscanf()函数读文件内容。
 //6.
 #if 0
@@ -885,7 +990,8 @@ void addmessage(FILE* fp,QIUYUAN* qiuyuan, int num)
 	int i=0;
 	while (fscanf(fp, "%d%s%s%d%d%d%d", &haoma,min, xin, &shangchang, &jizhong, &zoulei, &dadian)==7)
 	{
-		(qiuyuan + haoma)->haoma = haoma;
+		(qiuyuan + haoma)->haoma = haoma;//****************注*****************
+																		 //球员号可以作为结构的索引值
 		strcpy((qiuyuan+haoma)->min, min);
 		strcpy((qiuyuan+haoma)->xin, xin);
 		(qiuyuan + haoma)->shangchang += shangchang;
@@ -995,7 +1101,7 @@ int main(void)
 	fwrite(&library[filecount], sizeof(struct book), count - filecount, fp);
 	//count-filecount得出新添加的图书数量
 	puts("存入文件已完成！");
-                                                    //************************注意*************************************
+																			 //************************注意*******************
 																		   //若写成fclose("fp");则程序不会把数据存入文件，还难以排查错误！！！
 
 	char ch;
@@ -1020,13 +1126,16 @@ int main(void)
 				printf("请输入您要修改的记录的行号(输入q以退出)：");
 			}
 			else
+			{
+				printf("请输入您要修改的记录的行号(输入q以退出)：");
 				continue;
+			}
 		}
 
-		eatline();
+		eatline();																										//*************************注**********************************
 		printf("要在已有记录后继续写入内容吗？(输入y或n)");								//瑕疵：若仅删除但不添加内容，则文件中仍会留有部分原记录
 		scanf("%c", &ch);																						//应该可以由fopen()的w模式解决
-		eatline();
+		eatline();																										//*************************注**********************************
 
 		if (ch == 'y')
 		{
@@ -1089,10 +1198,252 @@ void eatline(void)
 	while (getchar() != '\n')
 		continue;
 }
-//命令行运行程序：D:\CODE\C_CODE\C Primer Plus Code practice\chapter 14\code1\Project1\x64\Debug
+//命令行运行程序：D:\CODE\C_CODE\C Primer Plus Code practice\chapter 14\code3\Project3\x64\Debug
 //Project3.exe
+//*****注*******此程序的操作的文件不管fopen()是文本模式还是二进制模式，用文件编辑器看是乱码。
+#endif
+//7.修改
+//**************************************************************************
+//实现了只删除记录但不添加新内容并将未删除的记录存入文件的功能
+//实现了在要修改的行添加内容的功能
+//实现了输入非指定字母，提示用户，并支持再次输入的功能
+//**************************************************************************
+#if 0
+#define MAX_SHUMING 41 //最大书名长度
+#define MAX_ZUOZHE 41 //最大作者姓名长度
+#define MAX_SHULIANG 100//最大书籍数量
 
-//*****注*******此程序的操作的文件不管fopen()是文本模式还是二进制模式，用文件编辑器看是乱码
+char* s_gets(char* string, int n);
+char get_choice(void);
+void eatline(void);
+
+struct book												//声明一个标记为book的结构
+{
+	char shuming[MAX_SHUMING];
+	char zuozhe[MAX_ZUOZHE];
+	float value;
+	int delete_biaoji;
+};
+
+int main(void)
+{
+	struct book library[MAX_SHULIANG];//声明一个使用book结构布局的结构变量数组library[100]
+	int count = 0;
+
+	//打开文件，并计算文件中原有的图书数量
+	FILE* fp;
+	if ((fp = fopen("book_data.txt", "r+b")) == NULL)//二进制模式下
+	{
+		fputs("打开文件失败！", stderr);
+		exit(EXIT_FAILURE);
+	}
+
+	rewind(fp);											//待读取文件数据拷贝进内存中的地址，待读数据块的大小，待读数据块数量，待读取的文件
+	while (count < MAX_SHULIANG && fread(&library[count], sizeof(struct book), 1, fp) == 1)
+	{
+		if (count == 0)
+			puts("当前文件中含有的图书信息如下：");
+
+		printf("%s:《%s》（￥%.2f）\n", library[count].zuozhe, library[count].shuming, library[count].value);
+		count++;
+	}
+
+	//保存文件中图书数量的值        (注：此处count的值是文件中图书数量的值，因为count从0开始递增)
+	int filecount = count;				//      (count值能赋给filecount，两者都能在后面程序中成为索引值)
+
+	//判断文件中图书数量是否大于了100本
+	if (filecount == MAX_SHULIANG)
+	{
+		fprintf(stderr, "book_data.txt已满！");
+		exit(EXIT_FAILURE);
+	}
+
+	//文件中图书数量没到100本
+	printf("请输入书名(在新行输入^Z或在新行输入[Enter]以结束)：\n");
+	while (count < MAX_SHULIANG && s_gets(library[count].shuming, MAX_SHUMING) != NULL && library[count].shuming[0] != '\0')
+	{
+		puts("请输入作者姓名：");
+		s_gets(library[count].zuozhe, MAX_ZUOZHE);
+
+		puts("请输入售价：");
+		scanf("%f", &library[count].value);
+		while (getchar() != '\n')//消除scanf()执行后缓冲区留下的\n
+			continue;
+
+		count++;
+
+		if (count < MAX_SHULIANG)
+			printf("请输入书名(在新行输入^Z或在新行输入[Enter]以结束)：\n");
+	}
+
+	//显示添加的图书，并把新加的图书也保存在文件中
+	printf("以下是图书目录：\n");
+	for (int index = 0; index < count; index++)
+	{
+		printf("%s:《%s》（￥%.2f）\n", library[index].zuozhe, library[index].shuming, library[index].value);
+	}
+	//待写入的文件数据所在的内存中的地址，待写数据块的大小，待写数据块数量，待写入的文件
+	fwrite(&library[filecount], sizeof(struct book), count - filecount, fp);
+															//count-filecount得出新添加的图书数量
+	puts("存入文件已完成！");				//count:图书总数，filecount文件中原图书数量
+																				//************************注意*******************
+	fclose(fp);															//若写成fclose("fp");则程序不会把数据存入文件，还难以排查错误！！！
+	
+
+	char ch;
+	printf("您想要修改记录的内容吗？(输入y或n)");
+	ch = get_choice();
+
+	if (ch == 'y')
+	{
+		if ((fp = fopen("book_data.txt", "wb")) == NULL)//二进制模式下
+		{
+			fputs("打开文件失败！", stderr);
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		if ((fp = fopen("book_data.txt", "r+b")) == NULL)//二进制模式下
+		{
+			fputs("打开文件失败！", stderr);
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	int line;
+	if (ch == 'y')
+	{
+		printf("请输入您要修改的记录的行号(如第一行，则输入0)(输入q以退出)：");
+	
+		while (scanf("%d", &line) == 1)
+		{
+			if (line<0 || line>count - 1)
+			{
+				printf("输入有误，请重新输入！");
+				continue;
+			}
+
+			eatline();
+			printf("是这行吗(输入y或n)：%s:《%s》（￥%.2f）", library[line].zuozhe, library[line].shuming, library[line].value);
+			ch= get_choice();
+			
+			if (ch == 'y')
+			{
+				library[line].delete_biaoji = 1;									//****************************注********************************
+				//count--;										//减去一本书。    不能减，后面count用来控制for循环遍历，要作为结束的条件
+				puts("此行内容已删除！");
+				printf("请输入您要修改的记录的行号(如第一行，则输入0)(输入q以退出)：");
+			}
+			else
+			{
+				printf("请输入您要修改的记录的行号(如第一行，则输入0)(输入q以退出)：");
+				continue;
+			}
+		}
+
+		eatline();
+		printf("要在此行写入新内容吗？(输入y或n)");
+		ch= get_choice();
+
+		if (ch == 'y')
+		{
+			printf("请输入书名：\n");
+			s_gets(library[line].shuming, MAX_SHUMING);
+			puts("请输入作者姓名：");
+			s_gets(library[line].zuozhe, MAX_ZUOZHE);
+			puts("请输入售价：");
+			scanf("%f", &library[line].value);
+			eatline();
+			library[line].delete_biaoji = 0;
+		}
+
+		printf("要在已有记录后继续写入内容吗？(输入y或n)");							
+		ch = get_choice();
+	
+		if (ch == 'y')
+		{
+			printf("请输入书名(在新行输入^Z或在新行输入[Enter]以结束)：\n");
+			while (count < MAX_SHULIANG && s_gets(library[count].shuming, MAX_SHUMING) != NULL && library[count].shuming[0] != '\0')
+			{
+				puts("请输入作者姓名：");
+				s_gets(library[count].zuozhe, MAX_ZUOZHE);
+
+				puts("请输入售价：");
+				scanf("%f", &library[count].value);
+				eatline();
+
+				library[count].delete_biaoji = 0;
+
+				count++;
+
+				if (count < MAX_SHULIANG)
+					printf("请输入书名(在新行输入^Z或在新行输入[Enter]以结束)：\n");
+			}
+		}
+
+	}
+
+	rewind(fp);
+
+	printf("以下是图书目录：\n");
+	for (int index = 0; index < count; index++)//*****count：delete_biaoji为1或0的图书数量*****
+	{
+		if (library[index].delete_biaoji != 1)
+		{
+			printf("%s:《%s》（￥%.2f）\n", library[index].zuozhe, library[index].shuming, library[index].value);
+			fwrite(&library[index], sizeof(struct book), 1, fp);
+		}
+	}
+
+	puts("存入文件已完成！");
+
+	fclose(fp);
+
+	return 0;
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	char* find;
+
+	fanhui = fgets(string, n, stdin);
+	if (fanhui)
+	{
+		find = strchr(string, '\n');
+		if (find)
+			*find = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+	return fanhui;
+}
+char get_choice(void)
+{
+	char answer;
+
+	answer = getchar();
+	answer = tolower(answer);//使用C库的tolower()
+
+	eatline();
+	while (strchr("yn", answer) == NULL)
+	{
+		puts("请输入y或n");
+		answer = tolower(getchar());
+		eatline();
+	}
+
+	return answer;
+}
+void eatline(void)
+{
+	while (getchar() != '\n')
+		continue;
+}
+//命令行运行程序：D:\CODE\C_CODE\C Primer Plus Code practice\chapter 14\code3\Project3\x64\Debug
+//Project3.exe
+//*****注*******此程序的操作的文件不管fopen()是文本模式还是二进制模式，用文件编辑器看是乱码。
 #endif
 
 
@@ -1141,7 +1492,7 @@ int main(void)
 			j = fenpeizuowei(xinxi, SIZE);
 			break;
 		case 'e':
-			j=quxiaozuowei(xinxi, j);
+			j=quxiaozuowei(xinxi, j);//		j用来标记用户预订了座位，可以选择取消预订这个功能。
 			break;
 		case 'f':
 		default:
@@ -1149,6 +1500,17 @@ int main(void)
 			exit(1);
 		}
 	}
+
+//法二：
+//showmenu();
+//char choice = get_choice();
+//while (choice != 'f')
+//{
+//    .........
+//showmenu();
+//choice = get_choice();
+//}
+
 	return 0;
 }
 void showmenu(void)
@@ -1213,7 +1575,7 @@ void show_chengke_paixu(XINXI* xinxi, int num)
 	XINXI xinxi_kaobei[SIZE];
 	for (int index = 0; index < num; index++)
 	{
-		xinxi_kaobei[index] = xinxi_kaobei[index];//拷贝结构数组的每个元素
+		xinxi_kaobei[index] = *(xinxi+index);//拷贝结构数组的每个元素，即每个结构
 	}
 
 	XINXI  temp;
@@ -1225,17 +1587,18 @@ void show_chengke_paixu(XINXI* xinxi, int num)
 		{
 			if (strcmp((xinxi_kaobei + seek1)->name_min, (xinxi_kaobei + seek2)->name_min) > 0)//若前一串字符串的首字母排序序列位于后一串字符串的首字母后面
 			{
-				temp = *(xinxi_kaobei + seek1);
+				temp = *(xinxi_kaobei + seek1);					//对结构排序	
 				xinxi_kaobei[seek1] = xinxi_kaobei[seek2];//*******************************两种写法**********************************
 				xinxi_kaobei[seek2] = temp;
 			}
 		}
 	}
+	//法二：对指针排序，可参考第3.题
 
 	printf("以下是按乘客字母排序的乘客列表：\n");
 	for (int index = 0; index < num; index++)
 	{
-		if ((xinxi + index)->yuding_biaoji != 0)
+		if ((xinxi_kaobei + index)->yuding_biaoji != 0)
 		printf("乘客名：%s 座位号：%d \n",(xinxi_kaobei+index)->name_min,(xinxi_kaobei)->zuoweibianhao );
 	}
 }
@@ -1255,9 +1618,9 @@ int fenpeizuowei(XINXI* xinxi, int num)
 				j = index;
 				break;
 			}
-
 			j = -1;
 		}
+
 		if (j == -1)
 		{
 			printf("未找到该座位编号，请重新输入！");
@@ -1388,7 +1751,7 @@ int main(void)
 				break;
 			default:
 				if (hangbanhao == 0)
-					exit(1);
+					exit(1);//也可以使用go to 语句
 				else
 				{
 					puts("输入有误，请重新输入！");
@@ -1405,8 +1768,8 @@ int main(void)
 		{																							//错误写法：while (		choice= get_choice()&&choice!='f'     )	若输入a，则choice=1
 			switch (choice)																//优先级：算数，关系，逻辑，赋值
 			{
-			case 'a':
-				show_empty_seats(*(xinxi + x), SIZE);
+			case 'a':													  //*************************注************************************************
+				show_empty_seats(*(xinxi + x), SIZE);//*(xinxi + x)=*(&xinxi[0]+x)=*(&xinxi[x])=xinxi[x] 传入的是&xinxi[x][0]
 				break;
 			case 'b':
 				show_list_of_empty_seats(xinxi[x], SIZE);
@@ -1710,5 +2073,105 @@ double transform(double* source, double* target, int num, double(*p)(double))
 	i++;
 
 	return (*(jieguo + i-1));//********注：-1必须要写***************************
+}
+#endif
+//transform()无返回值的版本如下：
+#if 1
+void transform(double* source, double* target, int num, double(*p)(double));
+double zidinyi1(double x);
+double zidinyi2(double y);
+
+int main(void)
+{
+	double source[100];
+	double target[100];
+	int num = 100;
+	int i;
+
+	for (i = 0; i < num; i++)
+	{
+		source[i] = i;
+	}
+
+	puts("原数组数据如下：");
+	for (i = 0; i < num; i++)
+	{
+		printf("%8.2lf",source[i]);
+		if (i % 6 == 5)
+			putchar('\n');
+	}
+	if (i % 6 !=0)
+		putchar('\n');
+
+	transform(source,target,num,sin);//   double sin (double a)
+
+	puts("目标数组数据如下(sin)：");
+	for (i = 0; i < num; i++)
+	{
+		printf("%8.2lf", target[i]);
+		if (i % 6 == 5)
+			putchar('\n');
+	}
+	if (i % 6 != 0)
+		putchar('\n');
+
+	transform(source, target, num, cos);//   double cos (double a)
+
+	puts("目标数组数据如下(cos)：");
+	for (i = 0; i < num; i++)
+	{
+		printf("%8.2lf", target[i]);
+		if (i % 6 == 5)
+			putchar('\n');
+	}
+	if (i % 6 != 0)
+		putchar('\n');
+
+	transform(source, target, num, zidinyi1);//   自定义函数1
+
+	puts("目标数组数据如下(自定义函数1)：");
+	for (i = 0; i < num; i++)
+	{
+		printf("%8.2lf", target[i]);
+		if (i % 6 == 5)
+			putchar('\n');
+	}
+	if (i % 6 != 0)
+		putchar('\n');
+
+	transform(source, target, num, zidinyi2);//   自定义函数2
+
+	puts("目标数组数据如下(自定义函数2)：");
+	for (i = 0; i < num; i++)
+	{
+		printf("%8.2lf", target[i]);
+		if (i % 6 == 5)
+			putchar('\n');
+	}
+	if (i % 6 != 0)
+		putchar('\n');
+
+	return 0;
+}
+void transform(double* source, double* target, int num, double(*p)(double))
+{
+	for (int i = 0; i < num; i++)
+	{
+		*(target + i) = p(*(source + i));
+	}
+
+	return;
+}
+double zidinyi1(double m)
+{
+	double y;
+	y = m * 1.1 + 1;
+	return y;
+}
+double zidinyi2(double n)
+{
+	double y;
+	y = n / 1.1 + 1;
+	return y;
 }
 #endif
