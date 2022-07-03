@@ -1,9 +1,9 @@
-#define _CRT_SECURE_NO_WARNINGS 1//╠ьпК╥етз╣зр╩пп
+#define _CRT_SECURE_NO_WARNINGS 1//Е©┘И║╩Ф■╬Е°╗Г╛╛Д╦─Х║▄
 //#include <stdio.h>
 //
 //int main()
 //{
-//	printf("яоб╥Й╩\n");
+//	printf("Yan\n");
 //		return 0;
 //
 //}
@@ -28,10 +28,10 @@
 //	printf("%d\n", age);
 //	printf("%lf\n", weight);
 //}
-//%d -уШпм
+//%d -Ф∙╢Е·▀
 //%f  -float
 //%lf -double
-//╣╠х╚╬ж╠Да©╨м╬ж╡©╠Да©ЁЕм╩й╠ё╛╬ж╡©╠Да©сеох
+//Е╫⌠Е┘╗Е╠─Е▐≤И┤▐Е▓▄Е╠─И┐╗Е▐≤И┤▐Е├╡Г╙│Ф≈╤О╪▄Е╠─И┐╗Е▐≤И┤▐Д╪≤Е┘┬
 
 int main()
 {
