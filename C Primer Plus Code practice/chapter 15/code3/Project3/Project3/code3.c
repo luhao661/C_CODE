@@ -309,6 +309,7 @@ int main(void)
 	show_attribute(&attribute);
 	char choice=get_choice();
 
+	int count = 0;//用来计数运行次数，其值的奇偶性可以用来切换开关状态
 	while (choice != 'q')
 	{
 		switch (choice)
@@ -320,18 +321,19 @@ int main(void)
 			change_alignment(&attribute);
 			break;
 		case 'b':
-			attribute.jiacu = 1;
+			count % 2 == 0 ? (attribute.jiacu = 1 ): (attribute.jiacu = 0);//*****注*****括号必须要加
 			break;
 		case 'i':
-			attribute.xieti = 1;
+			count % 2 == 0 ? (attribute.xieti = 1) : (attribute.xieti = 0);//*****注*****括号必须要加
 			break;
 		case 'u':
-			attribute.xiahuaxian = 1;
+			count % 2 == 0 ? (attribute.xiahuaxian = 1) : (attribute.xiahuaxian = 0);//*****注*****括号必须要加
 			break;
 		case 'f':
 			change_font(&attribute);
 			break;
 		}
+		count++;
 
 		show_attribute(&attribute);
 		choice = get_choice();
@@ -459,13 +461,13 @@ int main(void)
 			change_alignment(&attribute);
 			break;
 		case 'b':
-			attribute|= 0x40000;
+			attribute^= 0x40000;//切换位
 			break;
 		case 'i':
-			attribute|= 0x80000;
+			attribute^= 0x80000;
 			break;
 		case 'u':
-			attribute|= 0x100000;
+			attribute^= 0x100000;
 			break;
 		case 'f':
 			change_font(&attribute);
@@ -522,49 +524,53 @@ void change_size(unsigned long* xinxi)
 }
 void change_alignment(unsigned long* xinxi)
 {
-	//char choice;
-	//printf("Select alignment :");
-	//printf("l)left  c)center  r)right\n");
+	char choice;
+	printf("Select alignment :");
+	printf("l)left  c)center  r)right\n");
 
-	//scanf("%c", &choice);
-	//while (getchar() != '\n')
-	//	continue;
+	scanf("%c", &choice);
+	while (getchar() != '\n')
+		continue;
 
-	//while (strchr("lcr", choice) == NULL)
-	//{
-	//	printf("输入有误，请重新输入！");
-	//	scanf("%c", &choice);
-	//	while (getchar() != '\n')
-	//		continue;
-	//}
-	//choice = tolower(choice);
+	while (strchr("lcr", choice) == NULL)
+	{
+		printf("输入有误，请重新输入！");
+		scanf("%c", &choice);
+		while (getchar() != '\n')
+			continue;
+	}
+	choice = tolower(choice);
 
-	//switch (choice)
-	//{
-	//case 'l':
-	//	xinxi->duiqi = 0;
-	//	break;
-	//case 'c':
-	//	xinxi->duiqi = 1;
-	//	break;
-	//case 'r':
-	//	xinxi->duiqi = 2;
-	//	break;
-	//default:
-	//	printf("Error !");
-	//	exit(1);
-	//}
+	switch (choice)
+	{
+	case 'l':
+		*xinxi &= ~(0x30000);
+		break;
+	case 'c':
+		*xinxi &= ~(0x30000);					//先清零
+		*xinxi |= 0x10000;							//再置位
+		break;
+	case 'r':
+		*xinxi &= ~(0x30000);
+		*xinxi |= 0x20000;
+		break;
+	default:
+		printf("Error !");
+		exit(1);
+	}
 }
 void change_font(unsigned long* xinxi)
 {
-	//int num;
+	int num;
 
-	//printf("Enter font ID (0-255) :");
-	//scanf("%d", &num);
-	//while (getchar() != '\n')
-	//	continue;
+	printf("Enter font ID (0-255) :");
+	scanf("%d", &num);
+	while (getchar() != '\n')
+		continue;
 
-	//num = num & 0xff;							//最终值被修改为1个8位数据
-	//xinxi->ziti_id = num;
+	num = num & 0xff;							//最终值被修改为1个8位数据
+	
+	*xinxi &= ~(0xff);
+	*xinxi |= num;
 }
 #endif
