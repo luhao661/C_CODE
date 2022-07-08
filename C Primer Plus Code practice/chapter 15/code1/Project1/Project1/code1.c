@@ -169,7 +169,8 @@ int main(void)
 
 //如果声明的总位数超过一个unsigned int类型的大小（4 bytes）的情况
 #if 0
-struct {
+struct
+{
 	unsigned a : 4;
 	unsigned b : 4;
 	unsigned c : 4;
