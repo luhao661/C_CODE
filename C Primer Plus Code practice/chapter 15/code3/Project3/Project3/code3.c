@@ -8,6 +8,7 @@
 #if 1
 #endif
 
+
 //编程练习
 //1.
 #if 0
@@ -22,11 +23,12 @@ int main(void)
 
 	return 0;
 }
+//法一：从低位到高位累加
 int b_to_i(const char* string)
 {
 	int num=0;
 	int length = strlen(string);
-	int weiquan = 1;									 //位权
+	int weiquan = 1;									 //二进制数据第0号位的位权
 
 	for (int index = length - 1; index >= 0; index--)
 	{
@@ -39,6 +41,22 @@ int b_to_i(const char* string)
 
 	return num;
 }
+//法二：从高位到低位累加
+# if 0
+int b_to_i(const char* string)
+{
+	int num = 0;
+
+	while (*string != '\0')				//若输入110，则最高位1进入循环，num=1，第1号位进入循环，num=3，第0号位进入循环，num=6
+	{												//通过循环使每一位上的值都持续乘以2
+		num *= 2;
+		num += *string - '0';
+		string++;
+	}
+
+	return num;
+}
+#endif
 #endif
 
 
@@ -50,9 +68,15 @@ void show(char* string);
 
 int main(int argc,char **argv)
 {
+	if (argc != 3)
+	{
+		puts("Erroe !");
+		exit(EXIT_FAILURE);
+	}
+
 	int shuju1, shuju2;
 
-	shuju1 = b_to_i(argv[1]);//字符串表示的二进制内容转化为机器上存的二进制
+	shuju1 = b_to_i(argv[1]);//字符串表示的二进制内容转化为机器上存的二进制数据
 	shuju2 = b_to_i(argv[2]);
 
 	int temp1,temp2;
@@ -156,7 +180,7 @@ int dakaiwei_shuliang(int num)
 {
 	int count = 0;
 
-	for (int i = 31; i >= 0; i--,num>>=1)
+	for (int i = 0;		 i <32;		 i++,num>>=1)							//i表示正在处理的是第x号位
 	{
 		if (num & 0x1 == 1)
 			count++;
@@ -192,11 +216,12 @@ int panduanwei(int num,int position)
 
 	num >>= position;
 
-	if (num & 0x1 == 1)
+	if ((num & 0x1) == 1)
 		fanhui = 1;
 	
 	return fanhui;
 }
+//法二：先根据位的位置，设置好掩码，再利用位逻辑运算符的检查位值的功能，对该位置的值进行检查
 #endif
 
 
@@ -228,6 +253,7 @@ int main(void)
 
 	return 0;
 }
+//法一：要移动几位，就把最左侧的几位的值都拷贝到int类型的变量当中，最后原数据移动好后再与变量进行按位或运算。
 unsigned int rotate_l(unsigned int x, int zuoyi)
 {
 	//int temp[zuoyi+1];//无效
@@ -252,6 +278,24 @@ unsigned int rotate_l(unsigned int x, int zuoyi)
 
 	return x;
 }
+//法二：根据移出的最高位的值是1还是0，跳转到不同的分支语句。
+#if 0
+unsigned int rotate_l(unsigned int x, int zuoyi)
+{
+	for (int i = 0; i < zuoyi; i++)
+	{
+		if (x & 0x80000000)//先判断最高位的值		或写为：if(x&(1<<31))
+		{
+			x <<= 1;
+			x |= 1;
+		}
+		else
+			x <<= 1;
+	}
+
+	return x;
+}
+#endif
 char* i_to_bs(int zhengshu, char* string)
 {
 	const static int size = CHAR_BIT * sizeof(int);
@@ -322,6 +366,9 @@ int main(void)
 			break;
 		case 'b':
 			count % 2 == 0 ? (attribute.jiacu = 1 ): (attribute.jiacu = 0);//*****注*****括号必须要加
+			
+			//法二：**********一位数据可以直接使用非逻辑运算符************
+			/*attribute.jiacu = !attribute.jiacu;*/
 			break;
 		case 'i':
 			count % 2 == 0 ? (attribute.xieti = 1) : (attribute.xieti = 0);//*****注*****括号必须要加
@@ -430,7 +477,7 @@ void change_font(struct ziticanshu* xinxi)
 
 
 //7.
-#if 1
+#if 0
 const char* duiqi[3] = { "left","center","right" };
 void show_attribute(unsigned long *xinxi);
 char get_choice(void);
