@@ -139,14 +139,26 @@ int main(void)
 #endif
 
 
-//使用条件编译
+//使用条件编译来标记C语句块
 #if 1
 #define JUST_CHECKING
 #define LIMIT   4
+#define LIMIT 5
+
 int main(void)
 {
+	int total = 0;
 
-
+	for (int i = 0; i < LIMIT; i++)
+	{
+		total += 2 * i;
+#ifdef JUST_CHECKING
+		printf("i=%d, total=%d\n", i, total);
+#endif
+	}
+	
+	printf("total=%d\n",total);
+	
 	return 0;
 }
 #endif
