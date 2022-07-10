@@ -140,10 +140,9 @@ int main(void)
 
 
 //使用条件编译来标记C语句块
-#if 1
+#if 0
 #define JUST_CHECKING
 #define LIMIT   4
-#define LIMIT 5
 
 int main(void)
 {
@@ -160,5 +159,74 @@ int main(void)
 	printf("total=%d\n",total);
 	
 	return 0;
+}
+#endif
+
+
+//预定义宏和预定义标识符__func__
+#if 0
+#line 1																//重置行信息，即下一行行号为1
+void function(void);
+
+int main(void)
+{
+	//printf("C标准是%ld\n", __STDC_VERSION__);
+
+	printf("文件名为%s\n",__FILE__);
+
+	printf("日期是%s\n",__DATE__);
+	printf("时间是%s\n", __TIME__);
+
+	printf("此行的行号是%d\n",__LINE__ );
+	printf("正在执行的函数是%s\n", __func__);
+	function();
+
+	return 0;
+}
+void function(void)
+{
+	printf("此行的行号是%d\n", __LINE__);
+	printf("正在执行的函数是%s\n", __func__);
+}
+#endif
+
+
+//泛型选择表达式(此IDE不支持)
+#if 0
+#define GENERIC(X)			_Generic((X),\
+			int:"int",\
+			float:"float",\
+			double:"double",\
+			default:"other"\
+)
+
+int main(void)
+{
+	int num = 5;
+
+	printf("%s\n",GENERIC(num));
+	printf("%s\n", GENERIC(2.0*num));
+	printf("%s\n", GENERIC((long)num));		
+	printf("%s\n", GENERIC(&num));				//&num类型是int*
+
+	return 0;
+}
+#endif
+
+
+//使用内联函数
+#if 1
+inline static double square(double x);
+
+int main(void)
+{
+	double num = 5.0;
+	printf("%.2lf",square(num));
+
+	return 0;
+}
+double square(double x)
+{
+	return (x*x);
 }
 #endif
