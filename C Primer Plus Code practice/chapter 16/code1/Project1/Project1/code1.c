@@ -215,7 +215,7 @@ int main(void)
 
 
 //使用内联函数
-#if 1
+#if 0
 inline static double square(double x);
 
 int main(void)
@@ -229,4 +229,105 @@ double square(double x)
 {
 	return (x*x);
 }
+#endif
+
+
+//把直角坐标转化成极坐标（传递并返回结构法）
+#if 0
+#include <math.h>
+#define RAD_TO_DEG				(180/(4*atan(1)))				//弧度转化成角度的公式
+typedef struct 
+{
+	double jijin;					//极径
+	double jijiao;					//极角(角度制)
+}JIZUOBIAO;
+typedef struct
+{
+	double x;
+	double y;
+}ZHIJIAOZUOBIAO;
+
+JIZUOBIAO zhuanhuan(ZHIJIAOZUOBIAO zhijiaozuobiao);
+
+int main(void)
+{
+	ZHIJIAOZUOBIAO input;																	//结构1
+	JIZUOBIAO result;																				//结构2
+
+	puts("请输入直角坐标下x和y的值(输入q以退出)：");
+	while (scanf("%lf%lf", &input.x, &input.y) == 2)
+	{
+		result = zhuanhuan(input);
+		printf("极径：%.2lf		极角：%.2lf\n",result.jijin,result.jijiao);
+		puts("请输入直角坐标下x和y的值(输入q以退出)：");
+	}
+
+	return 0;
+}
+JIZUOBIAO zhuanhuan(ZHIJIAOZUOBIAO zhijiaozuobiao)				//结构3
+{
+	JIZUOBIAO temp;																				//结构4
+	temp.jijin = sqrt(zhijiaozuobiao.x* zhijiaozuobiao.x+ zhijiaozuobiao.y * zhijiaozuobiao.y);
+	//temp.jijiao = RAD_TO_DEG * atan2(zhijiaozuobiao.x,zhijiaozuobiao.y);  //错误，应改为y轴的值除以x轴的值
+	temp.jijiao = RAD_TO_DEG * atan2(zhijiaozuobiao.y,zhijiaozuobiao.x);  
+
+	return temp;
+}
+#endif
+
+
+//把直角坐标转化成极坐标（传递结构地址法）
+#if 0
+#include <math.h>
+#define RAD_TO_DEG				(180/(4*atan(1)))				//弧度转化成角度的公式
+typedef struct
+{
+	double jijin;					//极径
+	double jijiao;					//极角(角度制)
+}JIZUOBIAO;
+typedef struct
+{
+	double x;
+	double y;
+}ZHIJIAOZUOBIAO;
+
+void zhuanhuan(ZHIJIAOZUOBIAO * zhijiaozuobiao,JIZUOBIAO * jizuobiao);
+
+int main(void)
+{
+	ZHIJIAOZUOBIAO input;																	
+	JIZUOBIAO result;																			
+
+	puts("请输入直角坐标下x和y的值(输入q以退出)：");
+	while (scanf("%lf%lf", &input.x, &input.y) == 2)
+	{
+		zhuanhuan(&input,&result);
+		printf("极径：%.2lf		极角：%.2lf\n", result.jijin, result.jijiao);
+		puts("请输入直角坐标下x和y的值(输入q以退出)：");
+	}
+
+	return 0;
+}
+void zhuanhuan(ZHIJIAOZUOBIAO * zhijiaozuobiao,JIZUOBIAO * jizuobiao)			
+{
+	jizuobiao->jijin = sqrt(zhijiaozuobiao->x * zhijiaozuobiao->x + zhijiaozuobiao->y * zhijiaozuobiao->y);
+	jizuobiao->jijiao = RAD_TO_DEG * atan2(zhijiaozuobiao->y, zhijiaozuobiao->x);
+
+	return ;
+}
+#endif
+
+
+//利用泛型选择表达式来定义泛型函数
+#if 1
+#define RAD_TO_DEG				(180/(4*atan(1)))
+#define SQRT(X)				_Generic((X),\
+					long double :sqrtl,\
+					default:sqrt,\
+					float:sqrtf)(X)
+
+#define SIN(X)				_Generic((X),\
+					long double :sinl((X)/RAD_TO_DEG),\
+					default:sin((X)/RAD_TO_DEG),\
+					float:sinf((X)/RAD_TO_DEG))
 #endif
