@@ -318,8 +318,8 @@ void zhuanhuan(ZHIJIAOZUOBIAO * zhijiaozuobiao,JIZUOBIAO * jizuobiao)
 #endif
 
 
-//利用泛型选择表达式来定义泛型函数
-#if 1
+//利用泛型选择表达式来定义泛型类函数宏
+#if 0
 #define RAD_TO_DEG				(180/(4*atan(1)))
 #define SQRT(X)				_Generic((X),\
 					long double :sqrtl,\
@@ -330,4 +330,191 @@ void zhuanhuan(ZHIJIAOZUOBIAO * zhijiaozuobiao,JIZUOBIAO * jizuobiao)
 					long double :sinl((X)/RAD_TO_DEG),\
 					default:sin((X)/RAD_TO_DEG),\
 					float:sinf((X)/RAD_TO_DEG))
+#endif
+
+
+//使用atexit()
+#if 0
+#include <stdlib.h>
+
+void sign_off(void);
+void too_bad(void);
+
+int main(void)
+{
+	int n;
+
+	atexit(sign_off);//注册sign_off()函数，sign_off是函数指针
+	puts("请输入一个整数：");
+	if (scanf("%d", &n) != 1)
+	{
+		puts("这不是整数！");
+		atexit(too_bad);//注册too_bad()函数
+		exit(EXIT_FAILURE);//执行到此处时，因为已经注册了sign_off和too_bad函数，exit()会从新到旧(先入先出)地执行这些函数
+	}
+	printf("%d是%s\n",n,(n%2)==0?("偶数"):("奇数"));
+
+	return 0;						//	主函数执行完后会隐式调用exit()
+}
+void sign_off(void)
+{
+	puts("程序退出");
+}
+void too_bad(void)
+{
+	puts("程序中途退出");
+}
+#endif
+
+
+//使用qsort()函数排序一组数字
+#if 0
+#include <stdlib.h>
+#include <time.h>
+
+#define SIZE 40
+void fill_array(double *p,int n);
+void show_array(const double *p,int n);
+int mycompare(const void *p1,const void *p2);
+int main(void)
+{
+	double shuzu[SIZE];
+	srand((unsigned int)time(0));			/* 随机种子 */
+	fill_array(shuzu,SIZE);
+
+	puts("数组中的随机数如下");
+	show_array(shuzu,SIZE);
+
+	qsort(shuzu,SIZE,sizeof(double),mycompare);
+
+	puts("数组中的随机数排序完成后如下");
+	show_array(shuzu, SIZE);
+
+	return 0;
+}
+void fill_array(double* p, int n)
+{
+	for (int index = 0; index < n; index++)
+	{
+		*(p + index) = (double)rand() / ((double)rand()+0.1);
+	}
+}
+void show_array(const double* p, int n)
+{
+	int index;
+	for ( index = 0; index < n; index++)
+	{
+		printf("%6.2lf", *(p + index));
+
+		if (index % 6 == 5)
+			putchar('\n');
+	}
+	if (index % 6 !=0)
+		putchar('\n');
+}
+int mycompare(const void* p1, const void* p2)
+{
+//法一：
+	//if (*((const double*)p1) < *((const double*)p2))
+	//	return -1;
+	//else if (*((const double*)p1) == *((const double*)p2))
+	//	return 0;
+	//else
+	//	return 1;
+
+//法二：
+	const double* a1 = (const double*)p1;
+	const double* a2 = (const double*)p2;
+	if (*a1 < *a2)
+		return -1;
+	else if (*a1 == *a2)
+		return 0;
+	else
+		return 1;
+}
+#endif
+
+
+//使用assert()
+#if 0
+#include <math.h>
+#include <assert.h>
+//#define NDEBUG
+
+int main(void)
+{
+	double x, y, z;
+
+	puts("请输入一对数字(输入0 0以退出程序)：");
+	while (scanf("%lf%lf", &x, &y) == 2 && (x != 0 || y != 0))
+	{
+		z = x * x - y * y;
+		assert(z>=0);//对表达式求值，若为假，就中止程序，并显示出问题的行号
+		printf("答案是：%.2lf\n",sqrt(z));
+	}
+
+	return 0;
+}
+#endif
+
+
+//使用_Static_assert()   (此IDE不支持)
+#if 0
+#include <math.h>
+#include <limits.h>
+_Static_assert(CHAR_BIT == 16,"错误的一字节的位数");
+
+int main(void)
+{
+	double x, y, z;
+
+	puts("请输入一对数字(输入0 0以退出程序)：");
+	while (scanf("%lf%lf", &x, &y) == 2 && (x != 0 || y != 0))
+	{
+		z = x * x - y * y;
+		printf("答案是：%.2lf\n", sqrt(z));
+	}
+
+	return 0;
+}
+#endif
+
+
+//使用memcpy()和memmove()
+#if 1
+#include <string.h>
+#define SIZE 10
+
+void show_array(const int *p,int n);
+
+int main(void)
+{
+	int source[SIZE] = {1,2,3,4,5,6,7,8,9,10};
+	int target[SIZE];
+
+	double ceshi[SIZE / 2] = {1.0,2.0,3.0,4.0,5.0};
+
+	puts("使用memcpy()：");
+	puts("源字符数组内容：");
+	show_array(source,SIZE);
+
+	memcpy(target,source,SIZE*sizeof(int));
+	puts("目标字符数组内容：");
+	show_array(target, SIZE);
+
+	puts("\n使用memmove()（两个内存区域有重叠的情况）：");
+	memmove(target+2, target, 5 * sizeof(int));
+	puts("目标字符数组的第1至5个元素拷贝到目标数组的第3至7个元素：");
+	show_array(target, SIZE);
+
+	return 0;
+}
+void show_array(const int* p, int n)
+{
+	for (int index = 0; index < n; index++)
+	{
+		printf("%5d",*(p+index));
+	}
+	putchar('\n');
+}
 #endif
