@@ -481,7 +481,7 @@ int main(void)
 
 
 //使用memcpy()和memmove()
-#if 1
+#if 0
 #include <string.h>
 #define SIZE 10
 
@@ -516,5 +516,38 @@ void show_array(const int* p, int n)
 		printf("%5d",*(p+index));
 	}
 	putchar('\n');
+}
+#endif
+
+
+//变参函数
+#if 1
+#include <stdarg.h>
+double sum(int lim,...);							//1.函数原型至少一个形参和一个省略号
+
+int main(void)
+{
+	double result1, result2;
+
+	result1 = sum(3,1.1,2.5,13.3333333);
+	result2 = sum(6, 1.1, 2.1, 13.1,4.1,5.1,6.1);
+
+	printf("sum(3,1.1,2.5,13.3)=				%g\n",result1);
+	printf("sum(6, 1.1, 2.1, 13.1,4.1,5.1,6.1)=		%g\n", result2);
+
+	return 0;
+}
+double sum(int lim, ...)							//lim是parmN形参，其值为传入的实参的数量
+{
+	va_list ap;											//2.声明一个存储省略号部分的数据对象ap
+	va_start(ap,lim);									//3.实参的数据拷贝到ap(把ap初始化为参数列表)
+
+	double total = 0;
+	for (int i = 0; i < lim; i++)
+		total += va_arg(ap,double);			//4.访问参数列表的内容
+
+	va_end(ap);											//5.用宏完成清理工作(释放动态分配的用于存储参数的内存)
+
+	return total;
 }
 #endif
