@@ -521,7 +521,7 @@ void show_array(const int* p, int n)
 
 
 //变参函数
-#if 1
+#if 0
 #include <stdarg.h>
 double sum(int lim,...);							//1.函数原型至少一个形参和一个省略号
 
