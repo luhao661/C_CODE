@@ -123,7 +123,7 @@ void delay(double a)
 
 
 //5.
-#if 1
+#if 0
 #include <stdlib.h>//srand(),qsort() 
 #include <time.h>	  //time()
 #include <stdlib.h>//malloc()
@@ -150,18 +150,18 @@ int main(void)
 }
 void dayin(int* p, int num, int cishu)
 {
-	int* temp = (int*)malloc(cishu * sizeof(int));		//用动态内存分配，创建temp[cishu]
+	int* temp = (int*)malloc(cishu * sizeof(int));//用动态内存分配，创建temp[cishu]
 
 step1:	for (int index = 0; index < cishu; index++)
 	{
-		*(temp + index) =( (int)rand() % num );//索引值控制在1至5
-		printf("%3d", *(temp + index));
+		*(temp + index) =( (int)rand() % num );//索引值控制在0至num(即SIZE的值)
+		//printf("%3d", *(temp + index));	//检测值
 	}
 
-	putchar('\n');
+	//putchar('\n');
 
 	int index1,index2,biaoji=0;
-	for ( index1 = 0; index1 < cishu; index1++)					//遍历数组中的元素，若有重复值，标记置1
+	for ( index1 = 0; index1 < cishu-1; index1++)					//遍历数组中的元素，若有重复值，标记置1
 	{
 		for ( index2 = index1+1; index2 < cishu; index2++)
 			if (*(temp + index1) == *(temp + index2))
@@ -186,5 +186,115 @@ step1:	for (int index = 0; index < cishu; index++)
 	putchar('\n');
 
 	free(temp);
+}
+#endif
+
+
+//6.
+#if 0
+#include <stdlib.h>
+#include <string.h>// strcmp()
+#define SIZE 40
+struct names
+{
+	char first[SIZE];
+	char last[SIZE];
+};
+void show(const struct names* p, int n);
+int mycompare(const void* p1, const void* p2);
+int main(void)
+{
+	struct names staff[6] = {
+		{"Aaa","Bbb"},
+		{"Baa","Bbb"},
+		{"Daa","Bbb"},
+		{"Zaa","Abb"},
+		{"Baa","Abb"},
+		{"Aaa","Cbb"},
+	};
+
+	puts("结构数组中的内容如下");
+	show(staff, 6);
+
+	qsort(staff, 6, sizeof(struct names), mycompare);
+
+	puts("结构数组中的内容排序完成后如下");
+	show(staff, 6);
+
+	return 0;
+}
+void show(const struct names* p, int n)
+{
+	int index;
+	for (index = 0; index < n; index++)
+	{
+		printf("%-6s%-6s\n",(p+index)->first, (p + index)->last);
+	}
+
+}
+int mycompare(const void* p1, const void* p2)
+{
+	const struct names* a1 = (const struct names*)p1;
+	const struct names* a2 = (const struct names*)p2;
+
+	int a;
+	if (a = strcmp(a1->last, a2->last))//先比较姓
+	{
+		if (a == 1)
+			return 1;
+		else
+			return -1;
+		//法二：
+		//return a;
+	}
+	return strcmp(a1->first, a2->first);//后比较名
+}
+#endif
+
+
+//7.
+#if 1
+#include <stdlib.h>
+#include <stdarg.h>
+void show_array(const double *ar,int n);
+double* new_d_array(int n,...);
+
+int main(void)
+{
+	double* p1;
+	double* p2;
+
+	p1 = new_d_array(5,1.2,2.3,3.4,4.5,5.6);
+	p2 = new_d_array(4,100.0,20.00,8.08,-1890.0);
+
+	show_array(p1,5);
+	show_array(p2,4);
+
+	free(p1);
+	free(p2);
+
+	return 0;
+}
+void show_array(const double* ar, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		printf(" %-9.2lf",*(ar+i));
+	}
+	putchar('\n');
+}
+double* new_d_array(int n, ...)				//1.函数原型、函数声明至少一个形参和一个省略号
+{
+	double* p = (double*)malloc(n * sizeof(double));
+
+	va_list temp;										//2.声明一个存储省略号部分的数据对象temp
+	va_start(temp, n);								//3.实参的数据拷贝到temp(把temp初始化为参数列表)
+
+	for (int i = 0; i < n; i++)
+		*(p+i) = va_arg(temp, double);		//4.访问参数列表的内容
+
+	va_end(temp);										//5.用宏完成清理工作(释放动态分配的用于存储参数的内存)
+
+	return p;
 }
 #endif
