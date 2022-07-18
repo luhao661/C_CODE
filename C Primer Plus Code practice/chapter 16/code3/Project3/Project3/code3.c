@@ -19,7 +19,10 @@ int main(void)
 
 //2.
 #if 0
-#define TIAOHE_PINJUNSHU(X,Y)			(	2*(x)*(y)	)/(		 (x)+(y)	)
+#define TIAOHE_PINJUNSHU(X,Y)			(	2*(x)*(y)	)/(		 (x)+(y)	)			
+//法二：
+//#define TIAOHE_PINJUNSHU(X,Y)			(	1/(	(1/(x)+1/(y)	)	/2		)	)
+
 int main(void)
 {
 	double x, y,result;
@@ -83,10 +86,12 @@ ZHIJIAOZUOBIAO zhuanhuan(JIZUOBIAO jizuobiao)									//结构3
 //4.
 #if 0
 #include <time.h>
+
 void delay(double time);
 int main(void)
 {
 	double time;
+
 	printf("请输入要延时的时间(单位：秒)：");
 	scanf("%lf",&time);
 	delay(time);
@@ -96,10 +101,10 @@ int main(void)
 }
 void delay(double time)
 {
-	double tick1 =(double) clock();
+	double clock_start =(double) clock();
 	int i;
 
-	while (((double)clock() - tick1)/ CLOCKS_PER_SEC <time)//CLOCKS_PER_SEC：每秒钟处理器时钟滴答次数(每秒钟处理器的时钟数量)
+	while (((double)clock() - clock_start)/ CLOCKS_PER_SEC <time)//CLOCKS_PER_SEC：每秒钟处理器时钟滴答次数(每秒钟处理器的时间单位的数量)
 	{
 		for (i = 0; i < 0xfff; i++)
 			continue;
@@ -120,10 +125,12 @@ void delay(double a)
 //https ://blog.csdn.net/asdgyy/article/details/82973533
 #endif
 #endif
+//	*****注*****
+//也可以使用Sleep(1000);							//延时1000毫秒		//前提：#include <windows.h>
 
 
 //5.
-#if 0
+#if 1
 #include <stdlib.h>//srand(),qsort() 
 #include <time.h>	  //time()
 #include <stdlib.h>//malloc()
@@ -148,6 +155,9 @@ int main(void)
 
 	return 0;
 }
+//法一：对元素个数为cishu的值的temp数组随机赋值(即索引值)，然后判断是否有重复的值，若有则重新赋值
+//赋完值之后一次性打印信息
+#if 0
 void dayin(int* p, int num, int cishu)
 {
 	int* temp = (int*)malloc(cishu * sizeof(int));//用动态内存分配，创建temp[cishu]
@@ -161,7 +171,7 @@ step1:	for (int index = 0; index < cishu; index++)
 	//putchar('\n');
 
 	int index1,index2,biaoji=0;
-	for ( index1 = 0; index1 < cishu-1; index1++)					//遍历数组中的元素，若有重复值，标记置1
+	for ( index1 = 0; index1 < cishu-1; index1++)//遍历数组中的元素，若有重复值，标记置1
 	{
 		for ( index2 = index1+1; index2 < cishu; index2++)
 			if (*(temp + index1) == *(temp + index2))
@@ -187,6 +197,37 @@ step1:	for (int index = 0; index < cishu; index++)
 
 	free(temp);
 }
+#endif
+//法二：对元素个数为num的值的biaoji数组随机赋值(即索引值)，biaoji数组索引值对应的元素值置1，然后下次赋值时
+//判断赋的索引值对应的元素值是否为1，若为1则重新赋值(即索引值)
+//每赋一次值打印一次信息
+#if 1
+void dayin(int* p, int num, int cishu)
+{
+	int* biaoji = (int*)malloc(num * sizeof(int));//用动态内存分配，创建biaoji[num]
+
+	for (int i = 0; i < num; i++)
+		*(biaoji + i) = 0;											//biaoji数组元素先全部赋为0，若不这么做，则数组中都为垃圾值
+
+	int index;
+
+	while (cishu > 0)
+	{
+		index = rand() % num;
+
+		if (biaoji[index] != 0)
+			continue;
+		else
+			biaoji[index] = 1;
+
+		printf("选择的索引值是%d	数值为%d：\n",index,*(p+index));
+
+		cishu--;
+	}
+
+free(biaoji);
+}
+#endif
 #endif
 
 
@@ -253,7 +294,7 @@ int mycompare(const void* p1, const void* p2)
 
 
 //7.
-#if 1
+#if 0
 #include <stdlib.h>
 #include <stdarg.h>
 void show_array(const double *ar,int n);
