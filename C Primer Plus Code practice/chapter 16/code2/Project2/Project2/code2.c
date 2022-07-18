@@ -56,11 +56,19 @@ int main(void)
 #if 0
 #define	MIN(X,Y)			((X)>(Y))?(Y):(X)
 #endif
+//3.改正
+#if 0
+#define	MIN(X,Y)			(	(X)>(Y)?(Y):(X)	  )
+#endif
 
 
 //4.
 #if 0
 #define EVEN_GT(X,Y)		(	(	(X)%2==0	)&&(	 (X)>(Y) 	)	)?1:0
+#endif
+//4.改正
+#if 0
+#define EVEN_GT(X,Y)		(      (	(X)%2==0	)&& (  (X)>(Y) ?1:0	 )   	)
 #endif
 
 
@@ -101,17 +109,27 @@ int main(void)
 
 //9.
 #if 0
-
 #define PR_DATE		printf("日期是：%s",__DATE__)
-#ifdef PR_DATE
+
 int main(void)
 {
+#ifdef PR_DATE
 	PR_DATE;
-
+#endif
 	return 0;
 }
 #endif
+//法二：
+#if 0
+#define PR_DATE	
 
+int main(void)
+{
+#ifdef PR_DATE
+	printf("日期是：%s", __DATE__);
+#endif
+	return 0;
+}
 #endif
 
 
@@ -186,7 +204,7 @@ int mycompare(void* p1, void* p2)
 
 
 //14.
-#if 1
+#if 0
 #include <string.h>
 #include <stdlib.h>
 #define SIZE 300
@@ -209,7 +227,7 @@ int main(void)
 	puts("data1数组内容：");
 	show_array(data1, SIZE/3);
 	puts("把data2的后100个元素拷贝到data1中：");					//*****注*****后100个元素即第201至第300个元素
-	memcpy(data1, data2+200, SIZE / 3 * sizeof(double));
+	memcpy(data1, data2+200, SIZE / 3 * sizeof(double));     //data2+200也可写作&data2[200]
 	puts("data1数组内容：");
 	show_array(data1, SIZE / 3);
 

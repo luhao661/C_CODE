@@ -1,4 +1,2 @@
 ﻿  code2.c
-D:\CODE\C_CODE\C Primer Plus Code practice\chapter 16\code2\Project2\Project2\code2.c(201,20): warning C4013: “time”未定义；假设外部返回 int
-D:\CODE\C_CODE\C Primer Plus Code practice\chapter 16\code2\Project2\Project2\code2.c(201,20): warning C4244: “函数”: 从“double”转换到“unsigned int”，可能丢失数据
   Project2.vcxproj -> D:\CODE\C_CODE\C Primer Plus Code practice\chapter 16\code2\Project2\x64\Debug\Project2.exe
