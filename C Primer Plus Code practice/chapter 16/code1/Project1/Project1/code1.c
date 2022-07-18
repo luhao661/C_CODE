@@ -131,8 +131,8 @@ int main(void)
 	double y;
 
 	y = sqrt(x);
-	DAYIN(1,"x=%g\n",x);
-	DAYIN(2, "y=%.2lf\n", y);
+	DAYIN(66,"x=%g\n",x);
+	DAYIN(67, "y=%.2lf\n", y);
 
 	return 0;
 }
