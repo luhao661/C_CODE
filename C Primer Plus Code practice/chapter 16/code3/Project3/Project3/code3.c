@@ -215,7 +215,7 @@ void dayin(int* p, int num, int cishu)
 	{
 		index = rand() % num;
 
-		if (biaoji[index] != 0)
+		if (biaoji[index] != 0)									//先利用biaoji数组判断索引值是否已被使用
 			continue;
 		else
 			biaoji[index] = 1;
@@ -225,7 +225,7 @@ void dayin(int* p, int num, int cishu)
 		cishu--;
 	}
 
-free(biaoji);
+	free(biaoji);
 }
 #endif
 #endif
