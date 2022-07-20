@@ -130,7 +130,7 @@ void delay(double a)
 
 
 //5.
-#if 1
+#if 0
 #include <stdlib.h>//srand(),qsort() 
 #include <time.h>	  //time()
 #include <stdlib.h>//malloc()
@@ -200,7 +200,7 @@ step1:	for (int index = 0; index < cishu; index++)
 #endif
 //法二：对元素个数为num的值的biaoji数组随机赋值(即索引值)，biaoji数组索引值对应的元素值置1，然后下次赋值时
 //判断赋的索引值对应的元素值是否为1，若为1则重新赋值(即索引值)
-//每赋一次值打印一次信息
+//每赋一次值打印一次信息(也可以赋完值之后一次性打印信息)
 #if 1
 void dayin(int* p, int num, int cishu)
 {
@@ -220,9 +220,17 @@ void dayin(int* p, int num, int cishu)
 		else
 			biaoji[index] = 1;
 
-		printf("选择的索引值是%d	数值为%d：\n",index,*(p+index));
+		//每赋一次值打印一次信息
+		//printf("选择的索引值是%d	数值为%d：\n",index,*(p+index));
 
 		cishu--;
+	}
+
+	//赋完值之后一次性打印信息
+	for (int i = 0; i < num; i++)
+	{
+		if(biaoji[i] == 1)
+		printf("选择的索引值是%d	数值为%d：\n", i, *(p + i));
 	}
 
 	free(biaoji);
