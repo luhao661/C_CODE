@@ -134,7 +134,7 @@ char* s_gets(char* string, int num)
 
 
 //使用结构链表来表示数据
-#if 1
+#if 0
 #include <stdlib.h>//malloc()
 
 #define LENGTH 45
@@ -206,7 +206,6 @@ int main(void)
 
 	return 0;
 }
-
 char* s_gets(char* string, int num)
 {
 	char* fanhui;
@@ -227,5 +226,95 @@ char* s_gets(char* string, int num)
 
 	return fanhui;
 }
+#endif
 
+
+//定义新类型的方法，用3步完成从抽象到具体的过程
+//1.提供类型属性和相关操作的抽象描述
+//2.开发一个实现ADT的编程接口(指明如何存储数据和执行所需操作的函数)
+//3.编写代码来使用接口，编写代码来实现接口
+#if 1
+//*****把接口应用于特定编程问题的源代码文件*****
+#include <stdlib.h.>//exit()
+#include <stdbool.h>
+#include "list.h"
+
+void showmovies(Item item);
+
+char* s_gets(char *string,int num);
+
+int main(void)
+{
+	List movies;//创建一个指向note结构布局的指针movies
+
+	Item temp;//创建一个film结构布局的结构temp
+
+	InitializeList(&movies);
+	if (ListIsFull(&movies))
+	{
+		fprintf(stderr,"错误，链表数量已达到最大值！");
+		exit(1);
+	}
+
+	puts("请输入电影的标题：");
+	while (s_gets(temp.title, LENGTH) != NULL && temp.title[0] != '\0')
+	{
+		puts("请输入您的评分(0-10)：");
+		scanf("%d", &temp.rating);
+
+		while (getchar() != '\n')
+			continue;
+
+		if (AddItem(temp, &movies) == false)
+		{
+			fprintf(stderr,"错误，分配内存失败！");
+			break;
+		}
+		if (ListIsFull(&movies))
+		{
+			puts("链表数量已达到最大值！");
+			break;
+		}
+
+		puts("请输入下一个电影的标题(输入^Z或空行以退出)：");
+	}																				
+
+	if (ListIsEmpty(&movies))
+		printf("没有数据输入！\n");
+	else
+	{
+		printf("以下是电影目录");
+		Traverse(&movies,showmovies);
+	}
+	printf("你输入了%d部电影\n",ListItemCount(&movies));
+	
+	EmptyTheList(&movies);
+	printf("再见！\n");
+
+	return 0;
+}
+void showmovies(Item item)
+{
+	printf("电影名:%-20s电影评分:%d\n", item.title,item.rating);
+}
+char* s_gets(char* string, int num)
+{
+	char* fanhui;
+	char* find;
+
+	fanhui = fgets(string, num, stdin);
+
+	if (fanhui)
+	{
+		if (find = strchr(string, '\n'))
+			*find = '\0';
+		else
+		{
+			while (getchar() != '\n')
+				continue;
+		}
+	}
+
+	return fanhui;
+}
 #endif
