@@ -230,10 +230,10 @@ char* s_gets(char* string, int num)
 
 
 //定义新类型的方法，用3步完成从抽象到具体的过程
-//1.提供类型属性和相关操作的抽象描述
-//2.开发一个实现ADT的编程接口(指明如何存储数据和执行所需操作的函数)
-//3.编写代码来使用接口，编写代码来实现接口
-#if 1
+//1.提供类型属性和相关操作的抽象描述(抽象地描述ADT)
+//2.编写一个实现ADT的编程接口(如在list.h中指明如何存储数据和执行所需操作的函数)
+//3.编写代码来使用接口(在main.c中)，编写代码来实现接口(如在list.c中)
+#if 0
 //*****把接口应用于特定编程问题的源代码文件*****
 #include <stdlib.h.>//exit()
 #include <stdbool.h>
@@ -245,10 +245,11 @@ char* s_gets(char *string,int num);
 
 int main(void)
 {
-	List movies;//创建一个指向note结构布局的指针movies
+	P_Node movies;//创建一个指向Node结构布局的指针movies
 
 	Item temp;//创建一个film结构布局的结构temp
 
+//初始化链表的头指针
 	InitializeList(&movies);
 	if (ListIsFull(&movies))
 	{
@@ -256,6 +257,7 @@ int main(void)
 		exit(1);
 	}
 
+//获取用户输入并存储
 	puts("请输入电影的标题：");
 	while (s_gets(temp.title, LENGTH) != NULL && temp.title[0] != '\0')
 	{
@@ -277,17 +279,19 @@ int main(void)
 		}
 
 		puts("请输入下一个电影的标题(输入^Z或空行以退出)：");
-	}																				
+	}								
 
+//显示
 	if (ListIsEmpty(&movies))
 		printf("没有数据输入！\n");
 	else
 	{
-		printf("以下是电影目录");
+		printf("以下是电影目录\n");
 		Traverse(&movies,showmovies);
 	}
 	printf("你输入了%d部电影\n",ListItemCount(&movies));
 	
+//清理
 	EmptyTheList(&movies);
 	printf("再见！\n");
 
@@ -317,4 +321,10 @@ char* s_gets(char* string, int num)
 
 	return fanhui;
 }
+#endif
+
+
+//队列ADT
+#if 1
+#include "queue.h"
 #endif

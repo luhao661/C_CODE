@@ -5,24 +5,16 @@
 #include <stdlib.h>
 #include "list.h"
 
-void InitializeList(List* plist)
+void InitializeList(P_Node* plist)
 {
-	*plist = NULL;//即头指针head==NULL
+	*plist = NULL;//即头指针head=NULL
 }
 
-bool ListIsEmpty(const List* plist)
+bool ListIsFull(const P_Node* plist)
 {
-	if (*plist == NULL)
-		return true;
-	else
-		false;
-}
-
-bool ListIsFull(const List* plist)
-{
-	Node* p;
 	bool full;
-	p = (Node*)malloc(sizeof(Node));
+	Node* p;
+	p = (Node*)malloc(sizeof(Node));//测试能否为新项分配空间
 	if (p == NULL)
 		full = true;
 	else
@@ -32,65 +24,78 @@ bool ListIsFull(const List* plist)
 	return full;
 }
 
-unsigned int ListItemCount(const List* plist)
+bool AddItem(Item item, P_Node* plist)
 {
-	unsigned int count = 0;
-	Node* temp = *plist;
+	Node* head, * current;
+	//或
+	//P_Node head,current;
 
-	while (temp->next != NULL)
-	{
-		count++;
-		temp = temp->next;
-	}
-	return count;
-}
-
-bool AddItem(Item item, List* plist)
-{
-	Node* previous, * current;
-
-	previous = *plist;
+	head = *plist;
 
 	current = (Node*)malloc(sizeof(Node));//首先为新节点分配空间
-
-	if (current == NULL)
+												//current指向新节点，存新节点的地址
+	if (current == NULL)//若用户未调用ListIsFull()函数，那么此语句也能检查能否为新项分配空间
 		return false;
 
 	current->item = item;//若分配成功，则把项拷贝到新节点中(拷贝结构)
+
 	current->next = NULL;//表明该节点是链表的最后一个节点
 
-	if (previous == NULL)//若传入参数是头指针
-		*plist = current;//则把头指针设置为指向第一项
+	if (head == NULL)//若传入参数是头指针
+		*plist = current;//则把头指针设置为指向第一个节点
 	else						   //否则代码继续在链表中前进，
 	{
-		while (previous->next != NULL)//直到发现被设置成NULL的next成员
-			previous = previous->next;
+		while (head->next != NULL)//直到发现被设置成NULL的next成员
+			head = head->next;
 
-		previous->next = current;//最后一个节点的next设置成新节点的地址
+		head->next = current;//最后一个节点的next设置成新节点的地址
 	}
 
 	return true;
 }
 
-void Traverse(const List* plist, void(*pfun)(Item item))
+bool ListIsEmpty(const P_Node* plist)
 {
-	Node* start = *plist;
+	if (*plist == NULL)
+		return true;
+	else
+		return false;
+}
 
-	while (start != NULL)
+void Traverse(const P_Node* plist, void(*pfun)(Item item))
+{
+	Node* head = *plist;
+
+	while (head != NULL)
 	{
-		(*pfun)(start->item);
-		start = start->next;
+		(*pfun)(head->item);
+		head = head->next;
 	}
 }
 
-void EmptyTheList(List* plist)
+unsigned int ListItemCount(const P_Node* plist)
+{
+	unsigned int count = 0;
+	Node* head = *plist;
+
+	while (head != NULL)
+	{
+		count++;
+		head = head->next;
+		//*****注*****
+		//因为形参中有const存在，所以不允许出现*plist=(*plist)->next;
+	}
+	return count;
+}
+
+void EmptyTheList(P_Node* plist)
 {
 	Node* temp;
 
 	while (*plist != NULL)
 	{
-		temp = (*plist)->next;
+		temp = (*plist)->next;//保存下一节点的地址
 		free(*plist);
-		*plist = temp;
+		*plist = temp;//前进至下一节点
 	}
 }
