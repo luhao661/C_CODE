@@ -6,11 +6,13 @@
 #include <stdbool.h>
 #define MAX_QUEUE 10
 
-typedef struct 
-{
-	int data1;
-	int data2;
-}Item;
+typedef int Item;
+//数据存储的类型也可以是
+//typedef struct
+//{
+//	int data1;
+//	int data2;
+//}Item;
 
 typedef struct node
 {
@@ -72,6 +74,10 @@ bool DeQueue(Item* pitem, Queue* pq);
 /* 前提条件∶ pq 指向之前被初始化的队列 */
 /* 后置条件∶ 队列被清空 */
 void EmptyTheQueue(Queue* pq);
+
+
+extern void CopyToNode(Item item, Node* pq);
+extern void CopyToItem(Node* pq, Item* pitem);
 
 
 #endif		/*_QUEUE_H*/

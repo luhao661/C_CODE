@@ -326,5 +326,55 @@ char* s_gets(char* string, int num)
 
 //队列ADT
 #if 1
+#include <stdio.h>
 #include "queue.h"
+
+int main(void)
+{
+	Queue line;
+	Item shuju;//queue.h中改为typedef int Item;
+	char choice;
+
+	InitializeQueue(&line);
+	puts("**********测试接口**********");
+	puts("输入a来添加数据，输入d来删除数据，输入q退出程序：");
+
+	while ((choice = getchar()) != 'q')
+	{
+		if (choice != 'a' && choice != 'd')
+			continue;
+
+		if (choice == 'a')
+		{
+			printf("请输入要添加的整数数据：\n");
+			scanf("%d",&shuju);
+			if (!QueueIsFull(&line))
+			{
+				printf("已向队列中存入%d\n", shuju);
+				AddQueue(shuju, &line);
+			}
+			else
+				printf("队列已满！\n");
+		}
+
+		else if (choice == 'd')
+		{
+			if (QueueIsEmpty(&line))
+				puts("队列为空，无法删除数据！");
+			else
+			{
+				DeQueue(&shuju,&line);
+				printf("在队列的第一个节点删除了数据：%d\n",shuju);
+			}
+		}
+
+		printf("队列中存在%d个数据\n",QueueItemCount(&line));
+		puts("输入a来添加数据，输入d来删除数据，输入q退出程序：");
+	}
+
+	EmptyTheQueue(&line);
+	puts("再见！");
+
+	return 0;
+}
 #endif

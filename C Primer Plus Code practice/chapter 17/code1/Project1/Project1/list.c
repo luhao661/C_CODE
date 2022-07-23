@@ -48,7 +48,7 @@ bool AddItem(Item item, P_Node* plist)
 		while (head->next != NULL)//直到发现被设置成NULL的next成员
 			head = head->next;
 
-		head->next = current;//最后一个节点的next设置成新节点的地址
+		head->next = current;//把倒数第二个节点的next设置成新节点的地址(新节点是最后一个节点)
 	}
 
 	return true;
