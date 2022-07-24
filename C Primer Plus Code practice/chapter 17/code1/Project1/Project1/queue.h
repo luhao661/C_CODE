@@ -6,13 +6,15 @@
 #include <stdbool.h>
 #define MAX_QUEUE 10
 
-typedef int Item;
-//数据存储的类型也可以是
-//typedef struct
-//{
-//	int data1;
-//	int data2;
-//}Item;
+//队列ADT程序中使用
+//typedef int Item;
+// 
+//用队列包模拟咨询Sigmund的顾客队列程序中使用
+typedef struct
+{
+	long arrive;//一位顾客刚刚加入队列的时间
+	int processtime;//该顾客咨询时花费的时间
+}Item;
 
 typedef struct node
 {

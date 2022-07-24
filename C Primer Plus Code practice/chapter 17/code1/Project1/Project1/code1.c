@@ -325,7 +325,7 @@ char* s_gets(char* string, int num)
 
 
 //队列ADT
-#if 1
+#if 0
 #include <stdio.h>
 #include "queue.h"
 
@@ -377,4 +377,113 @@ int main(void)
 
 	return 0;
 }
+#endif
+
+
+//用队列包来模拟	咨询Sigmund的顾客	队列
+#if 1
+#include <stdio.h>
+#include "queue.h"
+#include <time.h>//time()
+#include <stdlib.h>//srand()、rand()
+
+#define MIN_PER_HOUR	60.0
+
+bool newcustomer(double x);//是否有新顾客到来
+Item customertime(long when);//设置顾客参数
+
+int main(void)
+{
+	Queue line;//创建一个顾客队列
+	int hours;//模拟的小时数
+	int customers_per_hour;//平均每小时的顾客数量
+
+	long cyclelimit;//循环计数器的上限
+	double min_per_customers;//平均每个顾客到来所需时间
+
+	int cycle;//循环计数器
+	int turnaways = 0;//因队列节点数满而被拒的顾客数量
+	int customers = 0;//加入队列的顾客数量
+	Item temp;//临时存数项目(顾客参数)
+
+	int wait_time = 0;//当前仍需等待的时间
+	int line_wait = 0;//队列累计等待的时间
+	int served = 0;//服务的顾客数量
+	int sum_line = 0;//累计队列节点数
+
+	InitializeQueue(&line);
+
+	srand((unsigned int)time(0));/*初始化种子 */
+	puts("**********咨询摊位的顾客数据研究**********");
+	puts("请输入模拟的时长(单位：小时)：");
+	scanf("%d",&hours);
+	puts("请输入平均每小时的顾客数量：");
+	scanf("%d",&customers_per_hour);
+	cyclelimit = MIN_PER_HOUR * hours;
+	min_per_customers = MIN_PER_HOUR / customers_per_hour;
+
+	for (cycle = 0; cycle < cyclelimit; cycle++)
+	{
+		if (newcustomer(min_per_customers))//判断每分钟是否有顾客来
+		{
+			if (QueueIsFull(&line))
+				turnaways++;
+			else
+			{
+				customers++;
+				temp = customertime(cycle);//在当前分钟数下新顾客的参数
+				AddQueue(temp,&line);
+			}
+		}
+
+		if (wait_time <= 0 && !QueueIsEmpty(&line))//当队列中有顾客且摊位空闲时
+		{
+			DeQueue(&temp,&line);//排第一个的顾客开始咨询，但其在队列中被排除
+			wait_time = temp.processtime;//赋新的等待时间
+			line_wait += cycle - temp.arrive;//当前时间-加入队列的时间=队列等待的时间
+			served++;
+		}
+
+		if (wait_time > 0)
+			wait_time--;
+
+		sum_line += QueueItemCount(&line);
+	}
+
+	if (customers > 0)
+	{
+		printf("%-10s%d\n", "到摊位的顾客人数：", customers);
+		printf("%-10s%d\n", "服务的顾客人数：", served);
+		printf("%-10s%d\n", "被拒的顾客人数：", turnaways);
+
+		printf("%-10s%.2lf\n", "队列平均节点数：", (double)sum_line / cyclelimit);
+		printf("%-10s%.2lf\n", "队列平均等待时间(单位：分钟)：", (double)line_wait / served);
+	}
+	else
+		puts("没有顾客！");
+
+	EmptyTheQueue(&line);
+	puts("程序模拟结束！");
+	
+	return 0;
+}
+bool newcustomer(double x)//是否有新顾客到来	//x：平均每个顾客到来所需时间
+{
+	if (rand() * x / RAND_MAX < 1)//RAND_MAX：rand()能产生的最大值
+		return true;								//0<=rand()<=RAND_MAX
+	else												//0<=rand()*x<=x*RAND_MAX
+		return false;							//所以rand() * x / RAND_MAX范围是0~x
+}														//根据客流的一般情况，x会大于1，
+														//设置小于1，即小于1分钟(cycle计数器每次递增1分钟)
+Item customertime(long when)//设置顾客参数
+{
+	Item jiegouticanshu;//结构体的参数
+
+	jiegouticanshu.arrive = when;
+	jiegouticanshu.processtime = rand() % 3 + 1;//rand() % 3 + 1范围1~3
+	//以下写法错误：
+	//jiegouticanshu.processtime = rand()*2/RAND_MAX + 1;//范围1~3(processtime声明为int类型)
+																						//***注***只有当ran()=RAND_MAX时，结果才为3
+	return jiegouticanshu;												//所以结果1、2、3的概率并不相同(其中3概率极小)
+}																						//因此赋值的对象是int类型时，此语句慎用
 #endif
