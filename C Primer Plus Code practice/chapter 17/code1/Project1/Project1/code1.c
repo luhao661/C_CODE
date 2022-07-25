@@ -437,7 +437,7 @@ int main(void)
 		}
 
 		if (wait_time <= 0 && !QueueIsEmpty(&line))//当队列中有顾客且摊位空闲时
-		{
+		{											 //*****注*****
 			DeQueue(&temp,&line);//排第一个的顾客开始咨询，但其在队列中被排除
 			wait_time = temp.processtime;//赋新的等待时间
 			line_wait += cycle - temp.arrive;//当前时间-加入队列的时间=队列等待的时间
@@ -456,8 +456,8 @@ int main(void)
 		printf("%-10s%d\n", "服务的顾客人数：", served);
 		printf("%-10s%d\n", "被拒的顾客人数：", turnaways);
 
-		printf("%-10s%.2lf\n", "队列平均节点数：", (double)sum_line / cyclelimit);
-		printf("%-10s%.2lf\n", "队列平均等待时间(单位：分钟)：", (double)line_wait / served);
+		printf("%-10s%.2lf\n", "队列平均节点数：", (double)sum_line / cyclelimit);//平均每分钟排队的人数
+		printf("%-10s%.2lf\n", "队列平均等待时间(单位：分钟)：", (double)line_wait / served);//平均每个被服务的人要等待的时间
 	}
 	else
 		puts("没有顾客！");
@@ -487,3 +487,5 @@ Item customertime(long when)//设置顾客参数
 	return jiegouticanshu;												//所以结果1、2、3的概率并不相同(其中3概率极小)
 }																						//因此赋值的对象是int类型时，此语句慎用
 #endif
+
+
