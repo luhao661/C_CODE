@@ -37,7 +37,7 @@ bool AddQueue(Item item, Queue* pq)
 
 	CopyToNode(item,current);//若分配成功，则把项拷贝到新节点中(拷贝结构)
 
-	current->next = NULL; //表明该节点是链表的最后一个节点
+	current->next = NULL;//表明该节点是链表的最后一个节点
 
 	if (QueueIsEmpty(pq))//若队列为空，则新节点既是首节点也是尾节点
 		pq->P_Node_front = current;//则把P_Node_front指针指向新节点

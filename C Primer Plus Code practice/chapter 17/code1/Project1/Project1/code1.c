@@ -232,7 +232,7 @@ char* s_gets(char* string, int num)
 //定义新类型的方法，用3步完成从抽象到具体的过程
 //1.提供类型属性和相关操作的抽象描述(抽象地描述ADT)
 //2.编写一个实现ADT的编程接口(如在list.h中指明如何存储数据和执行所需操作的函数)
-//3.编写代码来使用接口(在main.c中)，编写代码来实现接口(如在list.c中)
+//3.编写代码来实现接口(如在list.c中)，编写代码来使用接口(在main.c中)。
 #if 0
 //*****把接口应用于特定编程问题的源代码文件*****
 #include <stdlib.h.>//exit()
@@ -381,7 +381,7 @@ int main(void)
 
 
 //用队列包来模拟	咨询Sigmund的顾客	队列
-#if 1
+#if 0
 #include <stdio.h>
 #include "queue.h"
 #include <time.h>//time()
@@ -406,14 +406,15 @@ int main(void)
 	int customers = 0;//加入队列的顾客数量
 	Item temp;//临时存数项目(顾客参数)
 
-	int wait_time = 0;//当前仍需等待的时间
-	int line_wait = 0;//队列累计等待的时间
+	int wait_process_finished_time = 0;//当前仍需等待顾客咨询完毕的时间
+	int in_queue_wait_time = 0;//被服务的顾客在队列中累计等待的时间
 	int served = 0;//服务的顾客数量
-	int sum_line = 0;//累计队列节点数
+	int sum_nodes = 0;//累计队列节点数
 
 	InitializeQueue(&line);
 
 	srand((unsigned int)time(0));/*初始化种子 */
+
 	puts("**********咨询摊位的顾客数据研究**********");
 	puts("请输入模拟的时长(单位：小时)：");
 	scanf("%d",&hours);
@@ -436,18 +437,20 @@ int main(void)
 			}
 		}
 
-		if (wait_time <= 0 && !QueueIsEmpty(&line))//当队列中有顾客且摊位空闲时
+		if (wait_process_finished_time <= 0 && !QueueIsEmpty(&line))//当队列中有顾客且摊位空闲时
 		{											 //*****注*****
-			DeQueue(&temp,&line);//排第一个的顾客开始咨询，但其在队列中被排除
-			wait_time = temp.processtime;//赋新的等待时间
-			line_wait += cycle - temp.arrive;//当前时间-加入队列的时间=队列等待的时间
+			DeQueue(&temp,&line);//排第一个的顾客在队列中被排除，其开始咨询(其数据赋给了temp)
+
+			wait_process_finished_time = temp.processtime;//赋新的咨询花费的时间
+			in_queue_wait_time += cycle - temp.arrive;//当前时间-加入队列的时间=当前排第一个的顾客在队列中等待的时间
+		
 			served++;
 		}
 
-		if (wait_time > 0)
-			wait_time--;
+		if (wait_process_finished_time > 0)
+			wait_process_finished_time--;
 
-		sum_line += QueueItemCount(&line);
+		sum_nodes += QueueItemCount(&line);
 	}
 
 	if (customers > 0)
@@ -456,8 +459,8 @@ int main(void)
 		printf("%-10s%d\n", "服务的顾客人数：", served);
 		printf("%-10s%d\n", "被拒的顾客人数：", turnaways);
 
-		printf("%-10s%.2lf\n", "队列平均节点数：", (double)sum_line / cyclelimit);//平均每分钟排队的人数
-		printf("%-10s%.2lf\n", "队列平均等待时间(单位：分钟)：", (double)line_wait / served);//平均每个被服务的人要等待的时间
+		printf("%-10s%.2lf\n", "队列平均节点数：", (double)sum_nodes / cyclelimit);//平均每分钟排队的人数
+		printf("%-10s%.2lf\n", "队列平均等待时间(单位：分钟)：", (double)in_queue_wait_time / served);//平均每个被服务的人要等待的时间
 	}
 	else
 		puts("没有顾客！");
@@ -489,3 +492,6 @@ Item customertime(long when)//设置顾客参数
 #endif
 
 
+//二叉树ADT
+#if 1
+#endif
