@@ -1,5 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
+#if 0
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "queue.h"
@@ -94,3 +96,5 @@ void EmptyTheQueue(Queue* pq)
 	while (!QueueIsEmpty(pq))
 		DeQueue(&temp,pq);//循环调用DeQueue()直到队列为空
 }
+
+#endif

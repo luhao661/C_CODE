@@ -3,6 +3,7 @@
 #include "tree.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>//strcmp()
 
 void InitializeTree(Tree* ptree)
 {
@@ -56,7 +57,8 @@ bool AddItem(const Item* pitem, Tree* ptree)
 
 bool TreeIsEmpty(const Tree* ptree)
 {
-	return (ptree->size==0);
+	//return (ptree->size==0);
+	return (ptree->root==NULL);
 }
 
 bool DeleteItem(const Item* pitem, Tree* ptree)
@@ -206,7 +208,6 @@ static void DeleteNode(Treenode** p_ptree)//p_ptreeÊÇÖ¸ÏòÄ¿±ê½ÚµãµÄ¸¸½ÚµãÖ¸ÕëµÄÖ
 		free(temp); //ÊÍ·ÅÔ­À´µÄ¸¸½Úµã
 	}
 }
-
 
 static void InOrder(const Treenode* root, void (*p_function)(Item item))
 {

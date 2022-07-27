@@ -92,11 +92,11 @@ void Traverse(const Tree* ptree, void(*pfun)(Item item));
 void DeleteAll(Tree * ptree);
 
 
-extern void AddNode(Treenode* current, Treenode* root);
+static void AddNode(Treenode* current, Treenode* root);
+//或用extern，但是其他翻译单元文件还是不能访问这些函数
+static bool Toleft(const Item* current_item, const Item* root_item);
 
-extern bool Toleft(const Item* current_item, const Item* root_item);
-
-extern bool Toright(const Item* current_item, const Item* root_item);
+static bool Toright(const Item* current_item, const Item* root_item);
 
 typedef struct pair
 {
@@ -104,12 +104,12 @@ typedef struct pair
 	Treenode* child;
 }Pair;
 
-extern Pair SeekItem(const Item* pitem, const Tree* ptree);
+static Pair SeekItem(const Item* pitem, const Tree* ptree);
 
-extern void DeleteNode(Treenode** p_ptree);
+static void DeleteNode(Treenode** p_ptree);
 
-extern void InOrder(const Treenode* root, void (*p_function)(Item item));
+static void InOrder(const Treenode* root, void (*p_function)(Item item));
 
-extern void DeleteAllNodes(Treenode* root);
+static void DeleteAllNodes(Treenode* root);
 
-#endif
+#endif		/*_TREE_H*/

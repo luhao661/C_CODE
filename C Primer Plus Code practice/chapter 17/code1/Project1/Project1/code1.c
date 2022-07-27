@@ -494,4 +494,210 @@ Item customertime(long when)//设置顾客参数
 
 //二叉树ADT
 #if 1
+#include "tree.h"
+#include <stdio.h>
+#include <string.h>//strchr()
+#include <ctype.h>//tolower()
+
+void menu(void);
+char get_choice(void);
+void addpet(Tree *ptree);
+
+char* s_gets(char *string,int n);
+void lowercase(char *string);
+
+void showpets(const Tree *ptree);
+void dayin(Item item);
+
+void findpet(const Tree *ptree);
+void droppet(Tree *ptree);
+
+int main(void)
+{
+	Tree pets;
+	char choice;
+
+	menu();
+	InitializeTree(&pets);
+
+	while ((choice = get_choice()) != 'q')
+	{
+		switch (choice)
+		{
+		case 'a':
+			addpet(&pets);
+			break;
+		case 's':
+			showpets(&pets);
+			break;
+		case 'f':
+			findpet(&pets);
+			break;
+		case 'n':
+			printf("俱乐部里有%d只宠物\n",TreeItemCount(&pets));
+			break;
+		case 'd':
+			droppet(&pets);
+			break;
+		default:
+			puts("Error !");
+		}
+		putchar('\n');
+		putchar('\n');
+
+		menu();
+	}
+	DeleteAll(&pets);
+	puts("再见！");
+
+	return 0;
+}
+void menu(void)
+{
+	puts("Nerfville Pet Club Membership Program");
+	puts("Enter the letter corresponding to your choice:");
+	puts("a) 添加宠物 s) 显示宠物名单");
+	puts("n) 计算宠物数量 f) 寻找宠物");
+	puts("d) 删除一只宠物 q)退出");
+}
+char get_choice(void)
+{
+	char choice;
+
+	choice = getchar();
+	choice = tolower(choice);
+
+	while (getchar() != '\n')
+		continue;
+
+	while (strchr("asnfdq", choice) == NULL)
+	{
+		puts("请输入a、s、n、f、d或q");
+		choice = tolower(getchar());
+		while (getchar() != '\n')
+			continue;
+	}
+
+	//或
+	/*while ((choice = getchar()) != EOF)
+	{
+		while (getchar() != '\n')
+			continue;
+		choice = tolower(choice);
+
+		if (strchr("asnfdq", choice) == NULL)
+			puts("请输入a、s、n、f、d或q");
+		else
+			break;
+	}
+	if(choice==EOF)
+	choice='q'*/
+	return choice;
+}
+void addpet(Tree* ptree)
+{
+	Item temp;
+
+	if (TreeIsFull(ptree))
+		puts("宠物数量已达到最大值！");
+	else
+	{
+		puts("请输入宠物的名字：");
+		s_gets(temp.petname,LENGTH);
+		puts("请输入宠物的类型：");
+		s_gets(temp.petkind,LENGTH);
+
+		lowercase(temp.petname);
+		lowercase(temp.petkind);
+
+		AddItem(&temp,ptree);
+	}
+}
+char* s_gets(char* string, int n)
+{
+	char* fanhui;
+	char* find;
+	fanhui = fgets(string, n, stdin);
+	
+	if (fanhui)
+	{
+		find = strchr(string, '\n');
+		if (find)
+			*find = '\0';
+		else
+			while (getchar() != '\n')
+				continue;
+	}
+
+	return fanhui;
+}
+void lowercase(char* string)
+{
+	while (*string)
+	{
+		*string = tolower(*string);
+		string++;
+	}
+}
+void showpets(const Tree* ptree)
+{
+	if (TreeIsEmpty(ptree))
+		puts("没有输入内容！");
+	else
+		Traverse(ptree,dayin);
+}
+void dayin(Item item)
+{
+	printf("宠物名：%-19s，宠物类型：%-19s\n",item.petname,item.petkind);
+}
+void findpet(const Tree* ptree)
+{
+	Item temp;
+
+	if (TreeIsEmpty(ptree))
+	{
+		puts("没有输入内容！");
+		return;
+	}
+	
+	puts("请输入您想搜索的宠物的名字：");
+	s_gets(temp.petname, LENGTH);
+	puts("请输入您想搜索的宠物的类型：");
+	s_gets(temp.petkind, LENGTH);
+
+	lowercase(temp.petname);
+	lowercase(temp.petkind);
+
+	printf("宠物名：%-19s，宠物类型：%-19s", temp.petname, temp.petkind);
+	
+	if (InTree(&temp, ptree))
+		printf("在其中！\n");
+	else
+		printf("不在其中！\n");
+}
+void droppet(Tree* ptree)
+{
+	Item temp;
+
+	if (TreeIsEmpty(ptree))
+	{
+		puts("没有输入内容！");
+		return;
+	}
+
+	puts("请输入您想删除的宠物的名字：");
+	s_gets(temp.petname, LENGTH);
+	puts("请输入您想删除的宠物的类型：");
+	s_gets(temp.petkind, LENGTH);
+
+	lowercase(temp.petname);
+	lowercase(temp.petkind);
+
+	printf("宠物名：%-19s，宠物类型：%-19s", temp.petname, temp.petkind);
+
+	if (DeleteItem(&temp, ptree))
+		printf("已删除！\n");
+	else
+		printf("不在其中，无法删除！\n");
+}
 #endif

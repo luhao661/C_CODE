@@ -1,6 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
 //*****提供函数代码实现接口*****
+#if 0
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
@@ -99,3 +101,5 @@ void EmptyTheList(P_Node* plist)
 		*plist = temp;//前进至下一节点
 	}
 }
+
+#endif
