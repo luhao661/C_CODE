@@ -93,9 +93,10 @@ void DeleteAll(Tree * ptree);
 
 
 extern void AddNode(Treenode* current, Treenode* root);
+
 extern bool Toleft(const Item* current_item, const Item* root_item);
+
 extern bool Toright(const Item* current_item, const Item* root_item);
-extern Pair SeekItem(const Item* pitem, const Tree* ptree);
 
 typedef struct pair
 {
@@ -103,6 +104,12 @@ typedef struct pair
 	Treenode* child;
 }Pair;
 
+extern Pair SeekItem(const Item* pitem, const Tree* ptree);
+
 extern void DeleteNode(Treenode** p_ptree);
+
+extern void InOrder(const Treenode* root, void (*p_function)(Item item));
+
+extern void DeleteAllNodes(Treenode* root);
 
 #endif

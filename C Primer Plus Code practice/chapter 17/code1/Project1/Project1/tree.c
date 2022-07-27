@@ -20,11 +20,14 @@ bool AddItem(const Item* pitem, Tree* ptree)
 	Treenode* current;
 
 	if (TreeIsFull(ptree))//ÅÐ¶ÏÊÇ·ñ´ïµ½ÉèÖÃµÄ×î´óµÄ½ÚµãÊýÁ¿
+	{
+		fprintf(stderr, "´íÎó£¬Ê÷ÒÑÂú£¡\n");
 		return false;
+	}
 
 	if (SeekItem(pitem, ptree).child != NULL)
 	{
-		fprintf(stderr, "´íÎó£¬Ê÷ÖÐ´æÔÚÖØ¸´µÄÏî£¡");
+		fprintf(stderr, "´íÎó£¬Ê÷ÖÐ´æÔÚÖØ¸´µÄÏî£¡\n");
 		return false;
 	}
 
@@ -32,8 +35,8 @@ bool AddItem(const Item* pitem, Tree* ptree)
 															  //currentÖ¸ÏòÐÂ½Úµã£¬´æÐÂ½ÚµãµÄµØÖ·
 	if (current == NULL)//ÅÐ¶ÏÄÜ·ñÎªÐÂ½Úµã¶¯Ì¬·ÖÅäÄÚ´æ
 	{
-		fprintf(stderr, "´íÎó£¬Î´ÄÜ·ÖÅäµ½ÄÚ´æ£¡");
-		exit(1);
+		fprintf(stderr, "´íÎó£¬Î´ÄÜ·ÖÅäµ½ÄÚ´æ£¡\n");
+		return false;
 	}
 
 	current->item = *pitem;//Èô·ÖÅä³É¹¦£¬Ôò°ÑÏî¿½±´µ½ÐÂ½ÚµãÖÐ(¿½±´½á¹¹)
@@ -58,7 +61,21 @@ bool TreeIsEmpty(const Tree* ptree)
 
 bool DeleteItem(const Item* pitem, Tree* ptree)
 {
-	
+	Pair look;
+	look = SeekItem(pitem,ptree);
+
+	if (look.child == NULL)//ÈôÎ´ÕÒµ½Ö¸¶¨Ïî
+		return false;
+	if (look.parent == NULL)//ÈôÕÒµ½Ö¸¶¨Ïî£¬µ«ÔÚ¸ù½Úµã
+		DeleteNode(&ptree->root);
+	else if (look.parent->left == look.child)//ÈôÖ¸¶¨ÏîËùÔÚµÄ½ÚµãÊÇÆä¸¸½ÚµãµÄ×ó×Ó½Úµã
+		DeleteNode(&look.parent->left);
+	else//ÈôÖ¸¶¨ÏîËùÔÚµÄ½ÚµãÊÇÆä¸¸½ÚµãµÄÓÒ×Ó½Úµã
+		DeleteNode(&look.parent->right);
+
+	ptree->size--;
+
+	return true;
 }
 
 int TreeItemCount(const Tree* ptree)
@@ -71,10 +88,19 @@ bool InTree(const Item* pitem, const Tree* ptree)
 	return (SeekItem(pitem,ptree).child!=NULL)?true:false ;
 }
 
-void Traverse(const Tree* ptree, void(*pfun)(Item item));
+void Traverse(const Tree* ptree, void(*p_function)(Item item))
+{
+	if (ptree != NULL)
+		InOrder(ptree->root,p_function);
+}
+
 void DeleteAll(Tree* ptree)
 {
+	if (ptree != NULL)
+		DeleteAllNodes(ptree->root);
 
+	ptree->root = NULL;
+	ptree->size = 0;
 }
 
 //¶þ²æ²éÕÒÊ÷ÄÜ¶þ·Ö²éÕÒÊý¾Ý£¬Ç°ÌáÊÇÊý¾ÝÏîÓÐË³Ðò
@@ -102,8 +128,8 @@ static void AddNode(Treenode* current, Treenode* root)
 	}
 }
 
-static bool Toleft(const Item* current_item, const Item* root_item)
-{
+static bool Toleft(const Item* current_item, const Item* root_item)//Toleft()ºÍToright()¿ÉÒÔ¿´×÷ÊÇÁ½¸öµ¼º½º¯Êý
+{							//					ÐÂÏî											Ê÷ÖÐµÄÏî
 	int result;
 	if ((result = strcmp(current_item->petname, root_item->petname)) < 0)//µÚÒ»¸ö×Ö·û´®ÔÚµÚ¶þ¸ö×Ö·û´®Ç°Ãæ
 		return true;
@@ -133,12 +159,12 @@ static Pair SeekItem(const Item* pitem, const Tree* ptree)
 	if (look.child == NULL)//ÈôÊÇ¿ÕÊ÷
 		return look;
 
-	while (look.child != NULL)
+	while (look.child != NULL)//look.child==NULLÔòÍË³öÑ­»·
 	{
 		if (Toleft(pitem, &(look.child->item)))
 		{
-			look.parent = look.child;
-			look.child = look.child->left;
+			look.parent = look.child;//¸øparent³ÉÔ±ÏÈ¸³¸ù½ÚµãµÄµØÖ·
+			look.child = look.child->left;//child³ÉÔ±Öµ¸üÐÂÎª×ó×Ó½ÚµãµÄµØÖ·
 		}
 		else if (Toright(pitem, &(look.child->item)))
 		{
@@ -158,6 +184,49 @@ static void DeleteNode(Treenode** p_ptree)//p_ptreeÊÇÖ¸ÏòÄ¿±ê½ÚµãµÄ¸¸½ÚµãÖ¸ÕëµÄÖ
 
 	if ((*p_ptree)->left == NULL)//Èô´ýÉ¾³ýµÄ½ÚµãÊÇÃ»ÓÐ×ó×Ó½ÚµãµÄ½Úµã£¬»òÕßÊÇÒ¶×Ó½Úµã
 	{
-	
+		temp = *p_ptree;
+		*p_ptree = (*p_ptree)->right;//Ôò½«ÓÒ×Ó½ÚµãµÄµØÖ·(¿ÉÒÔÊÇNULL)¸³¸øÆä¸¸½ÚµãµÄÖ¸Õë£¬¸¸½ÚµãµÄÖ¸Õë´æµÄÖµµÃµ½¸üÐÂ
+		free(temp);//ÊÍ·ÅÔ­À´µÄ¸¸½Úµã
+	}
+	else if ((*p_ptree)->right == NULL)//Èô´ýÉ¾³ýµÄ½ÚµãÊÇÃ»ÓÐÓÒ×Ó½ÚµãµÄ½Úµã
+	{
+		temp = *p_ptree;
+		*p_ptree = (*p_ptree)->left;//Ôò½«×ó×Ó½ÚµãµÄµØÖ·¸³¸øÆä¸¸½ÚµãµÄÖ¸Õë
+		free(temp);
+	}
+	else//Èô´ýÉ¾³ýµÄ½ÚµãÓÐÁ½¸ö×Ó½Úµã
+	{
+		for (temp = (*p_ptree)->left; temp->right != NULL; temp = temp->right)
+			continue;//tempÖ¸Õë´Ó×ó×ÓÊ÷µÄÓÒ°ë²¿·ÖÏòÏÂ²éÕÒÒ»¸ö¿ÕÎ»£¬
+
+		temp->right = (*p_ptree)->right;//ÕÒµ½ºó°ÑÓÒ×ÓÊ÷Á¬½Óµ½´Ë
+
+		temp = *p_ptree;
+		*p_ptree = (*p_ptree)->left;//°Ñ×ó×ÓÊ÷Á¬½Óµ½¸¸½ÚµãÉÏ
+		free(temp); //ÊÍ·ÅÔ­À´µÄ¸¸½Úµã
+	}
+}
+
+
+static void InOrder(const Treenode* root, void (*p_function)(Item item))
+{
+	if (root != NULL)
+	{
+		InOrder(root->left,p_function);
+		(*p_function)(root->item);
+		InOrder(root->right,p_function);
+	}
+}
+
+static void DeleteAllNodes(Treenode *root)
+{
+	Treenode* temp;
+
+	if (root != NULL)
+	{
+		temp = root->right;
+		DeleteAllNodes(root->left);
+		free(root);
+		DeleteAllNodes(temp);
 	}
 }
