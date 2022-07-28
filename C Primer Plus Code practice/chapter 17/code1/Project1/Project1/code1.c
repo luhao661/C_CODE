@@ -6,7 +6,8 @@
 #endif
 
 
-//使用结构数组来存储数据
+//第17章
+//程序清单17.1		使用结构数组来存储数据
 #if 0
 #define LENGTH	45   //存储影片片名的最大长度
 #define MAX			500//存储影片的最大数量
@@ -65,7 +66,7 @@ char* s_gets(char* string, int num)
 #endif
 
 
-//使用结构和+动态内存分配，节省运行时使用的内存空间
+//使用结构和动态内存分配，节省运行时使用的内存空间
 #if 0
 #include <stdlib.h>//malloc()
 
@@ -88,11 +89,11 @@ int main(void)
 	continue;
 
 	struct film *movies = (struct film*)malloc(max*sizeof(struct film));
-
+	//创建movies[max]指针数组，内含max个指针，都是指向film结构布局的指针
 	int jishu = 0;
 
 	puts("请输入电影的标题：");
-	while (jishu < max && s_gets((*(movies+jishu)).title, LENGTH) != NULL && movies[jishu].title[0] != '\0')
+	while (jishu < max && s_gets(  	(*(movies+jishu)).title,    LENGTH) != NULL && movies[jishu].title[0] != '\0')
 	{
 		puts("请输入您的评分(0-10)：");
 		scanf("%d", &movies[jishu].rating);
@@ -133,7 +134,7 @@ char* s_gets(char* string, int num)
 #endif
 
 
-//使用结构链表来表示数据
+//程序清单17.2		使用结构链表来表示数据
 #if 0
 #include <stdlib.h>//malloc()
 
@@ -162,7 +163,7 @@ int main(void)
 		if (head == NULL)														//5.判断若处理的是第一个结构，则把第一个结构的地址存入头指针
 			head = current;
 		else
-			previous->next = current;							  	    //6.若处理的不是第一个结构，则结构指针previous指向的next成员(next也是个结构指针)存上一次分配的结构的地址
+			previous->next = current;							  	    //6.若处理的不是第一个结构，则结构指针previous指向的next成员(next也是个结构指针)存当前分配的结构的地址
 
 		current->next = NULL;												//7.表示当前结构是链表的最后一个结构
 		strcpy(current->title,input);
@@ -234,7 +235,7 @@ char* s_gets(char* string, int num)
 //2.编写一个实现ADT的编程接口(如在list.h中指明如何存储数据和执行所需操作的函数)
 //3.编写代码来实现接口(如在list.c中)，编写代码来使用接口(在main.c中)。
 #if 0
-//*****把接口应用于特定编程问题的源代码文件*****
+//程序清单17.4		*****把接口应用于特定编程问题的源代码文件*****
 #include <stdlib.h.>//exit()
 #include <stdbool.h>
 #include "list.h"
@@ -324,7 +325,7 @@ char* s_gets(char* string, int num)
 #endif
 
 
-//队列ADT
+//程序清单17.8		队列ADT
 #if 0
 #include <stdio.h>
 #include "queue.h"
@@ -380,7 +381,7 @@ int main(void)
 #endif
 
 
-//用队列包来模拟	咨询Sigmund的顾客	队列
+//程序清单17.9		用队列包来模拟 	咨询Sigmund的顾客	队列
 #if 0
 #include <stdio.h>
 #include "queue.h"
@@ -492,8 +493,8 @@ Item customertime(long when)//设置顾客参数
 #endif
 
 
-//二叉树ADT
-#if 1
+//程序清单17.12		二叉树ADT
+#if 0
 #include "tree.h"
 #include <stdio.h>
 #include <string.h>//strchr()

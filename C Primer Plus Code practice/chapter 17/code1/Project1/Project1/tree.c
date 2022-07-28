@@ -1,5 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
+#if 0
+
 #include "tree.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -231,3 +233,5 @@ static void DeleteAllNodes(Treenode *root)
 		DeleteAllNodes(temp);
 	}
 }
+
+#endif
