@@ -749,5 +749,61 @@ bool find(int* zhengshu, int num, int search)
 #include <stdio.h>
 #include <string.h>//strchr()
 #include <ctype.h>//tolower()
+#include <stdlib.h>//EXIT_FAILURE
 
+#define MAX 42
+int main(void)
+{
+	Tree words;
+	char choice;
+
+}
+void addpet(Tree* ptree)
+{
+	Item temp;
+
+	FILE* fp;
+	char words[MAX];
+	int zifujishu, index;
+
+	if ((fp = fopen("17.12.7.txt", "a+")) == NULL)//读和写
+	{
+		fprintf(stderr, "Can't open \"13.11.9.txt\" file.\n");
+		exit(EXIT_FAILURE);
+	}
+	rewind(fp);
+
+	while (fscanf(fp, "%s", words) == 1)
+	{
+		fprintf(stdout, "%s", words);
+		putc(' ', stdout);
+	}
+
+	rewind(fp);
+
+	if (TreeIsFull(ptree))
+		puts("单词数量已达到最大值！");
+	else
+	{
+		while (fscanf(fp, "%s", words) == 1)//从第一个非空白字符开始，到下一个空白字符之前的所有字符都是输入
+		{
+			zifujishu=strlen(words);
+			while (index = 0; index < zifujishu; index++)
+			{
+				temp.danci[index] = words[index];
+			}
+
+			AddItem(&temp, ptree);
+
+			//输入重复的单词怎么处理
+			//用SeekItem
+		}
+	}
+	puts("以上单词已存入单词树 !");
+
+	if (fclose(fp) != 0)
+		fprintf(stderr, "关闭文件失败！\n");
+}
+//命令行：D:\CODE\C_CODE\C Primer Plus Code practice\chapter 17\code3\Project3\x64\Debug
+//Project3.exe
 #endif

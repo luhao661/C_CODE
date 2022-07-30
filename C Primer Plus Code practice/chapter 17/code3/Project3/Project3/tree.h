@@ -5,8 +5,8 @@
 
 #include <stdbool.h>
 
-#define LENGTH		20
-#define MAXITEMS	10
+#define LENGTH		41
+#define MAXITEMS	1000
 
 typedef struct
 {
