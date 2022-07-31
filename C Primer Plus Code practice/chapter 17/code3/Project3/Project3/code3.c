@@ -1104,11 +1104,13 @@ void addpet(Tree* ptree)
 		{
 			find=strchr(SeekItem(&temp, ptree).child->item.petkind,'\0');
 			*find = ',';
-			
-			//用strcpy实现数组内容的拷贝
-			strcpy((SeekItem(&temp, ptree).child->item.petkind) + 5*n, temp.petkind);
-			n *= 2;
-			//测试：SeekItem(&temp, ptree).child->item.petkind[0] = 'q';
+			*(find + 1) = '\0';
+
+			strcat((SeekItem(&temp, ptree).child->item.petkind), temp.petkind);
+			//strcpy((SeekItem(&temp, ptree).child->item.petkind)+5*n, temp.petkind);
+			//n *= 2;
+			/***为什么不能用strcpy实现数组内容的拷贝？***/
+			//因为在'\0'的位置之后是垃圾值，即使指定在第6个元素的位置上拷贝了数据，它们之间的数据也不能打印出来
 		}
 		else
 			AddItem(&temp, ptree);
