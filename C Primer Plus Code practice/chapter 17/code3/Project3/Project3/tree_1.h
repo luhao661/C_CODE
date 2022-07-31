@@ -5,13 +5,13 @@
 
 #include <stdbool.h>
 
-#define LENGTH		41
-#define MAXITEMS	1000
+#define LENGTH		30
+#define MAXITEMS	10
 
 typedef struct
 {
-	char danci[LENGTH];
-	int cishu;
+	char petname[LENGTH];
+	char petkind[LENGTH];
 }Item;
 
 typedef struct treenode

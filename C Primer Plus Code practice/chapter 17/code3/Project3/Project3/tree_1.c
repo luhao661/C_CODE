@@ -1,8 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 0
+#if 1
 
-#include "tree.h"
+#include "tree_1.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>//strcmp()
@@ -135,8 +135,8 @@ static void AddNode(Treenode* current, Treenode* root)
 static bool Toleft(const Item* current_item, const Item* root_item)//Toleft()和Toright()可以看作是两个导航函数
 {							//					新项											树中的项
 	int result;
-	if ((result = strcmp(current_item->danci, root_item->danci)) < 0)//第一个字符串在第二个字符串前面
-		return true;//***注***大写字母ASCII码值比小写字母小
+	if ((result = strcmp(current_item->petname, root_item->petname)) < 0)//第一个字符串在第二个字符串前面
+		return true;
 	else//第一个字符串在第二个字符串后面，或两字符串相同
 		return false;
 }
@@ -144,7 +144,7 @@ static bool Toleft(const Item* current_item, const Item* root_item)//Toleft()和T
 static bool Toright(const Item* current_item, const Item* root_item)
 {
 	int result;
-	if ((result = strcmp(current_item->danci, root_item->danci)) > 0)//第一个字符串在第二个字符串后面
+	if ((result = strcmp(current_item->petname, root_item->petname)) > 0)//第一个字符串在第二个字符串后面
 		return true;
 	else//第一个字符串在第二个字符串前面，或两字符串相同
 		return false;
