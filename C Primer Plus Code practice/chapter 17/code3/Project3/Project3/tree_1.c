@@ -28,10 +28,23 @@ bool AddItem(const Item* pitem, Tree* ptree)
 		return false;
 	}
 
+	//if (SeekItem(pitem, ptree).child != NULL)
+	//{
+	//	fprintf(stderr, "错误，树中存在重复的项！\n");
+	//	return false;
+	//}
+
 	if (SeekItem(pitem, ptree).child != NULL)
 	{
-		fprintf(stderr, "错误，树中存在重复的项！\n");
-		return false;
+		for (int i = 0; i < LENGTH; i++)
+		{
+			if (strlen(SeekItem(pitem, ptree).child->item.petkind[i]) < 1)
+			{
+				strcpy(SeekItem(pitem, ptree).child->item.petkind[i], pitem->petkind[0]);
+				break;
+			}
+		}
+		return true;
 	}
 
 	current = (Treenode*)malloc(sizeof(Treenode));//首先为新节点分配空间

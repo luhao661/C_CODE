@@ -8,10 +8,15 @@
 #define LENGTH		30
 #define MAXITEMS	10
 
+//typedef struct
+//{
+//	char petname[LENGTH];
+//	char petkind[LENGTH];
+//}Item;
 typedef struct
 {
 	char petname[LENGTH];
-	char petkind[LENGTH];
+	char petkind[LENGTH][LENGTH];
 }Item;
 
 typedef struct treenode

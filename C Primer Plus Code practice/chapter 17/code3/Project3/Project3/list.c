@@ -47,7 +47,8 @@ bool AddItem(Item item, P_Node* plist)
 	{
 		plist->end->next = current;
 	}
-	plist->end = current;
+
+	plist->end = current;//更新end指针指向的节点
 
 	return true;
 }

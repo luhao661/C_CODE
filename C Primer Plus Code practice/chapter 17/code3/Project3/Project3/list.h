@@ -38,7 +38,7 @@ typedef struct
 
 //原list.h：
 //typedef Node* P_Node;		//把指向Node结构布局的指针类型命名为P_Node
-////或写为：typedef struct node* P_Node;				
+//或写为：typedef struct node* P_Node;				
 
 
 
@@ -48,6 +48,9 @@ typedef struct
 /* 前提条件∶ plist 指向一个链表 */
 /* 后置条件∶ 链表初始化为空 */
 void InitializeList(P_Node* plist);
+//传入plist的是&movies，是P_Node结构布局的结构的地址
+
+//原list.h：
 //*****注：List*plist即Node**plist，plist是指向	链表指针(链表地址)	的指针*****
 //*****传入plist的是&movies，即指向第一个链表的指针的地址*******************
 //*****所以*plist是指向第一个链表的指针(即头指针head)*************************

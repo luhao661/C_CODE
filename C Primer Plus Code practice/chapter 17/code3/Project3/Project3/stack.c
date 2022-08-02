@@ -6,7 +6,7 @@
 #include <stdlib.h>//exit()
 #include "stack.h"
 
-void InitializeStack(LinkStack* pstack)//要传入形参是应该是指向node结构布局的指针的地址
+void InitializeStack(LinkStack* pstack)//要传入形参是应该是LinkStack结构布局的结构的地址
 {
 	pstack->top =NULL;
 	pstack->length = 0;

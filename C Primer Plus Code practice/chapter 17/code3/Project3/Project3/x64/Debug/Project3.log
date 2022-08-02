@@ -1,1 +1,5 @@
-﻿  Project3.vcxproj -> D:\CODE\C_CODE\C Primer Plus Code practice\chapter 17\code3\Project3\x64\Debug\Project3.exe
+﻿  code3.c
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 17\code3\Project3\Project3\code3.c(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 17\code3\Project3\Project3\code3.c(1170,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+D:\CODE\C_CODE\C Primer Plus Code practice\chapter 17\code3\Project3\Project3\code3.c(1544,8): warning C4101: “find”: 未引用的局部变量
+  Project3.vcxproj -> D:\CODE\C_CODE\C Primer Plus Code practice\chapter 17\code3\Project3\x64\Debug\Project3.exe
