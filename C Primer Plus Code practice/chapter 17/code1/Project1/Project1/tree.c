@@ -146,7 +146,7 @@ static bool Toleft(const Item* current_item, const Item* root_item)//Toleft()和T
 static bool Toright(const Item* current_item, const Item* root_item)
 {
 	int result;
-	if ((result = strcmp(current_item->petname, root_item->petname)) > 0)//第一个字符串在第二个字符串前面
+	if ((result = strcmp(current_item->petname, root_item->petname)) > 0)//第一个字符串在第二个字符串后面
 		return true;
 	else if (result == 0 && strcmp(current_item->petkind, root_item->petkind) > 0)
 		return true;
