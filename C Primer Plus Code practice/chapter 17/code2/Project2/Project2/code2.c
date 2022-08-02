@@ -3,13 +3,13 @@
 
 //17.11∏¥œ∞Ã‚
 //5.
-#if 1
+#if 0
 
 #endif
 
 
 //7.
-#if 1
+#if 0
 //a.
 										       nice
 							food						   roam
@@ -36,7 +36,7 @@ dodge
 
 
 //8.
-#if 1
+#if 0
 //a.
 												 nice
 								dodge					    roam

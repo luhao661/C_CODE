@@ -16,27 +16,33 @@ typedef struct node
 {
 	Item item;
 	struct node* next;
-}Node,*P_Node;//P_Node是指向node结构布局的指针
+}Node;
+
+typedef struct
+{
+	Node* top;//栈顶指针 用于寻找栈，是指向node结构布局的指针
+	int length;//栈的长度
+} LinkStack;
 
 
 
 /*操作∶ 初始化栈* /
 /*前提条件∶ pstack 指向一个栈 */
 /*后置条件∶ 栈被初始化为空 */
-void InitializeStack(P_Node* pstack);//要传入形参是应该是指向node结构布局的指针的地址
+void InitializeStack(LinkStack* pstack);//要传入形参是应该是LinkStack结构布局的结构的地址
 
-bool StackIsFull(const P_Node* pstack);
+bool StackIsFull(const LinkStack* pstack);
 
-bool PushItem(Item item, P_Node* pstack);
+bool PushItem(Item item, LinkStack* pstack);
 
-bool PopItem(Item *item, P_Node* pstack);
+bool PopItem(Item* item, LinkStack* pstack);
 
-bool StackIsEmpty(const P_Node* pstack);
+bool StackIsEmpty(const LinkStack* pstack);
 
-void Traverse(const P_Node* pstack, void(*pfun)(Item item));
+void Traverse(const LinkStack* pstack, void(*pfun)(Item item));
 
-unsigned int StackItemCount(const P_Node* pstack);
+unsigned int StackItemCount(const LinkStack* pstack);
 
-void EmptyTheStack(P_Node* pstack);
+void EmptyTheStack(LinkStack* pstack);
 
 #endif		/*_STACK_H*/
