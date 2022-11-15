@@ -1,8 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 #include "3.6.h"
-#include "stdlib.h"   //malloc()
+#include "stdlib.h"   //malloc(), rand()
 #include "time.h"     //time()
 
 static Status visit(ElemType c)//声明为static说明这不是接口的一部分，对main函数所处的文件不可见
@@ -115,7 +115,7 @@ Status ListInsert(LinkList* L, int i, ElemType e)
     LinkList temp, s;
     int j;
 
-    temp = *L;//temp一开始指向头结点
+    temp = *L;//temp一开始存的是指向头结点的指针内容
     j = 1;                                //含头节点的链式存储结构
 
     while (temp && j < i)     /* 寻找第i个结点 */
@@ -177,11 +177,13 @@ Status ListDelete(LinkList* L, int i, ElemType* e)
 Status ListTraverse(LinkList L)
 {
     LinkList p = L->next;
+
     while (p)
     {
         visit(p->data);
         p = p->next;
     }
+
     printf("\n");
     return OK;
 }
@@ -194,6 +196,7 @@ void CreateListHead(LinkList* L, int n)
 
     srand(time(0));                         /* 初始化随机数种子 */
     *L = (LinkList)malloc(sizeof(Node));
+    //头结点的指针域的指针存的内容先设为空
     (*L)->next = NULL;                      /*  先建立一个带头结点的单链表 */
 
     for (i = 0; i < n; i++)
@@ -201,6 +204,7 @@ void CreateListHead(LinkList* L, int n)
         p = (LinkList)malloc(sizeof(Node)); /*  生成新结点 */
         p->data = rand() % 100 + 1;             /*  随机生成100以内的数字 */
 
+        //始终让新节点在第一的位置
         p->next = (*L)->next;
         (*L)->next = p;						/*  插入到表头 */
     }
@@ -211,14 +215,19 @@ void CreateListTail(LinkList* L, int n)
 {
     LinkList p, r;
     int i;
+
     srand(time(0));                      /* 初始化随机数种子 */
     *L = (LinkList)malloc(sizeof(Node)); /* L为整个线性表 */
+
     r = *L;                                /* r为指向尾部的结点 */
+    
     for (i = 0; i < n; i++)
     {
         p = (Node*)malloc(sizeof(Node)); /*  生成新结点 */
         p->data = rand() % 100 + 1;           /*  随机生成100以内的数字 */
+
         r->next = p;                        /* 将表尾终端结点的指针指向新结点 */
+        //***注***结构变量间的赋值操作
         r = p;                            /* 将当前的新结点定义为表尾终端结点 */
     }
     r->next = NULL;                       /* 表示当前链表结束 */

@@ -3,7 +3,7 @@
 
 //线性表的链式存储结构
 //链接3.6.c
-#if 1
+#if 0
 #include "3.6.h"
 
 int main()
@@ -15,6 +15,7 @@ int main()
     int j, k;
     i = InitList(&L);//传指向节点的指针的地址
     printf("初始化L后：ListLength(L)=%d\n", ListLength(L));
+
     for (j = 1; j <= 5; j++)
         i = ListInsert(&L, 1, j);
     printf("在L的表头依次插入1～5后：L.data=");
