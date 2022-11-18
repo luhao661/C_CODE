@@ -1,0 +1,14 @@
+﻿  4.13.c
+  code6.c
+D:\CODE\C_CODE\Data_Structure\chapter 4\code6\Project6\Project6\code6.c(35,9): warning C4477: “printf”: 格式字符串“%u”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“QueuePtr”
+D:\CODE\C_CODE\Data_Structure\chapter 4\code6\Project6\Project6\code6.c(35,9): warning C4313: "printf": 格式字符串中的 "%u" 与类型为 "QueuePtr" 的参数 1 冲突
+D:\CODE\C_CODE\Data_Structure\chapter 4\code6\Project6\Project6\code6.c(35,9): warning C4477: “printf”: 格式字符串“%u”需要类型“unsigned int”的参数，但可变参数 2 拥有了类型“QueuePtr”
+D:\CODE\C_CODE\Data_Structure\chapter 4\code6\Project6\Project6\code6.c(35,9): warning C4313: "printf": 格式字符串中的 "%u" 与类型为 "QueuePtr" 的参数 2 冲突
+D:\CODE\C_CODE\Data_Structure\chapter 4\code6\Project6\Project6\code6.c(35,9): warning C4477: “printf”: 格式字符串“%u”需要类型“unsigned int”的参数，但可变参数 3 拥有了类型“QNode *”
+D:\CODE\C_CODE\Data_Structure\chapter 4\code6\Project6\Project6\code6.c(35,9): warning C4313: "printf": 格式字符串中的 "%u" 与类型为 "QNode *" 的参数 3 冲突
+D:\CODE\C_CODE\Data_Structure\chapter 4\code6\Project6\Project6\code6.c(37,9): warning C4477: “printf”: 格式字符串“%u”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“QueuePtr”
+D:\CODE\C_CODE\Data_Structure\chapter 4\code6\Project6\Project6\code6.c(37,9): warning C4313: "printf": 格式字符串中的 "%u" 与类型为 "QueuePtr" 的参数 1 冲突
+D:\CODE\C_CODE\Data_Structure\chapter 4\code6\Project6\Project6\code6.c(37,9): warning C4477: “printf”: 格式字符串“%u”需要类型“unsigned int”的参数，但可变参数 2 拥有了类型“QueuePtr”
+D:\CODE\C_CODE\Data_Structure\chapter 4\code6\Project6\Project6\code6.c(37,9): warning C4313: "printf": 格式字符串中的 "%u" 与类型为 "QueuePtr" 的参数 2 冲突
+  正在生成代码...
+  Project6.vcxproj -> D:\CODE\C_CODE\Data_Structure\chapter 4\code6\Project6\x64\Debug\Project6.exe
