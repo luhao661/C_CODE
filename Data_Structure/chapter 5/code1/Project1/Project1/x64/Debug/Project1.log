@@ -1,0 +1,6 @@
+﻿  5.5.c
+D:\CODE\C_CODE\Data_Structure\chapter 5\code1\Project1\Project1\5.5.c(17,16): warning C4267: “=”: 从“size_t”转换到“char”，可能丢失数据
+  code1.c
+D:\CODE\C_CODE\Data_Structure\chapter 5\code1\Project1\Project1\code1.c(22,7): warning C4013: “exit”未定义；假设外部返回 int
+  正在生成代码...
+  Project1.vcxproj -> D:\CODE\C_CODE\Data_Structure\chapter 5\code1\Project1\x64\Debug\Project1.exe
