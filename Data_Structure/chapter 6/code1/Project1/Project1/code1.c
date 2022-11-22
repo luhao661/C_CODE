@@ -1,10 +1,10 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include <stdio.h>
 
-//使用顺序存储结构实现树的双亲表示法
-//链接6.4.1.c
+//使用顺序存储结构实现二叉树(一般只用于完全二叉树)
+//链接6.7.1.c
 #if 1
-#include "6.4.1.h"
+#include "6.7.1.h"
 
 int main()
 {
@@ -12,6 +12,7 @@ int main()
 	Position p;
 	TElemType e;
 	SqBiTree T;
+
 	InitBiTree(T);
 	CreateBiTree(T);
 	printf("建立二叉树后,树空否？%d(1:是 0:否) 树的深度=%d\n", BiTreeEmpty(T), BiTreeDepth(T));
