@@ -1,0 +1,5 @@
+﻿  6.7.2.c
+D:\CODE\C_CODE\Data_Structure\chapter 6\code2\Project2\Project2\6.7.2.c(20,16): warning C4267: “=”: 从“size_t”转换到“char”，可能丢失数据
+  code2.c
+  正在生成代码...
+  Project2.vcxproj -> D:\CODE\C_CODE\Data_Structure\chapter 6\code2\Project2\x64\Debug\Project2.exe
