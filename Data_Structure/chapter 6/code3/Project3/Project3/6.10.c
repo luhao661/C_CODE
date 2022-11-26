@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 #include "6.10.h"
 #include <stdio.h>
 #include <stdlib.h>
