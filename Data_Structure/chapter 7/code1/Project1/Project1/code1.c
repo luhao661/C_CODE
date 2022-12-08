@@ -176,15 +176,15 @@ int main(void)
 
 //图表邻接结构深度优先遍历(DFS)、广度优先遍历(BFS)
 //链接7.5.2.c
-#if 1
+#if 0
 #include "7.5.2.h"
 
 int main(void)
 {
-	MGraph G;
-	GraphAdjList GL;
+	MGraph G;//建立邻接矩阵结构G
+	GraphAdjList GL;//创建一个指向结构的指针
 	CreateMGraph(&G);
-	CreateALGraph(G, &GL);
+	CreateALGraph(G, &GL);//***注***利用邻接矩阵创建邻接表
 
 	printf("\n深度遍历:");
 	DFSTraverse(GL);

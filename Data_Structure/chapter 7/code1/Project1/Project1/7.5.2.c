@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 #include "7.5.2.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -114,15 +114,21 @@ void CreateALGraph(MGraph G, GraphAdjList* GL)
 	int i, j;
 	EdgeNode* e;
 
+	//申请内存存储邻接表结构体(包含了邻接表的顶点表结点)
 	*GL = (GraphAdjList)malloc(sizeof(graphAdjList));
 
+	//从邻接矩阵结构处拷贝数据到邻接表结构
 	(*GL)->numVertexes = G.numVertexes;
 	(*GL)->numEdges = G.numEdges;
+
 	for (i = 0; i < G.numVertexes; i++) /* 读入顶点信息,建立顶点表 */
 	{
-		(*GL)->adjList[i].in = 0;
+		//完善顶点表结点的顶点信息
 		(*GL)->adjList[i].data = G.vexs[i];
-		(*GL)->adjList[i].firstedge = NULL; 	/* 将边表置为空表 */
+		/* 将边表置为空表 */
+		(*GL)->adjList[i].firstedge = NULL; 	
+		//顶点adjList[i]的入度初始为0
+		(*GL)->adjList[i].in = 0;
 	}
 
 	for (i = 0; i < G.numVertexes; i++) /* 建立边表 */
@@ -131,17 +137,14 @@ void CreateALGraph(MGraph G, GraphAdjList* GL)
 		{
 			if (G.arc[i][j] == 1)
 			{
+				//分配内存存储边表节点
 				e = (EdgeNode*)malloc(sizeof(EdgeNode));
 
 				e->adjvex = j;					/* 邻接序号为j */
 
-				//正常代码下如下
-				//e->adjvex=j;					/* 邻接序号为j */   
-
-				e->next = (*GL)->adjList[i].firstedge;	/* 将当前顶点上的指向的结点指针赋值给e */
+				e->next = (*GL)->adjList[i].firstedge;	/* 将当前顶点上的指向的结点指针(即NULL)赋值给e */
 				(*GL)->adjList[i].firstedge = e;		/* 将当前顶点的指针指向e */
-				(*GL)->adjList[j].in++;
-
+				(*GL)->adjList[j].in++;//该顶点入度增一
 			}
 		}
 	}
@@ -154,7 +157,9 @@ void DFS(GraphAdjList GL, int i)
 {
 	EdgeNode* p;
 	visited[i] = TRUE;
+
 	printf("%c ", GL->adjList[i].data);/* 打印顶点,也可以其它操作 */
+	
 	p = GL->adjList[i].firstedge;
 	while (p)
 	{
@@ -170,6 +175,7 @@ void DFSTraverse(GraphAdjList GL)
 	int i;
 	for (i = 0; i < GL->numVertexes; i++)
 		visited[i] = FALSE; /* 初始所有顶点状态都是未访问过状态 */
+
 	for (i = 0; i < GL->numVertexes; i++)
 		if (!visited[i]) /* 对未访问过的顶点调用DFS,若是连通图,只会执行一次 */
 			DFS(GL, i);
@@ -181,8 +187,10 @@ void BFSTraverse(GraphAdjList GL)
 	int i;
 	EdgeNode* p;
 	Queue Q;
+
 	for (i = 0; i < GL->numVertexes; i++)
 		visited[i] = FALSE;
+
 	InitQueue(&Q);
 	for (i = 0; i < GL->numVertexes; i++)
 	{
@@ -190,6 +198,7 @@ void BFSTraverse(GraphAdjList GL)
 		{
 			visited[i] = TRUE;
 			printf("%c ", GL->adjList[i].data);/* 打印顶点,也可以其它操作 */
+
 			EnQueue(&Q, i);
 			while (!QueueEmpty(Q))
 			{

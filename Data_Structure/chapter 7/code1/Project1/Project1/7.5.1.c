@@ -28,6 +28,7 @@ Status EnQueue(Queue* Q, int e)
 {
 	if ((Q->rear + 1) % MAXSIZE == Q->front)	/* 队列满的判断 */
 		return ERROR;
+
 	Q->data[Q->rear] = e;			/* 将元素e赋值给队尾 */
 	Q->rear = (Q->rear + 1) % MAXSIZE;/* rear指针向后移一位置， */
 								/* 若到最后则转到数组头部 */
@@ -39,6 +40,7 @@ Status DeQueue(Queue* Q, int* e)
 {
 	if (Q->front == Q->rear)			/* 队列空的判断 */
 		return ERROR;
+
 	*e = Q->data[Q->front];				/* 将队头元素赋值给e */
 	Q->front = (Q->front + 1) % MAXSIZE;	/* front指针向后移一位置， */
 									/* 若到最后则转到数组头部 */
@@ -140,16 +142,22 @@ void BFSTraverse(MGraph G)
 {
 	int i, j;
 	Queue Q;
+
 	for (i = 0; i < G.numVertexes; i++)
 		visited[i] = FALSE;
+
 	InitQueue(&Q);		/* 初始化一辅助用的队列 */
+
 	for (i = 0; i < G.numVertexes; i++)  /* 对每一个顶点做循环 */
 	{
 		if (!visited[i])	/* 若是未访问过就处理 */
 		{
 			visited[i] = TRUE;		/* 设置当前顶点访问过 */
+
 			printf("%c ", G.vexs[i]);/* 打印顶点，也可以其它操作 */
+
 			EnQueue(&Q, i);		/* 将此顶点入队列 */
+
 			while (!QueueEmpty(Q))	/* 若当前队列不为空 */
 			{
 				DeQueue(&Q, &i);	/* 将队对元素出队列，赋值给i */
