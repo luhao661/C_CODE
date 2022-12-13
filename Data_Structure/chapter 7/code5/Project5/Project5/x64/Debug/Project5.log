@@ -1,0 +1,7 @@
+﻿  7.9.c
+  code5.c
+D:\CODE\C_CODE\Data_Structure\chapter 7\code5\Project5\Project5\code5.c(35,14): warning C4013: “CreateMGraph”未定义；假设外部返回 int
+D:\CODE\C_CODE\Data_Structure\chapter 7\code5\Project5\Project5\code5.c(36,15): warning C4013: “CreateALGraph”未定义；假设外部返回 int
+D:\CODE\C_CODE\Data_Structure\chapter 7\code5\Project5\Project5\code5.c(37,14): warning C4013: “CriticalPath”未定义；假设外部返回 int
+  正在生成代码...
+  Project5.vcxproj -> D:\CODE\C_CODE\Data_Structure\chapter 7\code5\Project5\x64\Debug\Project5.exe
