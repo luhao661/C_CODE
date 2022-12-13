@@ -2,8 +2,8 @@
 #include <stdio.h>
 
 //Dijkstra(迪杰斯特拉)算法求最短路径
-//链接无
-#if 1
+//链接7.7.1.c
+#if 0
 #include "7.7.1.h"
 
 int main(void)
