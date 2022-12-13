@@ -131,7 +131,7 @@ int main(void)
 
 //Kruskal(克鲁斯卡尔)算法生成最小生成树
 //链接无
-#if 1
+#if 0
 #define OK 1
 #define ERROR 0
 #define TRUE 1
@@ -201,16 +201,23 @@ void CreateMGraph(MGraph* G)
 	}
 }
 
+//将邻接矩阵转化为边集数组(按权值从小到大排序)
 /* 交换权值以及头和尾 */
 void Swapn(Edge* edges, int i, int j)
 {
 	int temp;
 	temp = (*(edges + i)).begin;
+
+	//交换起点下标
 	edges[i].begin = edges[j].begin;
 	edges[j].begin = temp;
+
+	//交换终点下标
 	temp = edges[i].end;
 	edges[i].end = edges[j].end;
 	edges[j].end = temp;
+
+	//交换权值
 	temp = edges[i].weight;
 	edges[i].weight = edges[j].weight;
 	edges[j].weight = temp;
@@ -257,10 +264,10 @@ void MiniSpanTree_Kruskal(MGraph G)
 
 	Edge edges[MAXEDGE];/* 定义边集数组,edge的结构为begin,end,weight,均为整型 */
 
-	/* 用来构建边集数组并排序********************* */
-	for (i = 0; i < G.numVertexes - 1; i++)
-	{
-		for (j = i + 1; j < G.numVertexes; j++)
+	/* 将邻接矩阵G转化为边集数组edges并排序********************* */
+	for (i = 0; i < G.numVertexes - 1; i++)//共numVertexes个顶点
+	{									  //则起始顶点的下标从0到numVertexes-2
+		for (j = i + 1; j < G.numVertexes; j++)//终止顶点的下标从1到numVertexes-1
 		{
 			if (G.arc[i][j] < GRAPH_INFINITY)
 			{
@@ -272,10 +279,9 @@ void MiniSpanTree_Kruskal(MGraph G)
 		}
 	}
 	sort(edges, &G);
-	/* ******************************************* */
+	/* *************************************************************** */
 
-
-	for (i = 0; i < G.numVertexes; i++)
+	for (i = 0; i < G.numVertexes; i++) //第1至9个元素均赋为0
 		parent[i] = 0;	/* 初始化数组值为0 */
 
 	printf("打印最小生成树：\n");
@@ -287,7 +293,8 @@ void MiniSpanTree_Kruskal(MGraph G)
 		{
 			parent[n] = m;	/* 将此边的结尾顶点放入下标为起点的parent中。 */
 							/* 表示此顶点已经在生成树集合中 */
-			printf("(%d, %d) %d\n", edges[i].begin, edges[i].end, edges[i].weight);
+			printf("(%d, %d) %d\n", edges[i].begin, edges[i].end,
+				edges[i].weight);
 		}
 	}
 }
