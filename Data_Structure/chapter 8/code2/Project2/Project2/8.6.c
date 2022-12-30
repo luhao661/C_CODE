@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 #include "8.6.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,23 +54,32 @@ static Status Delete(BiTree* p)
 {
 	BiTree q, s;
 
+	//若仅有左子树，或是叶子结点
 	if ((*p)->rchild == NULL) /* 右子树空则只需重接它的左子树（待删结点是叶子也走此分支) */
 	{
-		q = *p; *p = (*p)->lchild; free(q);
-	}
+		q = *p; 
+		*p = (*p)->lchild;
+		free(q);
+	}//若仅有右子树
 	else if ((*p)->lchild == NULL) /* 只需重接它的右子树 */
 	{
-		q = *p; *p = (*p)->rchild; free(q);
+		q = *p; 
+		*p = (*p)->rchild;
+		free(q);
 	}
 	else /* 左右子树均不空 */
 	{
-		q = *p; s = (*p)->lchild;
+		q = *p; 
+		s = (*p)->lchild;
+		
 		while (s->rchild) /* 转左，然后向右到尽头（找待删结点的前驱） */
 		{
 			q = s;
 			s = s->rchild;
 		}
+		
 		(*p)->data = s->data; /*  s指向被删结点的直接前驱（将被删结点前驱的值取代被删结点的值） */
+		
 		if (q != *p)
 			q->rchild = s->lchild; /*  重接q的右子树 */
 		else

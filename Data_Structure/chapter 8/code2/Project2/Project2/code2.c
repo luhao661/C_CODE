@@ -3,7 +3,7 @@
 
 //¶ş²æÅÅĞòÊ÷
 //Á´½Ó8.6.c
-#if 1
+#if 0
 #include "8.6.h"
 
 int main(void)
